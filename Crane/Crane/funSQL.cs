@@ -13,6 +13,7 @@ namespace Crane
         //定義
         private static string dataSource = @funINI.getString(conFILE.iniDefault, "[db]", "dataSource", 0)[0];
         private static int sqlLogMode = int.Parse(string.Format("{0}", conSetting.startupSettingCodes[0]));
+        private static int debugMode = int.Parse(string.Format("{0}", conSetting.startupSettingCodes[17]));
         private static void sqlLog(string msg)
         {
             if (sqlLogMode == 0)
@@ -29,14 +30,30 @@ namespace Crane
             SQLiteConnection conn = new SQLiteConnection($"DataSource={dataSource}");
             conn.Open();
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-            if(parameters.Length != 0)
+            if (debugMode == 0)
+            {
+                StringBuilder sb1 = new StringBuilder();
+                sb1.Append(sqlcode);
+                sb1.Append(":");
+                sb1.Append(sql);
+                funMSG.errMsg(sb1.ToString());
+            }
+            if (parameters.Length != 0)
             {
                 for (int i = 0; i < parameters.Length; i++)
                 {
-                    if(int.Parse(string.Format("{0}", conSetting.startupSettingCodes[17])) == 0)
+                    if(debugMode == 0)
                     {
-                        funMSG.errMsg(sqlcode + parameters[i]);
-                        funMSG.errMsg(sqlcode + values[i]);
+                        StringBuilder sb2 = new StringBuilder();
+                        sb2.Append(sqlcode);
+                        sb2.Append(":");
+                        sb2.Append(parameters[i]);
+                        StringBuilder sb3 = new StringBuilder();
+                        sb3.Append(sqlcode);
+                        sb3.Append(":");
+                        sb3.Append(values[i]);
+                        funMSG.errMsg(sb2.ToString());
+                        funMSG.errMsg(sb3.ToString());
                     }
                     cmd.Parameters.Add(new SQLiteParameter(parameters[i], values[i]));
                 }
@@ -62,10 +79,31 @@ namespace Crane
             SQLiteConnection conn = new SQLiteConnection($"DataSource={dataSource}");
             conn.Open();
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+            if (debugMode == 0)
+            {
+                StringBuilder sb1 = new StringBuilder();
+                sb1.Append(sqlcode);
+                sb1.Append(":");
+                sb1.Append(sql);
+                funMSG.errMsg(sb1.ToString());
+            }
             if (parameters.Length != 0)
             {
                 for (int i = 0; i < parameters.Length; i++)
                 {
+                    if (debugMode == 0)
+                    {
+                        StringBuilder sb2 = new StringBuilder();
+                        sb2.Append(sqlcode);
+                        sb2.Append(":");
+                        sb2.Append(parameters[i]);
+                        StringBuilder sb3 = new StringBuilder();
+                        sb3.Append(sqlcode);
+                        sb3.Append(":");
+                        sb3.Append(values[i]);
+                        funMSG.errMsg(sb2.ToString());
+                        funMSG.errMsg(sb3.ToString());
+                    }
                     cmd.Parameters.Add(new SQLiteParameter(parameters[i], values[i]));
                 }
             }

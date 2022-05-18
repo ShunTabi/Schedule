@@ -14,32 +14,32 @@ namespace Crane
     {
         private static void jgDock(Control ctl, int code0)
         {
-            if(code0 == 0)
+            if (code0 == 0)
             {
                 ctl.Dock = DockStyle.Fill;
             }
-            else if(code0 == 1)
+            else if (code0 == 1)
             {
                 ctl.Dock = DockStyle.Top;
             }
-            else if(code0 == 2)
+            else if (code0 == 2)
             {
                 ctl.Dock = DockStyle.Left;
             }
-            else if(code0 == 3)
+            else if (code0 == 3)
             {
                 ctl.Dock = DockStyle.Right;
             }
-            else if(code0 == 4)
+            else if (code0 == 4)
             {
                 ctl.Dock = DockStyle.Bottom;
             }
-            else if(code0 == 5)
+            else if (code0 == 5)
             {
                 ctl.Dock = DockStyle.None;
             }
         }
-        public static void addPanel(Panel pl,int code0,Control ctl, int[] size)
+        public static void addPanel(Panel pl, int code0, Control ctl, int[] size)
         {
             jgDock(pl, code0);
             pl.Margin = Padding.Empty;
@@ -74,12 +74,12 @@ namespace Crane
             lbl.Font = new Font("Yu mincho", 10, FontStyle.Regular);
             lbl.AutoSize = true;
         }
-        public static void addUserControl(UserControl uc,int code0,Control ctl)
+        public static void addUserControl(UserControl uc, int code0, Control ctl)
         {
             jgDock(uc, code0);
             ctl.Controls.Add(uc);
         }
-        public static void addCombobox(ComboBox cmb,int code0,int code1,Control ctl, int[] xy)
+        public static void addCombobox(ComboBox cmb, int code0, int code1, Control ctl, int[] xy)
         {
             jgDock(cmb, code0);
             ctl.Controls.Add(cmb);
@@ -120,7 +120,7 @@ namespace Crane
             dg.BorderStyle = BorderStyle.None;
             dg.RowHeadersVisible = false;
         }
-        public static void addDataGridViewColumns(DataGridView dg,string[] columnNames)
+        public static void addDataGridViewColumns(DataGridView dg, string[] columnNames)
         {
             dg.Columns.Clear();
             dg.AllowUserToAddRows = false;
@@ -129,7 +129,7 @@ namespace Crane
                 dg.Columns.Add(i.ToString(), columnNames[i]);
             }
         }
-        public static void addcontextMenuStrip( Control control,string[] btnNames, EventHandler[] e)
+        public static void addcontextMenuStrip(Control control, string[] btnNames, EventHandler[] e)
         {
             ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
             for (int i = 0; i < btnNames.Length; i++)
@@ -137,6 +137,10 @@ namespace Crane
                 contextMenuStrip.Items.Add(btnNames[i], null, e[i]);
             }
             control.ContextMenuStrip = contextMenuStrip;
+        }
+        public static void neverClose(object sender, System.ComponentModel.CancelEventArgs e, bool trueFalse)
+        {
+            e.Cancel = trueFalse;
         }
     }
 }

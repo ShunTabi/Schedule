@@ -47,15 +47,23 @@ namespace Crane
             public static string sql0303 = $"UPDATE T_WORK SET PLANID=@PLANID,WORKNAME=@WORKNAME,PRIORID=@PRIORID,WORKSTARTDATE=@WORKSTARTDATE,WORKENDDATE=@WORKENDDATE,WORKUPDATEDATE={com.now} WHERE WORKID=@WORKID";
             public static string sql0304 = $"UPDATE T_WORK SET WORKVISIBLESTATUS=1 WHERE WORKID=@WORKID";
             public static string sql0305 = $"SELECT * FROM V_WORK WHERE WORKID=@WORKID";
-            //public static string sql0306 = $"SELECT WORKID,WORKNAME FROM T_WORK";
+            public static string sql0306 = $"SELECT WORKID,PLANNAME,WORKNAME FROM V_WORK WHERE GOALID=@GOALID";
         }
-        public class todaywork
+        public class schedule
         {
-            public static string sql0401 = $"SELECT * FROM V_TODAYWORK WHERE TODAYWORKDATE=@TODAYWORKDATE ORDER BY TODAYWORKDATE DESC,STATUSID LIMIT {com.sqlLimit}";
+            public static string sql0401 = $"SELECT * FROM V_SCHEDULE WHERE SCHEDULEDATE=@SCHEDULEDATE ORDER BY SCHEDULEDATE DESC,STATUSID LIMIT {com.sqlLimit}";
+            public static string sql0402 = $"INSERT INTO T_SCHEDULE(WORKID,STATUSID,SCHEDULEDATE,SCHEDULESTARTTIME,SCHEDULEENDTIME,SCHEDULEUPDATEDATE) VALUES(@WORKID,@STATUSID,@SCHEDULEDATE,@SCHEDULESTARTTIME,@SCHEDULEENDTIME,{com.now})";
+            public static string sql0403 = $"UPDATE T_SCHEDULE SET WORKID=@WORKID,STATUSID=@STATUSID,SCHEDULEDATE=@SCHEDULEDATE,SCHEDULESTARTTIME=@SCHEDULESTARTTIME,SCHEDULEENDTIME=@SCHEDULEENDTIME,SCHEDULEUPDATEDATE={com.now} WHERE SCHEDULEID=@SCHEDULEID";
+            public static string sql0404 = $"UPDATE T_SCHEDULE SET SCHEDULEVISIBLESTATUS=1 WHERE WORKID=@WORKID";
+            public static string sql0405 = $"SELECT * FROM V_SCHEDULE WHERE SCHEDULEID=@SCHEDULEID";
         }
         public class prior
         {
             public static string sql9001 = $"SELECT PRIORID,PRIORNAME FROM V_PRIOR";
+        }
+        public class status
+        {
+            public static string sql9002 = $"SELECT STATUSID,STATUSNAME FROM V_STATUS";
         }
     }
 }

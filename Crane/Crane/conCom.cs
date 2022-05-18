@@ -12,6 +12,11 @@ namespace Crane
         public static int[] XY = new int[] { 1400, 900 };
         public static string[] defaultBtnNames = new string[] { "登録", "更新", "削除" };
     }
+    class conScheduler
+    {
+        public static int execCode = 0;
+        public static string ID = "0";
+    }
     class conSetting
     {
         public static string[] names = new string[]

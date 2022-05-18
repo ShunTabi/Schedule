@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SQLite;
+using System.Text.RegularExpressions;
 
 namespace Crane
 {
@@ -57,21 +58,21 @@ namespace Crane
                 cb1.Font = new Font("Yu mincho", 10, FontStyle.Regular);
                 cb1.Location = new Point(100, 15);
                 cb1.SelectedIndexChanged += (sender, e) => chgcmb(sender, e);
-                funCom.addCombobox(cb2, 5, 1, pa1, new int[] { 180, 10 });
+                funCom.addCombobox(cb2, 5, 2, pa1, new int[] { 180, 10 });
                 cb2.Font = new Font("Yu mincho", 10, FontStyle.Regular);
                 cb2.Location = new Point(100, 85);
-                funCom.addTextbox(tb2, 5, 2, pa1, new int[] { 180, 10 });
+                funCom.addTextbox(tb2, 5, 3, pa1, new int[] { 180, 10 });
                 tb2.Location = new Point(100, 155);
-                funCom.addCombobox(cb3, 5, 1, pa1, new int[] { 180, 10 });
+                funCom.addCombobox(cb3, 5, 4, pa1, new int[] { 180, 10 });
                 cb3.Font = new Font("Yu mincho", 10, FontStyle.Regular);
                 cb3.Location = new Point(100, 225);
-                funCom.addTextbox(tb3, 5, 2, pa1, new int[] { 180, 10 });
+                funCom.addTextbox(tb3, 5, 5, pa1, new int[] { 180, 10 });
                 tb3.Location = new Point(100, 295);
-                tb3.Text = funToday.getToday(0);
-                funCom.addTextbox(tb4, 5, 2, pa1, new int[] { 180, 10 });
+                tb3.Text = funDate.getToday(0);
+                funCom.addTextbox(tb4, 5, 6, pa1, new int[] { 180, 10 });
                 tb4.Location = new Point(100, 365);
-                tb4.Text = funToday.getToday(0);
-                funCom.addButton(btn1, 5, 3, pa1, new int[] { 90, 50 });
+                tb4.Text = funDate.getToday(0);
+                funCom.addButton(btn1, 5, 7, pa1, new int[] { 90, 50 });
                 btn1.Text = conCom.defaultBtnNames[0];
                 btn1.Location = new Point(100, 435);
                 btn1.BackColor = Color.MediumOrchid;
@@ -81,7 +82,7 @@ namespace Crane
             {
                 funCom.addDataGridView(dg, 0, pa2, new int[] { 0, 0 });
                 dg.BackgroundColor = Color.Plum;
-                funCom.addDataGridViewColumns(dg, new string[] { "ID", "目標", "計画", "作業", "優先度", "開始日", "終了日", "更新日" });
+                funCom.addDataGridViewColumns(dg, new string[] { "ID", "目標", "計画", "優先度/作業", "開始日", "終了日" });
                 funCom.addcontextMenuStrip(dg, conCom.defaultBtnNames, new EventHandler[] { click1, click2, click3 });
                 funCom.addPanel(pa3, 1, pa2, new int[] { 0, 80 });
                 Label lb1 = new Label();
@@ -107,6 +108,10 @@ namespace Crane
                 {
                     funMSG.errMsg(conMSG.message00001);
                 }
+                else if(!Regex.IsMatch(tb3.Text, @"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$") || !Regex.IsMatch(tb4.Text, @"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"))
+                {
+                    funMSG.errMsg(conMSG.message00005);
+                }
                 else
                 {
                     if (execCode == 0)
@@ -117,7 +122,7 @@ namespace Crane
                     {
                         funSQL.sqlDML("sql0303", conSQL.work.sql0303, new string[] { "@PLANID", "@WORKNAME", "@PRIORID", "WORKSTARTDATE", "WORKENDDATE", "@WORKID" }, new string[] { cb2.SelectedValue.ToString(), tb2.Text, cb3.SelectedValue.ToString(), tb3.Text, tb4.Text, ID });
                     }
-                    //cleaning.main();
+                    cleaning.main();
                     load.main();
                 }
             }
@@ -169,8 +174,8 @@ namespace Crane
             public static void main()
             {
                 tb2.Text = "";
-                tb3.Text = funToday.getToday(0);
-                tb4.Text = funToday.getToday(0);
+                tb3.Text = funDate.getToday(0);
+                tb4.Text = funDate.getToday(0);
                 ID = "0";
                 execCode = 0;
             }
@@ -187,15 +192,16 @@ namespace Crane
                 dg.Rows.Clear();
                 while (reader.Read())
                 {
+                    StringBuilder sb1 = new StringBuilder();
+                    sb1.Append((string)reader["PRIORSUBNAME"]);
+                    sb1.Append((string)reader["WORKNAME"]);
                     dg.Rows.Add(
                         ((Int64)reader["WORKID"]).ToString(),
                         (string)reader["GOALNAME"],
                         (string)reader["PLANNAME"],
-                        (string)reader["WORKNAME"],
-                        (string)reader["PRIORSUBNAME"],
+                        sb1.ToString(),
                         ((DateTime)reader["WORKSTARTDATE"]).ToString("yyyy-MM-dd"),
-                        ((DateTime)reader["WORKENDDATE"]).ToString("yyyy-MM-dd"),
-                        ((DateTime)reader["WORKUPDATEDATE"]).ToString()
+                        ((DateTime)reader["WORKENDDATE"]).ToString("yyyy-MM-dd")
                         );
                 }
             }
@@ -227,18 +233,21 @@ namespace Crane
             }
             public static void cmdload2()
             {
-                SQLiteDataReader reader = null;
-                long[] keys = new long[] { };
-                string[] values = new string[] { };
-                reader = funSQL.sqlSELECT("sql0206", conSQL.plan.sql0206, new string[] { "@GOALID" }, new string[] { cb1.SelectedValue.ToString()  });
-                while (reader.Read())
+                if(cb1.SelectedValue != null)
                 {
-                    Array.Resize(ref keys, keys.Length + 1);
-                    keys[keys.Length - 1] = (Int64)reader["PLANID"];
-                    Array.Resize(ref values, values.Length + 1);
-                    values[values.Length - 1] = (string)reader["PLANNAME"];
+                    SQLiteDataReader reader = null;
+                    long[] keys = new long[] { };
+                    string[] values = new string[] { };
+                    reader = funSQL.sqlSELECT("sql0206", conSQL.plan.sql0206, new string[] { "@GOALID" }, new string[] { cb1.SelectedValue.ToString() });
+                    while (reader.Read())
+                    {
+                        Array.Resize(ref keys, keys.Length + 1);
+                        keys[keys.Length - 1] = (Int64)reader["PLANID"];
+                        Array.Resize(ref values, values.Length + 1);
+                        values[values.Length - 1] = (string)reader["PLANNAME"];
+                    }
+                    funCom.addComboboxItem(cb2, keys, values);
                 }
-                funCom.addComboboxItem(cb2, keys, values);
             }
             public static void cmdload()
             {

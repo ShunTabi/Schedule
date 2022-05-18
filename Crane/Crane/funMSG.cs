@@ -17,7 +17,7 @@ namespace Crane
             Encoding sjisEnc  = Encoding.GetEncoding("Shift_JIS");
             StreamWriter writer = new StreamWriter(fileName, true, sjisEnc);
             StringBuilder sb = new StringBuilder();
-            sb.Append(funToday.getToday(2));
+            sb.Append(funDate.getToday(2));
             sb.Append(" >> ");
             sb.Append(msg);
             writer.WriteLine(sb.ToString());

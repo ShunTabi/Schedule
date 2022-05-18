@@ -62,7 +62,7 @@ namespace Crane
             {
                 funCom.addDataGridView(dg, 0, pa2, new int[] { 0, 0 });
                 dg.BackgroundColor = Color.Plum;
-                funCom.addDataGridViewColumns(dg, new string[] { "ID", "種別", "目標", "更新日" });
+                funCom.addDataGridViewColumns(dg, new string[] { "ID", "種別", "目標" });
                 funCom.addcontextMenuStrip(dg, conCom.defaultBtnNames, new EventHandler[] { click1, click2, click3 });
                 funCom.addPanel(pa3, 1, pa2, new int[] { 0, 80 });
                 Label lb1 = new Label();
@@ -160,8 +160,7 @@ namespace Crane
                     dg.Rows.Add(
                         ((Int64)reader["GOALID"]).ToString(),
                         (string)reader["GENRENAME"],
-                        (string)reader["GOALNAME"],
-                        ((DateTime)reader["GENREUPDATEDATE"]).ToString()
+                        (string)reader["GOALNAME"]
                         );
                 }
             }

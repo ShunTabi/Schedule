@@ -64,7 +64,7 @@ namespace Crane
             {
                 funCom.addDataGridView(dg, 0, pa2, new int[] { 0, 0 });
                 dg.BackgroundColor = Color.Plum;
-                funCom.addDataGridViewColumns(dg, new string[] { "ID","目標", "計画", "更新日" });
+                funCom.addDataGridViewColumns(dg, new string[] { "ID", "目標", "計画" });
                 funCom.addcontextMenuStrip(dg, conCom.defaultBtnNames, new EventHandler[] { click1, click2, click3 });
                 funCom.addPanel(pa3, 1, pa2, new int[] { 0, 80 });
                 Label lb1 = new Label();
@@ -162,8 +162,7 @@ namespace Crane
                     dg.Rows.Add(
                         ((Int64)reader["PLANID"]).ToString(),
                         (string)reader["GOALNAME"],
-                        (string)reader["PLANNAME"],
-                        ((DateTime)reader["PLANUPDATEDATE"]).ToString()
+                        (string)reader["PLANNAME"]
                         );
                 }
             }
@@ -187,7 +186,7 @@ namespace Crane
                 cmdload();
             }
         }
-    private void Todo_Load(object sender, EventArgs e)
+        private void Todo_Load(object sender, EventArgs e)
         {
             setup.main(this);
             startup.main();

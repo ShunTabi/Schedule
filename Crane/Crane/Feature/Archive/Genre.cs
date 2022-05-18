@@ -48,14 +48,14 @@ namespace Crane
                 btn1.Text = conCom.defaultBtnNames[execCode];
                 btn1.Location = new Point(100, 85);
                 btn1.BackColor = Color.MediumOrchid;
-                btn1.Click += (sender, e) => clickBtn(sender,e);
+                btn1.Click += (sender, e) => clickBtn(sender, e);
             }
             private static void rightSide()
             {
                 funCom.addDataGridView(dg, 0, pa2, new int[] { 0, 0 });
                 dg.BackgroundColor = Color.Plum;
-                funCom.addDataGridViewColumns(dg, new string[] { "ID", "種別", "更新日" });
-                funCom.addcontextMenuStrip(dg, conCom.defaultBtnNames, new EventHandler[] {click1,click2,click3});
+                funCom.addDataGridViewColumns(dg, new string[] { "ID", "種別" });
+                funCom.addcontextMenuStrip(dg, conCom.defaultBtnNames, new EventHandler[] { click1, click2, click3 });
                 funCom.addPanel(pa3, 1, pa2, new int[] { 0, 80 });
                 Label lb1 = new Label();
                 funCom.addLabel(lb1, 5, pa3);
@@ -78,13 +78,13 @@ namespace Crane
                 }
                 else
                 {
-                    if(execCode == 0)
+                    if (execCode == 0)
                     {
                         funSQL.sqlDML("sql0002", conSQL.genre.sql0002, new string[] { "@GENRENAME" }, new string[] { tb2.Text });
                     }
-                    else if(execCode == 1)
+                    else if (execCode == 1)
                     {
-                        funSQL.sqlDML("sql0003",conSQL.genre.sql0003, new string[] { "@GENRENAME","@GENREID" }, new string[] { tb2.Text,ID });
+                        funSQL.sqlDML("sql0003", conSQL.genre.sql0003, new string[] { "@GENRENAME", "@GENREID" }, new string[] { tb2.Text, ID });
                     }
                     cleaning.main();
                     load.main();
@@ -99,8 +99,8 @@ namespace Crane
             {//修正
                 execCode = 1;
                 btn1.Text = conCom.defaultBtnNames[execCode];
-                ID =  dg.SelectedRows[0].Cells[0].Value.ToString();
-                SQLiteDataReader reader = funSQL.sqlSELECT("sql0005", conSQL.genre.sql0005,new string[]{ "@GENREID" },new string[]{ ID });
+                ID = dg.SelectedRows[0].Cells[0].Value.ToString();
+                SQLiteDataReader reader = funSQL.sqlSELECT("sql0005", conSQL.genre.sql0005, new string[] { "@GENREID" }, new string[] { ID });
                 while (reader.Read())
                 {
                     tb2.Text = (string)reader["GENRENAME"];
@@ -149,8 +149,7 @@ namespace Crane
                 {
                     dg.Rows.Add(
                         ((Int64)reader["GENREID"]).ToString(),
-                        (string)reader["GENRENAME"],
-                        ((DateTime)reader["GENREUPDATEDATE"]).ToString()
+                        (string)reader["GENRENAME"]
                         );
                 }
             }

@@ -70,13 +70,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Feature\Scheduler\Todaywork.cs">
+    <Compile Include="Feature\Scheduler\SchedulerForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Feature\Scheduler\Todaywork.Designer.cs">
-      <DependentUpon>Todaywork.cs</DependentUpon>
+    <Compile Include="Feature\Scheduler\SchedulerForm.Designer.cs">
+      <DependentUpon>SchedulerForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="funcTools.cs" />
+    <Compile Include="funDate.cs" />
     <Compile Include="conMain.cs" />
     <Compile Include="conCom.cs" />
     <Compile Include="conFILE.cs" />
@@ -166,8 +166,8 @@
     <EmbeddedResource Include="Feature\Scheduler\Scheduler.resx">
       <DependentUpon>Scheduler.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Feature\Scheduler\Todaywork.resx">
-      <DependentUpon>Todaywork.cs</DependentUpon>
+    <EmbeddedResource Include="Feature\Scheduler\SchedulerForm.resx">
+      <DependentUpon>SchedulerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\Setting\Setting.resx">
       <DependentUpon>Setting.cs</DependentUpon>

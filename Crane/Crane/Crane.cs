@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace Crane
 {
@@ -17,6 +18,7 @@ namespace Crane
             InitializeComponent();
         }
         //定義
+        public static bool trueFalse = true;
         public static Panel pa1 = new Panel();
         public static Panel pa2 = new Panel();
         public static Panel pa3 = new Panel();
@@ -41,6 +43,7 @@ namespace Crane
         {
             public static void main(Form frm)
             {
+                frm.FormClosing += (e, sender) => funCom.neverClose(e, sender, trueFalse);
                 frm.Size = new Size(conCom.XY[0], conCom.XY[1]);
                 frm.Text = conCom.appName;
                 frm.Location = new Point(
@@ -56,7 +59,8 @@ namespace Crane
             private static void main1(Form frm)
             {
                 funCom.addPanel(pa3, 0, frm, new int[] { 0, 0 });
-                funCom.addcontextMenuStrip(pa1, new string[] { "アプリケーションを終了" }, new EventHandler[] { click1 });
+                ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
+                funCom.addcontextMenuStrip(pa1, new string[] { "アプリケーションを終了" }, new EventHandler[] { close.main });
                 funCom.addPanel(pa2, 1, frm, new int[] { 0, 95 });
                 funCom.addLabel(la1, 5, pa2);
                 la1.Text = conCom.appName;
@@ -92,9 +96,6 @@ namespace Crane
                 }
                 userControls[code].Visible = true;
             }
-            private static void click1(object sender, EventArgs e)
-            {
-            }
             public static void main(Form frm) { main1(frm); main2(); }
         }
         private static void main2()
@@ -127,6 +128,21 @@ namespace Crane
             startup.main(this);
             cleaning.main();
             load.main();
+        }
+        class close
+        {
+            public static void main(object sender, EventArgs e)
+            {
+                trueFalse = false;
+                Process myProcess = Process.GetCurrentProcess();
+                Process[] processes = Process.GetProcessesByName(myProcess.ProcessName);
+                // WindowsFormsApp1をすべて終了させる
+                foreach (Process process in processes)
+                {
+                    // クローズメッセージを送信する
+                    process.CloseMainWindow();
+                }
+            }
         }
     }
 }
