@@ -12,11 +12,9 @@ namespace Crane
     {
         //定義
         private static string dataSource = @funINI.getString(conFILE.iniDefault, "[db]", "dataSource", 0)[0];
-        private static int sqlLogMode = int.Parse(string.Format("{0}", conSetting.startupSettingCodes[0]));
-        private static int debugMode = int.Parse(string.Format("{0}", conSetting.startupSettingCodes[17]));
         private static void sqlLog(string msg)
         {
-            if (sqlLogMode == 0)
+            if (int.Parse(string.Format("{0}", conSetting.startupSettingCodes[0])) == 1)
             {
                 funMSG.wrtMsg(conFILE.sqlLog, msg);
             }
@@ -30,7 +28,7 @@ namespace Crane
             SQLiteConnection conn = new SQLiteConnection($"DataSource={dataSource}");
             conn.Open();
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-            if (debugMode == 0)
+            if (int.Parse(string.Format("{0}", conSetting.startupSettingCodes[17])) == 1)
             {
                 StringBuilder sb1 = new StringBuilder();
                 sb1.Append(sqlcode);
@@ -42,7 +40,7 @@ namespace Crane
             {
                 for (int i = 0; i < parameters.Length; i++)
                 {
-                    if(debugMode == 0)
+                    if(int.Parse(string.Format("{0}", conSetting.startupSettingCodes[17])) == 1)
                     {
                         StringBuilder sb2 = new StringBuilder();
                         sb2.Append(sqlcode);
@@ -79,7 +77,7 @@ namespace Crane
             SQLiteConnection conn = new SQLiteConnection($"DataSource={dataSource}");
             conn.Open();
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-            if (debugMode == 0)
+            if (int.Parse(string.Format("{0}", conSetting.startupSettingCodes[17])) == 1)
             {
                 StringBuilder sb1 = new StringBuilder();
                 sb1.Append(sqlcode);
@@ -91,7 +89,7 @@ namespace Crane
             {
                 for (int i = 0; i < parameters.Length; i++)
                 {
-                    if (debugMode == 0)
+                    if (int.Parse(string.Format("{0}", conSetting.startupSettingCodes[17])) == 1)
                     {
                         StringBuilder sb2 = new StringBuilder();
                         sb2.Append(sqlcode);

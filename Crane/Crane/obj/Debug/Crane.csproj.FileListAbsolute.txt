@@ -12,7 +12,6 @@ E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Debug\Crane.csproj.CoreCompileInpu
 E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Debug\Crane.csproj.CopyComplete
 E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Debug\Crane.exe
 E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Debug\Crane.pdb
-E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Debug\Crane.Archive.resources
 E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Debug\Crane.Genre.resources
 E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Debug\Crane.Goal.resources
 E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Debug\Crane.Work.resources
@@ -21,3 +20,4 @@ E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Debug\Crane.Scheduler.resources
 E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Debug\Crane.Setting.resources
 E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Debug\Crane.Plan.resources
 E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Debug\Crane.SchedulerForm.resources
+E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Debug\Crane.Record.resources

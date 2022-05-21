@@ -10,8 +10,6 @@ namespace Crane
 {
     class funMSG
     {
-        private static int msgBoxMode = int.Parse(string.Format("{0}", conSetting.startupSettingCodes[1]));
-        private static int msgLogMode = int.Parse(string.Format("{0}", conSetting.startupSettingCodes[2]));
         public static void wrtMsg(string fileName,string msg)
         {
             Encoding sjisEnc  = Encoding.GetEncoding("Shift_JIS");
@@ -25,11 +23,11 @@ namespace Crane
         }
         public static void errMsg(string msg)
         {
-            if (msgBoxMode == 0)
+            if (int.Parse(string.Format("{0}", conSetting.startupSettingCodes[1])) == 1)
             {
                 MessageBox.Show(msg,"ERROR",MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
-            if (msgLogMode == 0)
+            if (int.Parse(string.Format("{0}", conSetting.startupSettingCodes[2])) == 1)
             {
                 wrtMsg(conFILE.msgLog, msg);
             }

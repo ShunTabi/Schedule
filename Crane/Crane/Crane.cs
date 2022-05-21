@@ -34,17 +34,20 @@ namespace Crane
         public static Button bt3 = new Button();
         public static Button bt4 = new Button();
         public static Button[] btns = new Button[] { bt1, bt2, bt3, bt4 };
-        public static Scheduler scheduler = new Scheduler();
-        public static Review review = new Review();
-        public static Archive archive = new Archive();
-        public static Setting setting = new Setting();
-        public static UserControl[] userControls = new UserControl[] { scheduler, archive, review, setting };
+        public static Scheduler scheduler = conInstance.scheduler;
+        public static Review review = conInstance.review;
+        public static Record record = conInstance.record;
+        public static Setting setting = conInstance.setting;
+        public static UserControl[] userControls = new UserControl[] { scheduler, record, review, setting };
         class setup
         {
             public static void main(Form frm)
             {
                 frm.FormClosing += (e, sender) => funCom.neverClose(e, sender, trueFalse);
-                frm.Size = new Size(conCom.XY[0], conCom.XY[1]);
+                frm.Size = new Size(
+                    int.Parse(string.Format("{0}", funINI.getString(conFILE.iniDefault, "[Main]", "XY", 0)[0])),
+                    int.Parse(string.Format("{0}", funINI.getString(conFILE.iniDefault, "[Main]", "XY", 0)[1]))
+                    );
                 frm.Text = conCom.appName;
                 frm.Location = new Point(
                     int.Parse(string.Format("{0}", funINI.getString(conFILE.iniDefault, "[Main]", "Location", 0)[0])),
@@ -66,8 +69,8 @@ namespace Crane
                 la1.Text = conCom.appName;
                 la1.Font = new Font("Segoe Print", 30, FontStyle.Bold);
                 la1.Location = new Point(10, 10);
-                funCom.addPanel(pa1, 1, frm, new int[] { 0, 30 });
-                funCom.addPanel(pa4, 4, frm, new int[] { 0, 30 });
+                funCom.addPanel(pa1, 1, frm, new int[] { 0, 20 });
+                funCom.addPanel(pa4, 4, frm, new int[] { 0, 20 });
                 pa1.BackColor = Color.SpringGreen;
                 pa4.BackColor = Color.SpringGreen;
                 funCom.addPanel(pa6, 0, pa3, new int[] { 0, 0 });
@@ -83,7 +86,7 @@ namespace Crane
                     btn.Click += (sender, e) => clickBtn(sender, btn.TabIndex);
                 }
                 //scheduler.BackColor = Color.Yellow;
-                //archive.BackColor = Color.Red;
+                //record.BackColor = Color.Red;
                 review.BackColor = Color.Blue;
                 //setting.BackColor = Color.Black;
             }

@@ -39,7 +39,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -49,6 +49,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
@@ -70,6 +71,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="conInstance.cs" />
     <Compile Include="Feature\Scheduler\SchedulerForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,11 +102,11 @@
     <Compile Include="Feature\Scheduler\Scheduler.Designer.cs">
       <DependentUpon>Scheduler.cs</DependentUpon>
     </Compile>
-    <Compile Include="Feature\Archive\Archive.cs">
+    <Compile Include="Feature\Record\Record.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Feature\Archive\Archive.Designer.cs">
-      <DependentUpon>Archive.cs</DependentUpon>
+    <Compile Include="Feature\Record\Record.Designer.cs">
+      <DependentUpon>Record.cs</DependentUpon>
     </Compile>
     <Compile Include="Feature\Review\Review.cs">
       <SubType>UserControl</SubType>
@@ -118,46 +120,46 @@
     <Compile Include="Feature\Setting\Setting.Designer.cs">
       <DependentUpon>Setting.cs</DependentUpon>
     </Compile>
-    <Compile Include="Feature\Archive\Genre.cs">
+    <Compile Include="Feature\Record\Genre.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Feature\Archive\Genre.Designer.cs">
+    <Compile Include="Feature\Record\Genre.Designer.cs">
       <DependentUpon>Genre.cs</DependentUpon>
     </Compile>
-    <Compile Include="Feature\Archive\Work.cs">
+    <Compile Include="Feature\Record\Work.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Feature\Archive\Work.Designer.cs">
+    <Compile Include="Feature\Record\Work.Designer.cs">
       <DependentUpon>Work.cs</DependentUpon>
     </Compile>
-    <Compile Include="Feature\Archive\Goal.cs">
+    <Compile Include="Feature\Record\Goal.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Feature\Archive\Goal.Designer.cs">
+    <Compile Include="Feature\Record\Goal.Designer.cs">
       <DependentUpon>Goal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Feature\Archive\Plan.cs">
+    <Compile Include="Feature\Record\Plan.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Feature\Archive\Plan.Designer.cs">
+    <Compile Include="Feature\Record\Plan.Designer.cs">
       <DependentUpon>Plan.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Crane.resx">
       <DependentUpon>Crane.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Feature\Archive\Archive.resx">
-      <DependentUpon>Archive.cs</DependentUpon>
+    <EmbeddedResource Include="Feature\Record\Record.resx">
+      <DependentUpon>Record.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Feature\Archive\Genre.resx">
+    <EmbeddedResource Include="Feature\Record\Genre.resx">
       <DependentUpon>Genre.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Feature\Archive\Goal.resx">
+    <EmbeddedResource Include="Feature\Record\Goal.resx">
       <DependentUpon>Goal.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Feature\Archive\Plan.resx">
+    <EmbeddedResource Include="Feature\Record\Plan.resx">
       <DependentUpon>Plan.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Feature\Archive\Work.resx">
+    <EmbeddedResource Include="Feature\Record\Work.resx">
       <DependentUpon>Work.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\Review\Review.resx">

@@ -6,7 +6,7 @@ E:\03.C#\04.Crane -開発系-\Crane\Crane\bin\Release\System.Data.SQLite.xml
 E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Release\Crane.csproj.AssemblyReference.cache
 E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Release\Crane.csproj.SuggestedBindingRedirects.cache
 E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Release\Crane.Crane.resources
-E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Release\Crane.Archive.resources
+E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Release\Crane.Record.resources
 E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Release\Crane.Genre.resources
 E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Release\Crane.Goal.resources
 E:\03.C#\04.Crane -開発系-\Crane\Crane\obj\Release\Crane.Plan.resources

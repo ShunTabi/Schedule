@@ -128,6 +128,7 @@ namespace Crane
             {
                 dg.Columns.Add(i.ToString(), columnNames[i]);
             }
+            dg.Columns[0].Visible = false;
         }
         public static void addcontextMenuStrip(Control control, string[] btnNames, EventHandler[] e)
         {

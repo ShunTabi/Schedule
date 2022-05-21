@@ -45,8 +45,8 @@ namespace Crane
                 frm.Size = new Size(700, 800);
                 frm.FormBorderStyle = FormBorderStyle.None;
                 funCom.addPanel(pa2, 0, frm, new int[] { 0, 0 });
-                funCom.addPanel(pa1, 1, frm, new int[] { 0, 30 });
-                funCom.addPanel(pa3, 4, frm, new int[] { 0, 30 });
+                funCom.addPanel(pa1, 1, frm, new int[] { 0, 20 });
+                funCom.addPanel(pa3, 4, frm, new int[] { 0, 20 });
                 pa1.BackColor = Color.SpringGreen;
                 pa3.BackColor = Color.SpringGreen;
                 funCom.addcontextMenuStrip(pa1, new string[] { "フォームを閉じる" }, new EventHandler[] { (e, sender) => close.main(e, sender, frm) });
@@ -109,6 +109,7 @@ namespace Crane
                     }
                     conScheduler.execCode = 0;
                     conScheduler.ID = "0";
+                    conInstance.scheduler.Enabled = true;
                     frm.Visible = false;
                 }
             }
@@ -228,6 +229,7 @@ namespace Crane
         {
             public static void main(object sender, EventArgs e, Form frm)
             {
+                conInstance.scheduler.Enabled = true;
                 frm.Visible = false;
             }
         }
