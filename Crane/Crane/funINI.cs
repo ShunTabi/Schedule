@@ -9,9 +9,9 @@ using System.Runtime.CompilerServices;
 
 namespace Crane
 {
-    class funINI
+    class FunINI
     {
-        public static string[] getString(string fileName, string sectionName, string keyName, int logFlag)
+        public static string[] getString(string fileName, string sectionName, string keyName)
         {
             string[] output = new string[] { $"sectionName={sectionName}\nkeyName={keyName}\nresult=ないよ" };
             string line1;

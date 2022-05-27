@@ -10,7 +10,7 @@ using System.Data;
 
 namespace Crane
 {
-    class funCom
+    class FunCom
     {
         private static void jgDock(Control ctl, int code0)
         {
@@ -39,7 +39,7 @@ namespace Crane
                 ctl.Dock = DockStyle.None;
             }
         }
-        public static void addPanel(Panel pl, int code0, Control ctl, int[] size)
+        public static void AddPanel(Panel pl, int code0, Control ctl, int[] size)
         {
             jgDock(pl, code0);
             pl.Margin = Padding.Empty;
@@ -49,7 +49,7 @@ namespace Crane
             pl.Width = size[0];
             pl.Height = size[1];
         }
-        public static void addButton(Button b, int code0, int code1, Control ctl, int[] size)
+        public static void AddButton(Button b, int code0, int code1, Control ctl, int[] size)
         {
             jgDock(b, code0);
             ctl.Controls.Add(b);
@@ -58,7 +58,7 @@ namespace Crane
             b.Height = size[1];
             b.Font = new Font("Yu mincho", 10, FontStyle.Regular);
         }
-        public static void addTextbox(TextBox tb, int code0, int code1, Control ctl, int[] size)
+        public static void AddTextbox(TextBox tb, int code0, int code1, Control ctl, int[] size)
         {
             jgDock(tb, code0);
             ctl.Controls.Add(tb);
@@ -67,19 +67,19 @@ namespace Crane
             tb.Width = size[0];
             tb.Height = size[1];
         }
-        public static void addLabel(Label lbl, int code0, Control ctl)
+        public static void AddLabel(Label lbl, int code0, Control ctl)
         {
             jgDock(lbl, code0);
             ctl.Controls.Add(lbl);
             lbl.Font = new Font("Yu mincho", 10, FontStyle.Regular);
             lbl.AutoSize = true;
         }
-        public static void addUserControl(UserControl uc, int code0, Control ctl)
+        public static void AddUserControl(UserControl uc, int code0, Control ctl)
         {
             jgDock(uc, code0);
             ctl.Controls.Add(uc);
         }
-        public static void addCombobox(ComboBox cmb, int code0, int code1, Control ctl, int[] xy)
+        public static void AddCombobox(ComboBox cmb, int code0, int code1, Control ctl, int[] xy)
         {
             jgDock(cmb, code0);
             ctl.Controls.Add(cmb);
@@ -89,7 +89,7 @@ namespace Crane
             cmb.Width = xy[0];
             cmb.Height = xy[1];
         }
-        public static void addComboboxItem(ComboBox cmb, long[] keys, string[] values)
+        public static void AddComboboxItem(ComboBox cmb, long[] keys, string[] values)
         {
             //comboBox.Items.Clear();
             DataTable dt = new DataTable();
@@ -108,7 +108,7 @@ namespace Crane
             cmb.DisplayMember = "DisplayMember";
             cmb.AutoSize = true;
         }
-        public static void addDataGridView(DataGridView dg, int code0, Control ctl, int[] xy)
+        public static void AddDataGridView(DataGridView dg, int code0, Control ctl, int[] xy)
         {
             jgDock(dg, code0);
             ctl.Controls.Add(dg);
@@ -120,7 +120,7 @@ namespace Crane
             dg.BorderStyle = BorderStyle.None;
             dg.RowHeadersVisible = false;
         }
-        public static void addDataGridViewColumns(DataGridView dg, string[] columnNames)
+        public static void AddDataGridViewColumns(DataGridView dg, string[] columnNames)
         {
             dg.Columns.Clear();
             dg.AllowUserToAddRows = false;
@@ -129,8 +129,11 @@ namespace Crane
                 dg.Columns.Add(i.ToString(), columnNames[i]);
             }
             dg.Columns[0].Visible = false;
+            foreach (DataGridViewColumn c in dg.Columns)
+                c.SortMode = DataGridViewColumnSortMode.NotSortable;
+            dg.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         }
-        public static void addcontextMenuStrip(Control control, string[] btnNames, EventHandler[] e)
+        public static void AddContextMenuStrip(Control control, string[] btnNames, EventHandler[] e)
         {
             ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
             for (int i = 0; i < btnNames.Length; i++)

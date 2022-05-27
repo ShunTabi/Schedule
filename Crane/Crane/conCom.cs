@@ -7,23 +7,19 @@ using System.Drawing;
 
 namespace Crane
 {
-    class conCom
+    class ConCom
     {
         public static string appName = "Crane";
         public static string[] defaultBtnNames = new string[] { "登録", "更新", "削除" };
     }
-    class conScheduler
+    class ConScheduler
     {
         public static int execCode = 0;
         public static string ID = "0";
         public static Color[] statusColors = new Color[] { Color.Pink,Color.Lavender,Color.DimGray,Color.DimGray };
-        //INSERT INTO T_COMITEM(TABLEKIND,CODE,NAME1,NAME2) VALUES('STATUS',1,'対応中','Doing');
-        //INSERT INTO T_COMITEM(TABLEKIND, CODE, NAME1, NAME2) VALUES('STATUS',2,'未','Waiting');
-        //INSERT INTO T_COMITEM(TABLEKIND, CODE, NAME1, NAME2) VALUES('STATUS',3,'完了','Done');
-        //INSERT INTO T_COMITEM(TABLEKIND, CODE, NAME1, NAME2) VALUES('STATUS',4,'保留','Pending');
-
+        public static string selectedDate = FunDate.getToday(0, 0);
     }
-    class conSetting
+    class ConSetting
     {
         public static string[] names = new string[]
         {
@@ -53,6 +49,6 @@ namespace Crane
             new string[]{"OFF","ON"},//17
             new string[]{"OFF","ON"},//18
         };
-        public static string[] startupSettingCodes = funINI.getString(conFILE.iniDefault, "[Setting]", "startupSettingCode", 0);
+        public static string[] startupSettingCodes = FunINI.getString(ConFILE.iniDefault, "[Setting]", "startupSettingCode");
     }
 }

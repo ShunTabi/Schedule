@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Crane
 {
-    class conMSG
+    class ConMSG
     {
         public static string message00001 = "空や";
         public static string message00002 = "複数の起動はできません。";

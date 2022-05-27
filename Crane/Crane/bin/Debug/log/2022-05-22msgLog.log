@@ -1,0 +1,18 @@
+2022-05-22 10:58 >> sql0001：SQL logic error
+no such table: T_GENRE
+2022-05-22 15:36 >> SQL0001：SQL logic error
+near "keyName": syntax error
+2022-05-22 15:37 >> SQL0001：SQL logic error
+near "keyName": syntax error
+2022-05-22 15:37 >> SQL0001：SQL logic error
+near "keyName": syntax error
+2022-05-22 15:39 >> SQL0001：SQL logic error
+near "keyName": syntax error
+2022-05-22 15:39 >> SQL0001：SQL logic error
+near "keyName": syntax error
+2022-05-22 15:40 >> SQL0001：SQL logic error
+near "keyName": syntax error
+2022-05-22 15:40 >> SQL0001：SQL logic error
+near "keyName": syntax error
+2022-05-22 20:31 >> フォームの記載を確認してください。
+日付はyyyy-MM-dd、時間はHH:mmで記載してください。

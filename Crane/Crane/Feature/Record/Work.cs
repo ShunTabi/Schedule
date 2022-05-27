@@ -35,90 +35,89 @@ namespace Crane
         public static ComboBox cb2 = new ComboBox();
         public static ComboBox cb3 = new ComboBox();
         public static DataGridView dg = new DataGridView();
-        class setup
+        class LocalSetup
         {
-            private static void common(UserControl uc)
+            private static void Common(UserControl uc)
             {
-                uc.VisibleChanged += (sender, e) => { if (uc.Visible == false) { return; } else { cleaning.main(); load.main(); } };
-                funCom.addPanel(pa2, 0, uc, new int[] { 0, 0 });
-                funCom.addPanel(pa1, 2, uc, new int[] { 350, 0 });
+                FunCom.AddPanel(pa2, 0, uc, new int[] { 0, 0 });
+                FunCom.AddPanel(pa1, 2, uc, new int[] { 350, 0 });
                 pa2.BackColor = Color.Plum;
                 pa2.Padding = new Padding(10,10,10,10);
             }
-            private static void leftSide()
+            private static void LeftSide()
             {
                 string[] lbs = new string[] { "目標", "計画", "作業", "優先度", "開始日", "終了日" };
                 for (int i = 0; i < lbs.Length; i++)
                 {
                     Label lb = new Label();
-                    funCom.addLabel(lb, 5, pa1);
+                    FunCom.AddLabel(lb, 5, pa1);
                     lb.Text = lbs[i];
                     lb.Font = new Font("Yu mincho", 10, FontStyle.Regular);
                     lb.Location = new Point(15, 15 + i * 70);
                 }
-                funCom.addCombobox(cb1, 5, 1, pa1, new int[] { 180, 10 });
+                FunCom.AddCombobox(cb1, 5, 1, pa1, new int[] { 180, 10 });
                 cb1.Font = new Font("Yu mincho", 10, FontStyle.Regular);
                 cb1.Location = new Point(100, 15);
-                cb1.SelectedIndexChanged += (sender, e) => { load.cmdload2(); };
-                funCom.addCombobox(cb2, 5, 2, pa1, new int[] { 180, 10 });
+                cb1.SelectedIndexChanged += (sender, e) => { LocalLoad.CmdLocalLoad2(); };
+                FunCom.AddCombobox(cb2, 5, 2, pa1, new int[] { 180, 10 });
                 cb2.Font = new Font("Yu mincho", 10, FontStyle.Regular);
                 cb2.Location = new Point(100, 85);
-                funCom.addTextbox(tb2, 5, 3, pa1, new int[] { 180, 10 });
+                FunCom.AddTextbox(tb2, 5, 3, pa1, new int[] { 180, 10 });
                 tb2.Location = new Point(100, 155);
-                funCom.addCombobox(cb3, 5, 4, pa1, new int[] { 180, 10 });
+                FunCom.AddCombobox(cb3, 5, 4, pa1, new int[] { 180, 10 });
                 cb3.Font = new Font("Yu mincho", 10, FontStyle.Regular);
                 cb3.Location = new Point(100, 225);
-                funCom.addTextbox(tb3, 5, 5, pa1, new int[] { 180, 10 });
+                FunCom.AddTextbox(tb3, 5, 5, pa1, new int[] { 180, 10 });
                 tb3.Location = new Point(100, 295);
-                tb3.Text = funDate.getToday(0);
-                funCom.addTextbox(tb4, 5, 6, pa1, new int[] { 180, 10 });
+                tb3.Text = FunDate.getToday(0,0);
+                FunCom.AddTextbox(tb4, 5, 6, pa1, new int[] { 180, 10 });
                 tb4.Location = new Point(100, 365);
-                tb4.Text = funDate.getToday(0);
-                funCom.addButton(btn1, 5, 7, pa1, new int[] { 90, 50 });
+                tb4.Text = FunDate.getToday(0,0);
+                FunCom.AddButton(btn1, 5, 7, pa1, new int[] { 90, 50 });
                 btn1.Location = new Point(100, 435);
                 btn1.BackColor = Color.MediumOrchid;
                 btn1.Click += (sender, e) =>
                 {
                     if (cb1.Text == "" || cb2.Text == "" || tb2.Text == "" || cb3.Text == "" || tb3.Text == "" || tb4.Text == "")
                     {
-                        funMSG.errMsg(conMSG.message00001);
+                        FunMSG.errMsg(ConMSG.message00001);
                     }
                     else if (!Regex.IsMatch(tb3.Text, @"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$") || !Regex.IsMatch(tb4.Text, @"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"))
                     {
-                        funMSG.errMsg(conMSG.message00005);
+                        FunMSG.errMsg(ConMSG.message00005);
                     }
                     else
                     {
                         if (execCode == 0)
                         {
-                            funSQL.sqlDML("sql0302", conSQL.work.sql0302, new string[] { "@PLANID", "@WORKNAME", "@PRIORID", "WORKSTARTDATE", "WORKENDDATE" }, new string[] { cb2.SelectedValue.ToString(), tb2.Text, cb3.SelectedValue.ToString(), tb3.Text, tb4.Text });
+                            FunSQL.SQLDML("SQL0310", ConSQL.WorkSQL.SQL0310, new string[] { "@PLANID", "@WORKNAME", "@PRIORID", "WORKSTARTDATE", "WORKENDDATE" }, new string[] { cb2.SelectedValue.ToString(), tb2.Text, cb3.SelectedValue.ToString(), tb3.Text, tb4.Text });
                         }
                         else if (execCode == 1)
                         {
-                            funSQL.sqlDML("sql0303", conSQL.work.sql0303, new string[] { "@PLANID", "@WORKNAME", "@PRIORID", "WORKSTARTDATE", "WORKENDDATE", "@WORKID" }, new string[] { cb2.SelectedValue.ToString(), tb2.Text, cb3.SelectedValue.ToString(), tb3.Text, tb4.Text, ID });
+                            FunSQL.SQLDML("SQL0320", ConSQL.WorkSQL.SQL0320, new string[] { "@PLANID", "@WORKNAME", "@PRIORID", "WORKSTARTDATE", "WORKENDDATE", "@WORKID" }, new string[] { cb2.SelectedValue.ToString(), tb2.Text, cb3.SelectedValue.ToString(), tb3.Text, tb4.Text, ID });
                         }
-                        cleaning.main();
-                        load.main();
+                        LocalCleaning.LocalMain();
+                        LocalLoad.LocalMain();
                     }
                 };
             }
-            public static void rightSide()
+            public static void RightSide()
             {
-                funCom.addDataGridView(dg, 0, pa2, new int[] { 0, 0 });
+                FunCom.AddDataGridView(dg, 0, pa2, new int[] { 0, 0 });
                 dg.BackgroundColor = Color.Plum;
-                funCom.addDataGridViewColumns(dg, new string[] { "ID", "目標", "計画", "優先度/作業", "開始日", "終了日" });
-                funCom.addcontextMenuStrip(dg, conCom.defaultBtnNames, new EventHandler[]
+                FunCom.AddDataGridViewColumns(dg, new string[] { "ID", "目標", "計画", "優先度/作業", "開始日", "終了日" });
+                FunCom.AddContextMenuStrip(dg, ConCom.defaultBtnNames, new EventHandler[]
                 {
                     (sender, e) =>
                     {//新規
                         ID = "0";
                         execCode = 0;
-                        btn1.Text = conCom.defaultBtnNames[execCode];
+                        btn1.Text = ConCom.defaultBtnNames[execCode];
                     },
                     (sender, e) =>
                     {//更新
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
-                        SQLiteDataReader reader = funSQL.sqlSELECT("sql0305", conSQL.work.sql0305, new string[] { "@WORKID" }, new string[] { ID });
+                        SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0301", ConSQL.WorkSQL.SQL0301, new string[] { "@WORKID" }, new string[] { ID });
                         while (reader.Read())
                         {
                             cb1.Text = (string)reader["GOALNAME"];
@@ -126,68 +125,65 @@ namespace Crane
                             cb3.Text = (string)reader["PRIORNAME"];
                             tb3.Text = ((DateTime)reader["WORKSTARTDATE"]).ToString("yyyy-MM-dd");
                             tb4.Text = ((DateTime)reader["WORKENDDATE"]).ToString("yyyy-MM-dd");
-                            load.cmdload2();cb2.Text = (string)reader["PLANNAME"];
+                            LocalLoad.CmdLocalLoad2();cb2.Text = (string)reader["PLANNAME"];
                         }
                         execCode = 1;
-                        btn1.Text = conCom.defaultBtnNames[execCode];
+                        btn1.Text = ConCom.defaultBtnNames[execCode];
                     },
                     (sender, e) =>
                     {//削除
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
-                        SQLiteDataReader reader = funSQL.sqlSELECT("sql0304", conSQL.work.sql0304, new string[] { "@WORKID" }, new string[] { ID });
-                        //cleaning.main();
-                        load.main();
+                        FunSQL.SQLDML("SQL0321", ConSQL.WorkSQL.SQL0321, new string[] { "@vISIBLESTATUS","@WORKID" }, new string[] { "1",ID });
+                        LocalCleaning.LocalMain();
+                        LocalLoad.LocalMain();
                     }
                 }
                 );
-                funCom.addPanel(pa3, 1, pa2, new int[] { 0, 50 });
+                FunCom.AddPanel(pa3, 1, pa2, new int[] { 0, 50 });
                 Label lb1 = new Label();
-                funCom.addLabel(lb1, 5, pa3);
+                FunCom.AddLabel(lb1, 5, pa3);
                 lb1.Text = "目標/計画";
                 lb1.Location = new Point(0, 0);
                 lb1.Font = new Font("Yu mincho", 10, FontStyle.Regular);
-                funCom.addTextbox(tb1, 5, 1, pa3, new int[] { 180, 10 });
+                FunCom.AddTextbox(tb1, 5, 1, pa3, new int[] { 180, 10 });
                 tb1.Location = new Point(101, 0);
-                tb1.TextChanged += (sender, e) => { load.dataload(); };
+                tb1.TextChanged += (sender, e) => { LocalLoad.DataLocalLoad(); };
             }
-            private static void clickBtn(object sender, EventArgs e)
+            public static void LocalMain(UserControl uc)
             {
-            }
-            public static void main(UserControl uc)
-            {
-                common(uc);
-                leftSide();
-                rightSide();
+                Common(uc);
+                LeftSide();
+                RightSide();
             }
         }
-        //class startup
+        //class LocalStartup
         //{
-        //    public static void main()
+        //    public static void LocalMain()
         //    {
 
         //    }
         //}
-        class cleaning
+        class LocalCleaning
         {
-            public static void main()
+            public static void LocalMain()
             {
                 tb2.Text = "";
-                tb3.Text = funDate.getToday(0);
-                tb4.Text = funDate.getToday(0);
+                tb3.Text = FunDate.getToday(0,0);
+                tb4.Text = FunDate.getToday(0,0);
                 ID = "0";
                 execCode = 0;
-                btn1.Text = conCom.defaultBtnNames[execCode];
+                btn1.Text = ConCom.defaultBtnNames[execCode];
             }
         }
-        class load
+        class LocalLoad
         {
-            public static void dataload()
+            public static void DataLocalLoad()
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("%");
                 sb.Append(tb1.Text);
                 sb.Append("%");
-                SQLiteDataReader reader = funSQL.sqlSELECT("sql0301", conSQL.work.sql0301, new string[] { "@KEYWORD" }, new string[] { sb.ToString() });
+                SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0300", ConSQL.WorkSQL.SQL0300, new string[] { "@KEYWORD" }, new string[] { sb.ToString() });
                 dg.Rows.Clear();
                 while (reader.Read())
                 {
@@ -204,11 +200,11 @@ namespace Crane
                         );
                 }
             }
-            private static void cmdload1()
+            private static void CmdLocalLoad1()
             {
                 long[] keys = new long[] { };
                 string[] values = new string[] { };
-                SQLiteDataReader reader = funSQL.sqlSELECT("sql0106", conSQL.goal.sql0106, new string[] { }, new string[] { });
+                SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0102", ConSQL.GoalSQL.SQL0102, new string[] { }, new string[] { });
                 while (reader.Read())
                 {
                     Array.Resize(ref keys, keys.Length + 1);
@@ -216,10 +212,10 @@ namespace Crane
                     Array.Resize(ref values, values.Length + 1);
                     values[values.Length - 1] = (string)reader["GOALNAME"];
                 }
-                funCom.addComboboxItem(cb1, keys, values);
+                FunCom.AddComboboxItem(cb1, keys, values);
                 keys = new long[] { };
                 values = new string[] { };
-                reader = funSQL.sqlSELECT("sql9001", conSQL.prior.sql9001, new string[] { }, new string[] { });
+                reader = FunSQL.SQLSELECT("SQL9001", ConSQL.PriorSQL.SQL9001, new string[] { }, new string[] { });
                 while (reader.Read())
                 {
                     Array.Resize(ref keys, keys.Length + 1);
@@ -227,15 +223,15 @@ namespace Crane
                     Array.Resize(ref values, values.Length + 1);
                     values[values.Length - 1] = (string)reader["PRIORNAME"];
                 }
-                funCom.addComboboxItem(cb3, keys, values);
+                FunCom.AddComboboxItem(cb3, keys, values);
             }
-            public static void cmdload2()
+            public static void CmdLocalLoad2()
             {
                 if (cb1.SelectedValue != null)
                 {
                     long[] keys = new long[] { };
                     string[] values = new string[] { };
-                    SQLiteDataReader reader = funSQL.sqlSELECT("sql0206", conSQL.plan.sql0206, new string[] { "@GOALID" }, new string[] { cb1.SelectedValue.ToString() });
+                    SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0202", ConSQL.PlanSQL.SQL0202, new string[] { "@GOALID" }, new string[] { cb1.SelectedValue.ToString() });
                     while (reader.Read())
                     {
                         Array.Resize(ref keys, keys.Length + 1);
@@ -243,24 +239,44 @@ namespace Crane
                         Array.Resize(ref values, values.Length + 1);
                         values[values.Length - 1] = (string)reader["PLANNAME"];
                     }
-                    funCom.addComboboxItem(cb2, keys, values);
+                    FunCom.AddComboboxItem(cb2, keys, values);
                 }
             }
-            public static void cmdload()
+            public static void CmdLocalLoad()
             {
-                cmdload1();
-                cmdload2();
+                CmdLocalLoad1();
+                CmdLocalLoad2();
             }
-            public static void main()
+            public static void LocalMain()
             {
-                dataload();
-                cmdload();
+                DataLocalLoad();
+                CmdLocalLoad();
             }
         }
-        private void Work_Load(object sender, EventArgs e)
+
+        private void Work_VisibleChanged(object sender, EventArgs e)
         {
-            setup.main(this);
-            //startup.main();
+            int loadStatus = ConInstance.workFirstLoad;
+            if (loadStatus == 1)
+            {
+                ConInstance.workFirstLoad = 2;
+                LocalSetup.LocalMain(this);
+                LocalCleaning.LocalMain();
+                LocalLoad.LocalMain();
+            }
+            else if(loadStatus == 2)
+            {
+                if (Visible == false) { return; }
+                else
+                {
+                    LocalCleaning.LocalMain();
+                    LocalLoad.LocalMain();
+                }
+            }
+            else if (loadStatus == 0)
+            {
+                ConInstance.workFirstLoad = 1;
+            }
         }
     }
 }

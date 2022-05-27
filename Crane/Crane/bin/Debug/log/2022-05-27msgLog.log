@@ -1,0 +1,35 @@
+2022-05-27 00:41 >> SQL0004：unknown error
+Insufficient parameters supplied to the command
+2022-05-27 19:57 >> 空や
+2022-05-27 19:57 >> SQL0002：constraint failed
+UNIQUE constraint failed: T_GENRE.GENRENAME
+2022-05-27 19:57 >> 空や
+2022-05-27 19:58 >> 空や
+2022-05-27 19:58 >> 空や
+2022-05-27 19:58 >> 空や
+2022-05-27 19:58 >> 空や
+2022-05-27 19:58 >> 空や
+2022-05-27 19:58 >> 空や
+2022-05-27 19:58 >> 空や
+2022-05-27 19:58 >> 空や
+2022-05-27 19:58 >> 空や
+2022-05-27 19:58 >> 空や
+2022-05-27 19:58 >> 空や
+2022-05-27 20:01 >> SQL0102：constraint failed
+UNIQUE constraint failed: T_GOAL.GOALNAME
+2022-05-27 20:56 >> SQL0400：unknown error
+Insufficient parameters supplied to the command
+2022-05-27 20:57 >> SQL0101：unknown error
+Insufficient parameters supplied to the command
+2022-05-27 20:58 >> SQL0101：unknown error
+Insufficient parameters supplied to the command
+2022-05-27 20:58 >> SQL0101：unknown error
+Insufficient parameters supplied to the command
+2022-05-27 20:59 >> SQL0301：unknown error
+Insufficient parameters supplied to the command
+2022-05-27 21:00 >> SQL0020：unknown error
+Insufficient parameters supplied to the command
+2022-05-27 21:01 >> SQL0220：unknown error
+Insufficient parameters supplied to the command
+2022-05-27 21:01 >> SQL0021：unknown error
+Insufficient parameters supplied to the command

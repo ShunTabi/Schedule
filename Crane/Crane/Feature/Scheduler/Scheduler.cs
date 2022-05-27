@@ -18,192 +18,81 @@ namespace Crane
             InitializeComponent();
         }
         //定義
-        public static int execCode = 0;
-        public static string ID = "0";
-        public static Form schedulerForm = new SchedulerForm();
         public static Panel pa1 = new Panel();
         public static Panel pa2 = new Panel();
-        public static Panel pa3 = new Panel();
-        public static Panel pa4 = new Panel();
-        public static Panel pa5 = new Panel();
-        public static Panel pa6 = new Panel();
-        public static TextBox tb1 = new TextBox();
-        public static DataGridView dg = new DataGridView();
-        class setup
+        public static ScheduleDaily scheduleDaily = new ScheduleDaily();
+        public static ScheduleWeekly scheduleWeekly = new ScheduleWeekly();
+        public static ScheduleList scheduleList = new ScheduleList();
+        public static UserControl[] userControls = new UserControl[] { scheduleDaily, scheduleWeekly, scheduleList };
+        class LocalSetup
         {
-            private static void common(UserControl uc)
+            private static void common1(UserControl uc)
             {
-                uc.EnabledChanged += (sender, e) => { if (uc.Enabled == false) { return; } else { load.main(); } };
-                uc.VisibleChanged += (sender, e) => { if (uc.Visible == false) { return; } else { load.main(); } };
-                schedulerForm.Visible = false;
-                funCom.addPanel(pa2, 0, uc, new int[] { 0, 0 });
-                funCom.addPanel(pa1, 2, uc, new int[] { 350, 0 });
-                pa2.BackColor = Color.Plum;
-                pa2.Padding = new Padding(10,0, 10, 0);
+                FunCom.AddPanel(pa2, 0, uc, new int[] { 0, 0 });
+                FunCom.AddPanel(pa1, 1, uc, new int[] { 0, 100 });
+                string[] btnNames = new string[] { "日間","週間","一覧" };
+                for (int i = 0; i < userControls.Length; i++)
+                {
+                    Button btn = new Button();
+                    FunCom.AddButton(btn, 5, i, pa1, new int[] { 90, 50 });
+                    btn.Text = btnNames[i];
+                    btn.Location = new Point(10 + i * 95, 10);
+                    btn.BackColor = Color.MediumOrchid;
+                    btn.Click += (sender, e) => {
+                        for (int j = 0; j < userControls.Length; j++)
+                        {
+                            uc = userControls[j];
+                            uc.Visible = false;
+                        }
+                        userControls[btn.TabIndex].Visible = true;
+                    };
+                }
             }
-            private static void leftSide()
+            private static void common2()
             {
-                funCom.addPanel(pa4, 0, pa1, new int[] { 0, 0 });
-                funCom.addPanel(pa3, 1, pa1, new int[] { 0, 70 });
-                pa4.AutoScroll = true;
-                Label l1 = new Label();
-                funCom.addLabel(l1, 5, pa3);
-                l1.Location = new Point(0, 20);
-                l1.Font = new Font("Yu mincho", 10, FontStyle.Regular);
-                l1.Text = "日付";
-                funCom.addTextbox(tb1, 5, 0, pa3, new int[] { 160, 10 });
-                tb1.Location = new Point(53, 20);
-                tb1.Text = funDate.getToday(0);
-                tb1.TextChanged += (sender, e) => chgTxt(sender, e);
+                for (int i = 0; i < userControls.Length; i++)
+                {
+                    UserControl uc = userControls[i];
+                    FunCom.AddUserControl(uc, 0, pa2);
+                    uc.Visible = false;
+                }
+                userControls[ConMain.scheduleStartupCode].Visible = true;
             }
-            private static void rightSide()
+            public static void LocalMain(UserControl uc)
             {
-                funCom.addDataGridView(dg, 0, pa2, new int[] { 0, 0 });
-                dg.BackgroundColor = Color.Plum;
-                funCom.addcontextMenuStrip(dg, conCom.defaultBtnNames, new EventHandler[] { click1, click2, click3 });
-                funCom.addDataGridViewColumns(dg, new string[] { "ID", "目標", "計画/作業", " 進捗", "開始時間", "終了時間" });
-                funCom.addPanel(pa5, 1, pa2, new int[] { 0, 100 });
-                funCom.addPanel(pa6, 4, pa2, new int[] { 0, 70 });
-                Label l2 = new Label();
-                funCom.addLabel(l2, 5, pa5);
-                l2.Location = new Point(0, 0);
-                l2.Font = new Font("Segoe Print", 25, FontStyle.Regular);
-                l2.Text = "TODAY";
-                pa6.BackColor = Color.Plum;
-                Button btn1 = new Button();
-                funCom.addButton(btn1, 5, 1, pa6, new int[] { 90, 50 });
-                btn1.Location = new Point(15, 5);
-                btn1.Text = conCom.defaultBtnNames[0];
-                btn1.BackColor = Color.MediumOrchid;
-                btn1.Click += (sender, e) => clickBtn(sender, e);
-            }
-            private static void chgTxt(object sender, EventArgs e)
-            {
-                load.dataload();
-                load.lbload();
-            }
-            private static void clickBtn(object sender, EventArgs e)
-            {//新規
-                conScheduler.execCode = 0;
-                conScheduler.ID = "0";
-                schedulerForm.Visible = true;
-                conInstance.scheduler.Enabled = false;
-            }
-            private static void click1(object sender, EventArgs e)
-            {//新規
-                conScheduler.execCode = 0;
-                conScheduler.ID = "0";
-                schedulerForm.Visible = true;
-                conInstance.scheduler.Enabled = false;
-            }
-            private static void click2(object sender, EventArgs e)
-            {//修正
-                conScheduler.execCode = 1;
-                conScheduler.ID = dg.SelectedRows[0].Cells[0].Value.ToString();
-                schedulerForm.Visible = true;
-                conInstance.scheduler.Enabled = false;
-            }
-            private static void click3(object sender, EventArgs e)
-            {//削除
-                string ID = dg.SelectedRows[0].Cells[0].Value.ToString();
-                SQLiteDataReader reader = funSQL.sqlSELECT("sql0404", conSQL.schedule.sql0404, new string[] { "@SCHEDULEID" }, new string[] { ID });
-                load.main();
-            }
-            public static void main(UserControl uc)
-            {
-                common(uc);
-                leftSide();
-                rightSide();
+                common1(uc);
+                common2();
             }
         }
-        class startup
-        {
-            public static void main()
-            {
+        //class startup
+        //{
+        //    public static void main()
+        //    {
 
-            }
-        }
-        class cleaning
+        //    }
+        //}
+        //class cleaning
+        //{
+        //    public static void main()
+        //    {
+
+        private void Scheduler_VisibleChanged(object sender, EventArgs e)
         {
-        }
-        class load
-        {
-            private static SQLiteDataReader sql0401()
+            int loadStatus = ConInstance.scheduleFirstLoad;
+            if (loadStatus == 1)
             {
-                SQLiteDataReader reader = funSQL.sqlSELECT("sql0401", conSQL.schedule.sql0401, new string[] { "@SCHEDULEDATE" }, new string[] { tb1.Text });
-                return reader;
+                ConInstance.scheduleFirstLoad = 2;
+                LocalSetup.LocalMain(this);
+                //LocalStartup.LocalMain();
             }
-            public static void dataload()
+            else if (loadStatus == 2)
             {
-                SQLiteDataReader reader = sql0401();
-                dg.Rows.Clear();
-                while (reader.Read())
-                {
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append((string)reader["PLANNAME"]);
-                    sb.Append(":");
-                    sb.Append((string)reader["WORKNAME"]);
-                    dg.Rows.Add(
-                    ((Int64)reader["SCHEDULEID"]).ToString(),
-                    (string)reader["GOALNAME"],
-                        sb.ToString(),
-                        (string)reader["STATUSNAME"],
-                        ((DateTime)reader["SCHEDULESTARTTIME"]).ToString("HH:mm"),
-                        ((DateTime)reader["SCHEDULEENDTIME"]).ToString("HH:mm")
-                        );
-                }
+                return;
             }
-            public static void lbload()
+            else if (loadStatus == 0)
             {
-                pa4.Controls.Clear();
-                for (int i = 0; i < 25; i++)
-                {
-                    Label l = new Label();
-                    funCom.addLabel(l, 5, pa4);
-                    l.Location = new Point(0, 10 + i * 200);
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append("--");
-                    sb.Append(i.ToString("00"));
-                    sb.Append(":00--");
-                    l.Text = sb.ToString();
-                    l.Font = new Font("Segoe Print", 9, FontStyle.Regular);
-                }
-                SQLiteDataReader reader = sql0401();
-                while (reader.Read())
-                {
-                    Panel p = new Panel();
-                    funCom.addPanel(p, 99, pa4, new int[] { 300, funDate.getInt(((DateTime)reader["SCHEDULEENDTIME"]).ToString("HH:mm")) - funDate.getInt(((DateTime)reader["SCHEDULESTARTTIME"]).ToString("HH:mm")) });
-                    p.Location = new Point(0, funDate.getInt(((DateTime)reader["SCHEDULESTARTTIME"]).ToString("HH:mm")));
-                    p.BackColor = conScheduler.statusColors[(Int64)reader["STATUSID"]-1];
-                    Label l = new Label();
-                    l.Padding = new Padding(20, 25, 20, 5);
-                    funCom.addLabel(l, 5, p);
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append("-----------------------------------\n");
-                    sb.Append("【");
-                    sb.Append((string)reader["STATUSSUBNAME"]);
-                    sb.Append("】");
-                    sb.Append((string)reader["GOALNAME"]);
-                    sb.Append("\n-----------------------------------\n");
-                    sb.Append((string)reader["PRIORSUBNAME"]);
-                    sb.Append((string)reader["PLANNAME"]);
-                    sb.Append("(");
-                    sb.Append((string)reader["WORKNAME"]);
-                    sb.Append(")");
-                    l.Text = sb.ToString();
-                    l.Font = new Font("Yu mincho", 9, FontStyle.Regular);
-                }
+                ConInstance.scheduleFirstLoad = 1;
             }
-            public static void main()
-            {
-                dataload();
-                lbload();
-            }
-        }
-        private void Scheduler_Load(object sender, EventArgs e)
-        {
-            setup.main(this);
-            startup.main();
         }
     }
 }

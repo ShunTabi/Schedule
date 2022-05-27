@@ -32,35 +32,39 @@ namespace Crane
         public static ComboBox cb1 = new ComboBox();
         public static ComboBox cb2 = new ComboBox();
         public static ComboBox cb3 = new ComboBox();
-        class setup
+        class LocalSetup
         {
-            private static void common(Form frm)
+            private static void Common(Form frm)
             {
-                frm.FormClosing += (e, sender) => funCom.neverClose(e, sender, true);
-                frm.VisibleChanged += (e, sender) => load.frmchg(e, sender);
+                frm.FormClosing += (e, sender) => FunCom.neverClose(e, sender, true);
+                frm.VisibleChanged += (e, sender) =>
+                {
+                    LocalCleaning.LocalMain();
+                    LocalLoad.LocalMain();
+                };
                 frm.Location = new Point(
-                    int.Parse(string.Format("{0}", funINI.getString(conFILE.iniDefault, "[Sub]", "Location", 0)[0])),
-                    int.Parse(string.Format("{0}", funINI.getString(conFILE.iniDefault, "[Sub]", "Location", 0)[1]))
+                    int.Parse(string.Format("{0}", FunINI.getString(ConFILE.iniDefault, "[Sub]", "Location")[0])),
+                    int.Parse(string.Format("{0}", FunINI.getString(ConFILE.iniDefault, "[Sub]", "Location")[1]))
                     );
                 frm.Size = new Size(700, 800);
                 frm.FormBorderStyle = FormBorderStyle.None;
-                funCom.addPanel(pa2, 0, frm, new int[] { 0, 0 });
-                funCom.addPanel(pa1, 1, frm, new int[] { 0, 20 });
-                funCom.addPanel(pa3, 4, frm, new int[] { 0, 20 });
+                FunCom.AddPanel(pa2, 0, frm, new int[] { 0, 0 });
+                FunCom.AddPanel(pa1, 1, frm, new int[] { 0, 20 });
+                FunCom.AddPanel(pa3, 4, frm, new int[] { 0, 20 });
                 pa1.BackColor = Color.SpringGreen;
                 pa3.BackColor = Color.SpringGreen;
-                funCom.addcontextMenuStrip(pa1, new string[] { "フォームを閉じる" }, new EventHandler[] { (e, sender) => close.main(e, sender, frm) });
+                FunCom.AddContextMenuStrip(pa1, new string[] { "フォームを閉じる" }, new EventHandler[] { (e, sender) => LocalClose.LocalMain(frm) });
             }
-            private static void createForm(Form frm)
+            private static void CreateForm(Form frm)
             {
-                funCom.addLabel(lb1, 5, pa2);
+                FunCom.AddLabel(lb1, 5, pa2);
                 lb1.Location = new Point(30, 30);
                 lb1.Font = new Font("Segoe Print", 20, FontStyle.Regular);
                 string[] names = new string[] { "目標", "計画/作業", "進捗", "日付", "開始時間", "終了時間" };
                 for (int i = 0; i < names.Length; i++)
                 {
                     Label l = new Label();
-                    funCom.addLabel(l, 5, pa2);
+                    FunCom.AddLabel(l, 5, pa2);
                     l.Text = names[i];
                     l.Location = new Point(70, 150 + 70 * i);
                     l.Font = new Font("Yu mincho", 10, FontStyle.Regular);
@@ -68,66 +72,64 @@ namespace Crane
                 ComboBox[] cbs = new ComboBox[] { cb1, cb2, cb3 };
                 for (int i = 0; i < cbs.Length; i++)
                 {
-                    funCom.addCombobox(cbs[i], 5, i, pa2, new int[] { 200, 10 });
+                    FunCom.AddCombobox(cbs[i], 5, i, pa2, new int[] { 200, 10 });
                     cbs[i].Location = new Point(240, 150 + 70 * i);
                     cbs[i].Font = new Font("Yu mincho", 10, FontStyle.Regular);
                 }
-                cb1.SelectedIndexChanged += (sender, e) => cmbchg(sender, e);
+                cb1.SelectedIndexChanged += (sender, e) =>
+                {
+                    LocalCleaning.CLN2();
+                };
                 TextBox[] tbs = new TextBox[] { tb1, tb2, tb3 };
                 for (int i = 0; i < tbs.Length; i++)
                 {
-                    funCom.addTextbox(tbs[i], 5, i + 3, pa2, new int[] { 200, 10 });
+                    FunCom.AddTextbox(tbs[i], 5, i + 3, pa2, new int[] { 200, 10 });
                     tbs[i].Location = new Point(240, 360 + 70 * i);
                     tbs[i].Font = new Font("Yu mincho", 10, FontStyle.Regular);
                 }
-                funCom.addButton(btn1, 5, 6, pa2, new int[] { 90, 50 });
+                FunCom.AddButton(btn1, 5, 6, pa2, new int[] { 90, 50 });
                 btn1.Location = new Point(240, 570);
                 btn1.BackColor = Color.MediumOrchid;
-                btn1.Click += (sender, e) => clickBtn(sender, e, frm);
-            }
-            public static void clickBtn(object sender, EventArgs e, Form frm)
-            {
-                if (cb1.SelectedValue == null || cb2.SelectedValue == null || cb3.SelectedValue == null || tb1.Text == "" || tb2.Text == "" || tb3.Text == "")
+                btn1.Click += (sender, e) =>
                 {
-                    funMSG.errMsg(conMSG.message00001);
-                }
-                else if (!Regex.IsMatch(tb1.Text, @"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$") || !Regex.IsMatch(tb2.Text, @"^([01][0-9]|2[0-3]):[0-5][0-9]$") || !Regex.IsMatch(tb3.Text, @"^([01][0-9]|2[0-3]):[0-5][0-9]$"))
-                {
-                    funMSG.errMsg(conMSG.message00005);
-                }
-                else
-                {
-                    if (conScheduler.execCode == 0)
+                    if (cb1.SelectedValue == null || cb2.SelectedValue == null || cb3.SelectedValue == null || tb1.Text == "" || tb2.Text == "" || tb3.Text == "")
                     {
-                        funSQL.sqlDML("sql0402", conSQL.schedule.sql0402, new string[] { "@WORKID", "@STATUSID", "@SCHEDULEDATE", "@SCHEDULESTARTTIME", "@SCHEDULEENDTIME" },
-                            new string[] { cb2.SelectedValue.ToString(), cb3.SelectedValue.ToString(), tb1.Text, tb2.Text, tb3.Text });
+                        FunMSG.errMsg(ConMSG.message00001);
                     }
-                    else if (conScheduler.execCode == 1)
+                    else if (!Regex.IsMatch(tb1.Text, @"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$") || !Regex.IsMatch(tb2.Text, @"^([01][0-9]|2[0-3]):[0-5][0-9]$") || !Regex.IsMatch(tb3.Text, @"^([01][0-9]|2[0-3]):[0-5][0-9]$"))
                     {
-                        funSQL.sqlDML("sql0403", conSQL.schedule.sql0403, new string[] { "@WORKID", "@STATUSID", "@SCHEDULEDATE", "@SCHEDULESTARTTIME", "@SCHEDULEENDTIME", "@SCHEDULEID" },
-                            new string[] { cb2.SelectedValue.ToString(), cb3.SelectedValue.ToString(), tb1.Text, tb2.Text, tb3.Text, conScheduler.ID });
+                        FunMSG.errMsg(ConMSG.message00005);
                     }
-                    conScheduler.execCode = 0;
-                    conScheduler.ID = "0";
-                    conInstance.scheduler.Enabled = true;
-                    frm.Visible = false;
-                }
+                    else
+                    {
+                        if (ConScheduler.execCode == 0)
+                        {
+                            FunSQL.SQLDML("SQL0410", ConSQL.ScheduleSQL.SQL0410, new string[] { "@WORKID", "@STATUSID", "@SCHEDULEDATE", "@SCHEDULESTARTTIME", "@SCHEDULEENDTIME" },
+                                new string[] { cb2.SelectedValue.ToString(), cb3.SelectedValue.ToString(), tb1.Text, tb2.Text, tb3.Text });
+                        }
+                        else if (ConScheduler.execCode == 1)
+                        {
+                            FunSQL.SQLDML("SQL0420", ConSQL.ScheduleSQL.SQL0420, new string[] { "@WORKID", "@STATUSID", "@SCHEDULEDATE", "@SCHEDULESTARTTIME", "@SCHEDULEENDTIME", "@SCHEDULEID" },
+                                new string[] { cb2.SelectedValue.ToString(), cb3.SelectedValue.ToString(), tb1.Text, tb2.Text, tb3.Text, ConScheduler.ID });
+                        }
+                        ConScheduler.execCode = 0;
+                        ConScheduler.ID = "0";
+                        ConInstance.scheduler.Enabled = true;
+                        frm.Visible = false;
+                    }
+                };
             }
-            public static void cmbchg(object sender, EventArgs e)
-            {
-                cleaning.cln2();
-            }
-            public static void main(Form frm) { common(frm); createForm(frm); }
+            public static void LocalMain(Form frm) { Common(frm); CreateForm(frm); }
         }
-        class startup
+        class LocalStartup
         {
-            public static void main() { }
+            public static void LocalMain() { }
         }
-        class cleaning
+        class LocalCleaning
         {
-            private static void cln1()
+            private static void CLN1()
             {
-                SQLiteDataReader reader = funSQL.sqlSELECT("sql0106", conSQL.goal.sql0106, new string[] { }, new string[] { });
+                SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0102", ConSQL.GoalSQL.SQL0102, new string[] { }, new string[] { });
                 long[] keys = new long[] { };
                 string[] values = new string[] { };
                 while (reader.Read())
@@ -137,8 +139,8 @@ namespace Crane
                     Array.Resize(ref values, values.Length + 1);
                     values[values.Length - 1] = (string)reader["GOALNAME"];
                 }
-                funCom.addComboboxItem(cb1, keys, values);
-                reader = funSQL.sqlSELECT("sql9002", conSQL.status.sql9002, new string[] { }, new string[] { });
+                FunCom.AddComboboxItem(cb1, keys, values);
+                reader = FunSQL.SQLSELECT("SQL9002", ConSQL.StatusSQL.SQL9002, new string[] { }, new string[] { });
                 keys = new long[] { };
                 values = new string[] { };
                 while (reader.Read())
@@ -148,11 +150,11 @@ namespace Crane
                     Array.Resize(ref values, values.Length + 1);
                     values[values.Length - 1] = (string)reader["STATUSNAME"];
                 }
-                funCom.addComboboxItem(cb3, keys, values);
+                FunCom.AddComboboxItem(cb3, keys, values);
             }
-            public static void cln2()
+            public static void CLN2()
             {
-                SQLiteDataReader reader = funSQL.sqlSELECT("sql0306", conSQL.work.sql0306, new string[] { "@GOALID" }, new string[] { cb1.SelectedValue.ToString() });
+                SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0302", ConSQL.WorkSQL.SQL0302, new string[] { "@GOALID" }, new string[] { cb1.SelectedValue.ToString() });
                 long[] keys = new long[] { };
                 string[] values = new string[] { };
                 while (reader.Read())
@@ -166,21 +168,28 @@ namespace Crane
                     sb.Append((string)reader["WORKNAME"]);
                     values[values.Length - 1] = sb.ToString();
                 }
-                funCom.addComboboxItem(cb2, keys, values);
+                FunCom.AddComboboxItem(cb2, keys, values);
             }
-            public static void main() { cln1(); cln2(); }
+            public static void LocalMain() { CLN1(); CLN2(); }
         }
-        class load
+        class LocalLoad
         {
-            private static void load1()
+            private static void LocalLoad1()
             {
-                tb1.Text = funDate.getToday(0);
-                tb2.Text = funDate.getToday(1);
-                tb3.Text = funDate.getToday(1);
+                if (Regex.IsMatch(ConScheduler.selectedDate, @"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"))
+                {
+                    tb1.Text = ConScheduler.selectedDate;
+                }
+                else
+                {
+                    tb1.Text = FunDate.getToday(0, 0);
+                }
+                tb2.Text = FunDate.getToday(1, 0);
+                tb3.Text = FunDate.getToday(1, 0);
             }
-            private static void load2()
+            private static void LocalLoad2()
             {
-                SQLiteDataReader reader = funSQL.sqlSELECT("sql0405", conSQL.schedule.sql0405, new string[] { "@SCHEDULEID" }, new string[] { conScheduler.ID });
+                SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0401", ConSQL.ScheduleSQL.SQL0401, new string[] { "@SCHEDULEID" }, new string[] { ConScheduler.ID });
                 while (reader.Read())
                 {
                     StringBuilder sb = new StringBuilder();
@@ -195,41 +204,36 @@ namespace Crane
                     tb3.Text = ((DateTime)reader["SCHEDULEENDTIME"]).ToString("HH:mm");
                 }
             }
-            private static void main()
+            public static void LocalMain()
             {
-                if (conScheduler.execCode == 0)
+                if (ConScheduler.execCode == 0)
                 {
-                    load1();
+                    LocalLoad1();
                 }
-                else if (conScheduler.execCode == 1)
+                else if (ConScheduler.execCode == 1)
                 {
-                    load2();
+                    LocalLoad2();
                 }
                 StringBuilder sb = new StringBuilder();
                 sb.Append("ScheduleForm【");
-                sb.Append(conCom.defaultBtnNames[conScheduler.execCode]);
+                sb.Append(ConCom.defaultBtnNames[ConScheduler.execCode]);
                 sb.Append("】");
                 lb1.Text = sb.ToString();
-                btn1.Text = conCom.defaultBtnNames[conScheduler.execCode];
-            }
-            public static void frmchg(object sender, EventArgs e)
-            {
-                cleaning.main();
-                main();
+                btn1.Text = ConCom.defaultBtnNames[ConScheduler.execCode];
             }
         }
         private void SchedulerForm_Load(object sender, EventArgs e)
         {
-            setup.main(this);
-            startup.main();
-            //cleaning.main();
-            //load.main();
+            LocalSetup.LocalMain(this);
+            LocalStartup.LocalMain();
+            //LocalCleaning.LocalMain();
+            //LocalLoad.LocalMain();
         }
-        class close
+        class LocalClose
         {
-            public static void main(object sender, EventArgs e, Form frm)
+            public static void LocalMain(Form frm)
             {
-                conInstance.scheduler.Enabled = true;
+                ConInstance.scheduler.Enabled = true;
                 frm.Visible = false;
             }
         }

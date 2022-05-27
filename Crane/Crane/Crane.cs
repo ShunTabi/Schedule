@@ -25,116 +25,113 @@ namespace Crane
         public static Panel pa4 = new Panel();
         public static Panel pa5 = new Panel();
         public static Panel pa6 = new Panel();
-        public static Label la1 = new Label();
-        public static Label la2 = new Label();
-        public static Label la3 = new Label();
-        public static Label la4 = new Label();
-        public static Button bt1 = new Button();
-        public static Button bt2 = new Button();
-        public static Button bt3 = new Button();
-        public static Button bt4 = new Button();
-        public static Button[] btns = new Button[] { bt1, bt2, bt3, bt4 };
-        public static Scheduler scheduler = conInstance.scheduler;
-        public static Review review = conInstance.review;
-        public static Record record = conInstance.record;
-        public static Setting setting = conInstance.setting;
-        public static UserControl[] userControls = new UserControl[] { scheduler, record, review, setting };
-        class setup
+        public static Button[] btns = new Button[] { };
+        public static Scheduler scheduler = ConInstance.scheduler;
+        public static Review review = ConInstance.review;
+        public static Record record = ConInstance.record;
+        public static Statistics statistics = ConInstance.statistics;
+        public static impexp impexp = ConInstance.impexp;
+        public static Bin bin = ConInstance.bin;
+        public static Setting setting = ConInstance.setting;
+        public static UserControl[] userControls = new UserControl[] { scheduler, record, review, statistics, impexp, bin, setting };
+        class LocalSetup
         {
-            public static void main(Form frm)
+            public static void LocalMain(Form frm)
             {
-                frm.FormClosing += (e, sender) => funCom.neverClose(e, sender, trueFalse);
+                frm.FormClosing += (e, sender) => FunCom.neverClose(e, sender, trueFalse);
                 frm.Size = new Size(
-                    int.Parse(string.Format("{0}", funINI.getString(conFILE.iniDefault, "[Main]", "XY", 0)[0])),
-                    int.Parse(string.Format("{0}", funINI.getString(conFILE.iniDefault, "[Main]", "XY", 0)[1]))
+                    int.Parse(string.Format("{0}", FunINI.getString(ConFILE.iniDefault, "[Main]", "XY")[0])),
+                    int.Parse(string.Format("{0}", FunINI.getString(ConFILE.iniDefault, "[Main]", "XY")[1]))
                     );
-                frm.Text = conCom.appName;
+                frm.Text = ConCom.appName;
                 frm.Location = new Point(
-                    int.Parse(string.Format("{0}", funINI.getString(conFILE.iniDefault, "[Main]", "Location", 0)[0])),
-                    int.Parse(string.Format("{0}", funINI.getString(conFILE.iniDefault, "[Main]", "Location", 0)[1]))
+                    int.Parse(string.Format("{0}", FunINI.getString(ConFILE.iniDefault, "[Main]", "Location")[0])),
+                    int.Parse(string.Format("{0}", FunINI.getString(ConFILE.iniDefault, "[Main]", "Location")[1]))
                     );
                 frm.FormBorderStyle = FormBorderStyle.None;
                 frm.Padding = new Padding(0, 0, 0, 0);
             }
         }
-        class startup
+        class LocalStartup
         {
-            private static void main1(Form frm)
+            private static void LocalMain1(Form frm)
             {
-                funCom.addPanel(pa3, 0, frm, new int[] { 0, 0 });
-                ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
-                funCom.addcontextMenuStrip(pa1, new string[] { "アプリケーションを終了" }, new EventHandler[] { close.main });
-                funCom.addPanel(pa2, 1, frm, new int[] { 0, 95 });
-                funCom.addLabel(la1, 5, pa2);
-                la1.Text = conCom.appName;
-                la1.Font = new Font("Segoe Print", 30, FontStyle.Bold);
-                la1.Location = new Point(10, 10);
-                funCom.addPanel(pa1, 1, frm, new int[] { 0, 20 });
-                funCom.addPanel(pa4, 4, frm, new int[] { 0, 20 });
+                FunCom.AddPanel(pa3, 0, frm, new int[] { 0, 0 });
+                ContextMenuStrip ContextMenuStrip = new ContextMenuStrip();
+                FunCom.AddContextMenuStrip(pa1, new string[] { "アプリケーションを終了", "最小化" }, new EventHandler[] {
+                    LocalClose.LocalMain,
+                    (sender, e) => {
+                        frm.WindowState = FormWindowState.Minimized;
+                    }
+                });
+                FunCom.AddPanel(pa2, 1, frm, new int[] { 0, 95 });
+                Label lbl1 = new Label();
+                FunCom.AddLabel(lbl1, 5, pa2);
+                lbl1.Text = ConCom.appName;
+                lbl1.Font = new Font("Segoe Print", 30, FontStyle.Bold);
+                lbl1.Location = new Point(10, 10);
+                FunCom.AddPanel(pa1, 1, frm, new int[] { 0, 20 });
+                FunCom.AddPanel(pa4, 4, frm, new int[] { 0, 20 });
                 pa1.BackColor = Color.SpringGreen;
                 pa4.BackColor = Color.SpringGreen;
-                funCom.addPanel(pa6, 0, pa3, new int[] { 0, 0 });
-                funCom.addPanel(pa5, 2, pa3, new int[] { 130, 0 });
-                for (int i = 0; i < btns.Length; i++)
-                {
-                    Button btn = btns[i];
-                    funCom.addButton(btns[i], 5, i, pa5, new int[] { 100, 70 });
-                    btn.Location = new Point(15, 85 * i + 80);
-                    btn.Text = conMain.mainButton[i];
-                    btn.Font = new Font("Segoe Print", 8, FontStyle.Regular);
-                    btn.BackColor = Color.SpringGreen;
-                    btn.Click += (sender, e) => clickBtn(sender, btn.TabIndex);
-                }
-                //scheduler.BackColor = Color.Yellow;
-                //record.BackColor = Color.Red;
-                review.BackColor = Color.Blue;
-                //setting.BackColor = Color.Black;
-            }
-            private static void clickBtn(object sender, int code)
-            {
+                FunCom.AddPanel(pa6, 0, pa3, new int[] { 0, 0 });
+                FunCom.AddPanel(pa5, 2, pa3, new int[] { 130, 0 });
                 for (int i = 0; i < userControls.Length; i++)
                 {
-                    UserControl uc = userControls[i];
-                    uc.Visible = false;
+                    Button btn = new Button();
+                    FunCom.AddButton(btn, 5, i, pa5, new int[] { 100, 70 });
+                    btn.Location = new Point(15, 85 * i + 80);
+                    btn.Text = ConMain.mainButton[i];
+                    btn.Font = new Font("Segoe Print", 8, FontStyle.Regular);
+                    btn.BackColor = Color.SpringGreen;
+                    btn.Click += (sender, e) =>
+                    {
+                        for (int j = 0; j < userControls.Length; j++)
+                        {
+                            UserControl uc = userControls[j];
+                            uc.Visible = false;
+                        }
+                        userControls[btn.TabIndex].Visible = true;
+                    };
                 }
-                userControls[code].Visible = true;
             }
-            public static void main(Form frm) { main1(frm); main2(); }
+            public static void LocalMain(Form frm) { LocalMain1(frm); LocalMain2(); }
         }
-        private static void main2()
+        private static void LocalMain2()
         {
             for (int i = 0; i < userControls.Length; i++)
             {
                 UserControl uc = userControls[i];
-                funCom.addUserControl(uc, 0, pa6);
+                FunCom.AddUserControl(uc, 0, pa6);
                 uc.Visible = false;
             }
-            userControls[conMain.startupCode].Visible = true;
+            userControls[ConMain.startupCode].Visible = true;
         }
-        class cleaning
+        class LocalCleaning
         {
-            public static void main()
+            public static void LocalMain()
             {
 
             }
         }
-        class load
+        class LocalLoad
         {
-            public static void main()
+            public static void LocalMain()
             {
 
             }
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            setup.main(this);
-            startup.main(this);
-            cleaning.main();
-            load.main();
+            ConTask.AppStartup();
+            LocalSetup.LocalMain(this);
+            LocalStartup.LocalMain(this);
+            LocalCleaning.LocalMain();
+            LocalLoad.LocalMain();
         }
-        class close
+        class LocalClose
         {
-            public static void main(object sender, EventArgs e)
+            public static void LocalMain(object sender, EventArgs e)
             {
                 trueFalse = false;
                 Process myProcess = Process.GetCurrentProcess();

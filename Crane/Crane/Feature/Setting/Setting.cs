@@ -24,20 +24,20 @@ namespace Crane
             {
                 uc.VisibleChanged += (sender, e) => { if (uc.Visible == false) { return; } else { /*cleaning.main();*/ load.main(); } };
                 uc.Padding = new Padding(20, 20, 20, 20);
-                for (int i = 0; i < conSetting.names.Length; i++)
+                for (int i = 0; i < ConSetting.names.Length; i++)
                 {
                     Label la = new Label();
-                    funCom.addLabel(la, 5, uc);
-                    la.Text = conSetting.names[i];
+                    FunCom.AddLabel(la, 5, uc);
+                    la.Text = ConSetting.names[i];
                     la.Font = new Font("Yu mincho", 10, FontStyle.Regular);
                     ComboBox cb = new ComboBox();
                     Array.Resize(ref cbs, cbs.Length + 1);
                     cbs[cbs.Length - 1] = cb;
-                    funCom.addCombobox(cb, 5, i, uc, new int[] { 180, 10 });
+                    FunCom.AddCombobox(cb, 5, i, uc, new int[] { 180, 10 });
                     cb.Font = new Font("Yu mincho", 10, FontStyle.Regular);
                     la.Location = new Point(70 + 400 * (i % 3), 90 + 90 * (i / 3));
                     cb.Location = new Point(190 + 400 * (i % 3), 90 + 90 * (i / 3));
-                    funCom.addComboboxItem(cb, conSetting.keys, conSetting.values[i]);
+                    FunCom.AddComboboxItem(cb, ConSetting.keys, ConSetting.values[i]);
                 }
             }
         }
@@ -55,7 +55,7 @@ namespace Crane
             {
                 for(int i = 0; i < cbs.Length; i++)
                 {
-                    cbs[i].SelectedIndex = int.Parse(string.Format("{0}", conSetting.startupSettingCodes[i]));
+                    cbs[i].SelectedIndex = int.Parse(string.Format("{0}", ConSetting.startupSettingCodes[i]));
                 }
                 for (int i = 0; i < cbs.Length; i++)
                 {
@@ -67,15 +67,28 @@ namespace Crane
                             Array.Resize(ref nowSettingValues, nowSettingValues.Length + 1);
                             nowSettingValues[nowSettingValues.Length - 1] = cbs[j].SelectedValue.ToString();
                         }
-                        conSetting.startupSettingCodes = nowSettingValues;
+                        ConSetting.startupSettingCodes = nowSettingValues;
                     };
                 }
             }
         }
-        private void Setting_Load(object sender, EventArgs e)
+        private void Setting_VisibleChanged(object sender, EventArgs e)
         {
-            setup.main(this);
-            //startup.main();
+            int loadStatus = ConInstance.settingFirstLoad;
+            if (loadStatus == 1)
+            {
+                ConInstance.settingFirstLoad = 2;
+                setup.main(this);
+                //startup.main();
+            }
+            else if (loadStatus == 2)
+            {
+                return;
+            }
+            else if (loadStatus == 0)
+            {
+                ConInstance.settingFirstLoad = 1;
+            }
         }
     }
 }

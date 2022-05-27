@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Crane
 {
-    class conFILE
+    class ConFILE
     {
         public static string iniDefault = @".\resources\ini\default.ini";
-        public static string msgLog = @funINI.getString(iniDefault, "[log]", "msgLogFolder", 0)[0] + funDate.getToday(0) + "msgLog" + ".log";
-        public static string sqlLog = @funINI.getString(iniDefault, "[db]", "sqlLogFolder", 0)[0] + funDate.getToday(0) + "sqlLog" + ".log";
+        public static string msgLog = FunINI.getString(iniDefault, "[log]", "MSGLogFolder")[0] + FunDate.getToday(0,0) + "msgLog" + ".log";
+        public static string sqlLog = FunINI.getString(iniDefault, "[db]", "SQLLogFolder")[0] + FunDate.getToday(0,0) + "sqlLog" + ".log";
     }
 }

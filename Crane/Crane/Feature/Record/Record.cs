@@ -19,78 +19,88 @@ namespace Crane
         //定義
         public static Panel pa1 = new Panel();
         public static Panel pa2 = new Panel();
-        public static Genre genre = conInstance.genre;
-        public static Goal goal = conInstance.goal;
-        public static Plan plan = conInstance.plan;
-        public static Work work = conInstance.work;
+        public static Genre genre = ConInstance.genre;
+        public static Goal goal = ConInstance.goal;
+        public static Plan plan = ConInstance.plan;
+        public static Work work = ConInstance.work;
         public static UserControl[] userControls = new UserControl[] { genre, goal, plan, work };
-        class setup
+        class LocalSetup
         {
-            private static void common1(UserControl uc)
+            private static void Common1(UserControl uc)
             {
-                //uc.VisibleChanged += (sender, e) => { if (uc.Visible == false) { return; } else { cleaning.main(); load.main(); } };
-                funCom.addPanel(pa2, 0, uc, new int[] { 0, 0 });
-                funCom.addPanel(pa1, 1, uc, new int[] { 0, 100 });
+                //uc.VisibleChanged += (sender, e) => { if (uc.Visible == false) { return; } else { cleaning.LocalMain(); load.LocalMain(); } };
+                FunCom.AddPanel(pa2, 0, uc, new int[] { 0, 0 });
+                FunCom.AddPanel(pa1, 1, uc, new int[] { 0, 100 });
                 string[] btnNames = new string[] { "種別","目標","計画","作業" };
                 for ( int i = 0;i< userControls.Length; i++)
                 {
                     Button btn = new Button();
-                    funCom.addButton(btn, 5, i, pa1, new int[] { 90,50 });
+                    FunCom.AddButton(btn, 5, i, pa1, new int[] { 90,50 });
                     btn.Text = btnNames[i];
                     btn.Location = new Point(10 + i* 95, 10);
                     btn.BackColor = Color.MediumOrchid;
-                    btn.Click += (sender, e) => clickBtn(sender, btn.TabIndex);
+                    btn.Click += (sender, e) => {
+                        for (int j = 0; j < userControls.Length; j++)
+                        {
+                            uc = userControls[j];
+                            uc.Visible = false;
+                        }
+                        userControls[btn.TabIndex].Visible = true;
+                    };
                 }
             }
-            private static void common2()
+            private static void Common2()
             {
                 for (int i = 0; i < userControls.Length; i++)
                 {
                     UserControl uc = userControls[i];
-                    funCom.addUserControl(uc, 0, pa2);
+                    FunCom.AddUserControl(uc, 0, pa2);
                     uc.Visible = false;
                 }
-                userControls[conMain.archiveStartupCode].Visible = true;
+                userControls[ConMain.recordStartupCode].Visible = true;
             }
-            public static void main(UserControl uc)
+            public static void LocalMain(UserControl uc)
             {
-                common1(uc);
-                common2();
-            }
-            private static void clickBtn(object sender, int code)
-            {
-                for (int i = 0; i < userControls.Length; i++)
-                {
-                    UserControl uc = userControls[i];
-                    uc.Visible = false;
-                }
-                userControls[code].Visible = true;
+                Common1(uc);
+                Common2();
             }
         }
-        //class startup
+        //class LocalStartup
         //{
-        //    public static void main()
+        //    public static void LocalMain()
         //    {
 
         //    }
         //}
-        //class cleaning
+        //class LocalCleaning
         //{
-        //    public static void main()
+        //    public static void LocalMain()
         //    {
 
         //    }
         //}
-        //class load
+        //class LocalLoad
         //{
-        //    public static void main()
+        //    public static void LocalMain()
         //    {
         //    }
-        //}
-        private void Record_Load(object sender, EventArgs e)
+        private void Record_VisibleChanged(object sender, EventArgs e)
         {
-            setup.main(this);
-            //startup.main();
+            int loadStatus = ConInstance.recordFirstLoad;
+            if (loadStatus == 1)
+            {
+                ConInstance.recordFirstLoad = 2;
+                LocalSetup.LocalMain(this);
+                //startup.LocalMain();
+            }
+            else if(loadStatus == 2)
+            {
+                return;
+            }
+            else if (loadStatus == 0)
+            {
+                ConInstance.recordFirstLoad = 1;
+            }
         }
     }
 }

@@ -35,7 +35,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "Genre";
-            this.Load += new System.EventHandler(this.Genre_Load);
+            this.VisibleChanged += new System.EventHandler(this.Genre_VisibleChanged);
             this.ResumeLayout(false);
 
         }

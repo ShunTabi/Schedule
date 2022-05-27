@@ -28,136 +28,135 @@ namespace Crane
         public static Button btn1 = new Button();
         public static ComboBox cb1 = new ComboBox();
         public static DataGridView dg = new DataGridView();
-        class setup
+        class LocalSetup
         {
-            private static void common(UserControl uc)
+            private static void Common(UserControl uc)
             {
-                uc.VisibleChanged += (sender, e) => { if (uc.Visible == false) { return; } else { cleaning.main(); load.main(); } };
-                funCom.addPanel(pa2, 0, uc, new int[] { 0, 0 });
-                funCom.addPanel(pa1, 2, uc, new int[] { 350, 0 });
+                FunCom.AddPanel(pa2, 0, uc, new int[] { 0, 0 });
+                FunCom.AddPanel(pa1, 2, uc, new int[] { 350, 0 });
                 pa2.BackColor = Color.Plum;
                 pa2.Padding = new Padding(10, 10, 10, 10);
             }
-            private static void leftSide()
+            private static void LeftSide()
             {
                 string[] lbs = new string[] { "種別", "目標" };
                 for (int i = 0; i < lbs.Length; i++)
                 {
                     Label lb1 = new Label();
-                    funCom.addLabel(lb1, 5, pa1);
+                    FunCom.AddLabel(lb1, 5, pa1);
                     lb1.Text = lbs[i];
                     lb1.Font = new Font("Yu mincho", 10, FontStyle.Regular);
                     lb1.Location = new Point(15, 15 + i * 70);
                 }
-                funCom.addCombobox(cb1, 5, 1, pa1, new int[] { 180, 10 });
+                FunCom.AddCombobox(cb1, 5, 1, pa1, new int[] { 180, 10 });
                 cb1.Font = new Font("Yu mincho", 10, FontStyle.Regular);
                 cb1.Location = new Point(100, 15);
-                funCom.addTextbox(tb2, 5, 2, pa1, new int[] { 180, 10 });
+                FunCom.AddTextbox(tb2, 5, 2, pa1, new int[] { 180, 10 });
                 tb2.Location = new Point(100, 85);
-                funCom.addButton(btn1, 5, 3, pa1, new int[] { 90, 50 });
+                FunCom.AddButton(btn1, 5, 3, pa1, new int[] { 90, 50 });
                 btn1.Location = new Point(100, 155);
                 btn1.BackColor = Color.MediumOrchid;
                 btn1.Click += (sender, e) =>
                 {
                     if (cb1.Text == "" || tb2.Text == "")
                     {
-                        funMSG.errMsg(conMSG.message00001);
+                        FunMSG.errMsg(ConMSG.message00001);
                     }
                     else
                     {
                         if (execCode == 0)
                         {
-                            funSQL.sqlDML("sql0102", conSQL.goal.sql0102, new string[] { "@GENREID", "@GOALNAME" }, new string[] { cb1.SelectedValue.ToString(), tb2.Text });
+                            FunSQL.SQLDML("SQL0110", ConSQL.GoalSQL.SQL0110, new string[] { "@GENREID", "@GOALNAME" }, new string[] { cb1.SelectedValue.ToString(), tb2.Text });
                         }
                         else if (execCode == 1)
                         {
-                            funSQL.sqlDML("sql0103", conSQL.goal.sql0103, new string[] { "@GENREID", "@GOALNAME", "@GOALID" }, new string[] { cb1.SelectedValue.ToString(), tb2.Text, ID });
+                            FunSQL.SQLDML("SQL0120", ConSQL.GoalSQL.SQL0120, new string[] { "@GENREID", "@GOALNAME", "@GOALID" }, new string[] { cb1.SelectedValue.ToString(), tb2.Text, ID });
                         }
-                        cleaning.main();
-                        load.main();
+                        LocalCleaning.LocalMain();
+                        LocalLoad.LocalMain();
                     }
                 };
             }
-            public static void main(UserControl uc)
+            public static void LocalMain(UserControl uc)
             {
-                common(uc);
-                leftSide();
-                rightSide();
+                Common(uc);
+                LeftSide();
+                RightSide();
             }
-            public static void rightSide()
+            public static void RightSide()
             {
-                funCom.addDataGridView(dg, 0, pa2, new int[] { 0, 0 });
+                FunCom.AddDataGridView(dg, 0, pa2, new int[] { 0, 0 });
                 dg.BackgroundColor = Color.Plum;
-                funCom.addDataGridViewColumns(dg, new string[] { "ID", "種別", "目標" });
-                funCom.addcontextMenuStrip(dg, conCom.defaultBtnNames, new EventHandler[]
+                FunCom.AddDataGridViewColumns(dg, new string[] { "ID", "種別", "目標" });
+                FunCom.AddContextMenuStrip(dg, ConCom.defaultBtnNames, new EventHandler[]
                 {
                     (sender,e)=>
                     {//新規
                         ID = "0";
                         execCode = 0;
-                        btn1.Text = conCom.defaultBtnNames[execCode];
+                        btn1.Text = ConCom.defaultBtnNames[execCode];
                     },
                     (sender, e) =>
                     {//更新
 
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
-                        SQLiteDataReader reader = funSQL.sqlSELECT("sql0105", conSQL.goal.sql0105, new string[] { "@GOALID" }, new string[] { ID });
+                        SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0101", ConSQL.GoalSQL.SQL0101, new string[] { "@GOALID" }, new string[] { ID });
                         while (reader.Read())
                         {
                             cb1.Text = (string)reader["GENRENAME"];
                             tb2.Text = (string)reader["GOALNAME"];
                         }
                         execCode = 1;
-                        btn1.Text = conCom.defaultBtnNames[execCode];
+                        btn1.Text = ConCom.defaultBtnNames[execCode];
                     },
                     (sender, e) =>
                     {//削除
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
-                        SQLiteDataReader reader = funSQL.sqlSELECT("sql0104", conSQL.goal.sql0104, new string[] { "@GOALID" }, new string[] { ID });
-                        cleaning.main();
-                        load.main();
+                        FunSQL.SQLDML("SQL0121", ConSQL.GoalSQL.SQL0121, new string[] { "@VISIBLESTATUS","@GOALID" }, new string[] { "1",ID });
+                        LocalCleaning.LocalMain();
+                        LocalLoad.LocalMain();
                     }
                 });
-                funCom.addPanel(pa3, 1, pa2, new int[] { 0, 50 });
+                FunCom.AddPanel(pa3, 1, pa2, new int[] { 0, 50 });
                 Label lb1 = new Label();
-                funCom.addLabel(lb1, 5, pa3);
+                FunCom.AddLabel(lb1, 5, pa3);
                 lb1.Text = "目標";
                 lb1.Location = new Point(0,0);
                 lb1.Font = new Font("Yu mincho", 10, FontStyle.Regular);
-                funCom.addTextbox(tb1, 5, 1, pa3, new int[] { 180, 10 });
+                FunCom.AddTextbox(tb1, 5, 1, pa3, new int[] { 180, 10 });
                 tb1.Location = new Point(52, 0);
                 tb1.TextChanged += (sender, e) =>
                 {
-                    load.dataload();
+                    LocalLoad.DataLocalLoad();
                 };
             }
         }
-        //class startup
+        //class LocalStartup
         //{
-        //    public static void main()
+        //    public static void LocalMain()
         //    {
 
         //    }
         //}
-        class cleaning
+        class LocalCleaning
         {
-            public static void main()
+            public static void LocalMain()
             {
                 tb2.Text = "";
                 ID = "0";
                 execCode = 0;
-                btn1.Text = conCom.defaultBtnNames[execCode];
+                btn1.Text = ConCom.defaultBtnNames[execCode];
             }
         }
-        class load
+        class LocalLoad
         {
-            public static void dataload()
+            public static void DataLocalLoad()
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("%");
                 sb.Append(tb1.Text);
                 sb.Append("%");
-                SQLiteDataReader reader = funSQL.sqlSELECT("sql0101", conSQL.goal.sql0101, new string[] { "@GOALNAME" }, new string[] { sb.ToString() });
+                SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0100", ConSQL.GoalSQL.SQL0100, new string[] { "@GOALNAME" }, new string[] { sb.ToString() });
                 dg.Rows.Clear();
                 while (reader.Read())
                 {
@@ -168,11 +167,11 @@ namespace Crane
                         );
                 }
             }
-            public static void cmdload()
+            public static void CMDLocalLoad()
             {
                 long[] keys = new long[] { };
                 string[] values = new string[] { };
-                SQLiteDataReader reader = funSQL.sqlSELECT("sql0006", conSQL.genre.sql0006, new string[] { }, new string[] { });
+                SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0002", ConSQL.GenreSQL.SQL0002, new string[] { }, new string[] { });
                 while (reader.Read())
                 {
                     Array.Resize(ref keys, keys.Length + 1);
@@ -180,18 +179,38 @@ namespace Crane
                     Array.Resize(ref values, values.Length + 1);
                     values[values.Length - 1] = (string)reader["GENRENAME"];
                 }
-                funCom.addComboboxItem(cb1, keys, values);
+                FunCom.AddComboboxItem(cb1, keys, values);
             }
-            public static void main()
+            public static void LocalMain()
             {
-                dataload();
-                cmdload();
+                DataLocalLoad();
+                CMDLocalLoad();
             }
         }
-        private void Goal_Load(object sender, EventArgs e)
+        private void Goal_VisibleChanged(object sender, EventArgs e)
         {
-            setup.main(this);
-            //startup.main();
+            int loadStatus = ConInstance.goalFirstLoad;
+            if (loadStatus == 1)
+            {
+                ConInstance.goalFirstLoad = 2;
+                LocalSetup.LocalMain(this);
+                LocalCleaning.LocalMain();
+                //LocalStartup.LocalMain();
+                LocalLoad.LocalMain();
+            }
+            else if(loadStatus == 2)
+            {
+                if (Visible == false) { return; }
+                else
+                {
+                    LocalCleaning.LocalMain();
+                    LocalLoad.LocalMain();
+                }
+            }
+            else if (loadStatus == 0)
+            {
+                ConInstance.goalFirstLoad = 1;
+            }
         }
     }
 }

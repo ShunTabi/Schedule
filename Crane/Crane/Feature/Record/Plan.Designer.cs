@@ -30,12 +30,12 @@
         {
             this.SuspendLayout();
             // 
-            // Todo
+            // Plan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "Todo";
-            this.Load += new System.EventHandler(this.Todo_Load);
+            this.Name = "Plan";
+            this.VisibleChanged += new System.EventHandler(this.Plan_VisibleChanged);
             this.ResumeLayout(false);
 
         }

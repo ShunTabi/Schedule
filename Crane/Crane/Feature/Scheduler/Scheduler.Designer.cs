@@ -35,7 +35,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "Scheduler";
-            this.Load += new System.EventHandler(this.Scheduler_Load);
+            this.VisibleChanged += new System.EventHandler(this.Scheduler_VisibleChanged);
             this.ResumeLayout(false);
 
         }

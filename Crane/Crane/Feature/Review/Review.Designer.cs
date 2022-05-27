@@ -35,7 +35,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "Review";
-            this.Load += new System.EventHandler(this.Review_Load);
             this.ResumeLayout(false);
 
         }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Crane
 {
-    class funDate
+    class FunDate
     {
-        public static string getToday(int code0)
+        public static string getToday(int code0,int code1)
         {
             string output = "";
             if (code0 == 0)
@@ -20,6 +20,10 @@ namespace Crane
                 output = DateTime.Now.ToString("HH:mm");
             }
             else if (code0 == 2)
+            {
+                output = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+            }
+            else if (code0 == 4)
             {
                 output = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
             }
