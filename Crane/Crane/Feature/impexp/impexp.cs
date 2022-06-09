@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Crane
 {
-    public partial class impexp : UserControl
+    public partial class Impexp : UserControl
     {
-        public impexp()
+        public Impexp()
         {
             InitializeComponent();
         }

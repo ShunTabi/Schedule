@@ -12,7 +12,14 @@ namespace Crane
         public static string appName = "Crane";
         public static string[] defaultBtnNames = new string[] { "登録", "更新", "削除" };
     }
-    class ConScheduler
+    class ConColor
+    {
+        public static Color mainButtonColor = Color.SpringGreen;
+        public static Color mainButtonColorPushed = Color.LimeGreen;
+        public static Color subButtonColor = Color.MediumOrchid;
+        public static Color subButtonColorPushed = Color.Purple;
+    }
+    class ConSchedule
     {
         public static int execCode = 0;
         public static string ID = "0";
@@ -49,6 +56,6 @@ namespace Crane
             new string[]{"OFF","ON"},//17
             new string[]{"OFF","ON"},//18
         };
-        public static string[] startupSettingCodes = FunINI.getString(ConFILE.iniDefault, "[Setting]", "startupSettingCode");
+        public static string[] startupSettingCodes = FunINI.GetString(ConFILE.iniDefault, "[Setting]", "startupSettingCode");
     }
 }

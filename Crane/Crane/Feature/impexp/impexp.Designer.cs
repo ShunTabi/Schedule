@@ -1,6 +1,6 @@
 ﻿namespace Crane
 {
-    partial class impexp
+    partial class Impexp
     {
         /// <summary> 
         /// 必要なデザイナー変数です。

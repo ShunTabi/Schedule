@@ -1,6 +1,6 @@
 ﻿namespace Crane
 {
-    partial class SchedulerForm
+    partial class ScheduleForm
     {
         /// <summary>
         /// Required designer variable.
@@ -37,7 +37,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Name = "SchedulerForm";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.SchedulerForm_Load);
+            this.Load += new System.EventHandler(this.ScheduleForm_Load);
             this.ResumeLayout(false);
 
         }

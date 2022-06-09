@@ -22,7 +22,7 @@ namespace Crane
         public static string ID = "0";
         public static Panel pa1 = new Panel();
         public static Panel pa2 = new Panel();
-        public static Form schedulerForm = new SchedulerForm();
+        public static Form scheduleForm = new ScheduleForm();
         public static DataGridView dg = new DataGridView();
         class LocalSetup
         {
@@ -49,23 +49,29 @@ namespace Crane
                 {
                     (sender, e) =>
                     {//新規
-                        ConScheduler.execCode = 0;
-                        ConScheduler.ID = "0";
-                        schedulerForm.Visible = true;
-                        ConInstance.scheduler.Enabled = false;
+                        ConSchedule.execCode = 0;
+                        ConSchedule.ID = "0";
+                        scheduleForm.Visible = true;
+                        ConInstance.schedule.Enabled = false;
                     },
                     (sender, e) =>
                     {//修正
-                        ConScheduler.execCode = 1;
-                        ConScheduler.ID = dg.SelectedRows[0].Cells[0].Value.ToString();
-                        schedulerForm.Visible = true;
-                        ConInstance.scheduler.Enabled = false;
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                        ConSchedule.execCode = 1;
+                        ConSchedule.ID = dg.SelectedRows[0].Cells[0].Value.ToString();
+                        scheduleForm.Visible = true;
+                        ConInstance.schedule.Enabled = false;
                     },
                     (sender, e) =>
                     {//削除
-                        string ID = dg.SelectedRows[0].Cells[0].Value.ToString();
-                        FunSQL.SQLDML("SQL0421", ConSQL.ScheduleSQL.SQL0421, new string[] { "@VISIBLESTATUS", "@SCHEDULEID" }, new string[] { "1",ID });
-                        LocalLoad.LocalMain();
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                        DialogResult result = MessageBox.Show(ConMSG.message00100,"確認",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button2);
+                        if(result == DialogResult.OK)
+                        {
+                            string ID = dg.SelectedRows[0].Cells[0].Value.ToString();
+                            FunSQL.SQLDML("SQL0421", ConSQL.ScheduleSQL.SQL0421, new string[] { "@VISIBLESTATUS", "@SCHEDULEID" }, new string[] { "1",ID });
+                            LocalLoad.LocalMain();
+                        }
                     }
                 });
                 FunCom.AddDataGridViewColumns(dg, new string[] { "ID", "目標", "計画/作業", " 進捗","日付", "開始時間", "終了時間" });
@@ -106,6 +112,12 @@ namespace Crane
                         ((DateTime)reader["SCHEDULESTARTTIME"]).ToString("HH:mm"),
                         ((DateTime)reader["SCHEDULEENDTIME"]).ToString("HH:mm")
                         );
+                    if ((DateTime)reader["SCHEDULEDATE"] > (DateTime)reader["WORKENDDATE"])
+                    {
+                        int count = dg.Rows.Count - 1;
+                        dg.Rows[count].DefaultCellStyle.ForeColor = Color.Red;
+                        dg.Rows[count].DefaultCellStyle.BackColor = Color.Gainsboro;
+                    }
                 }
             }
             public static void LocalMain()

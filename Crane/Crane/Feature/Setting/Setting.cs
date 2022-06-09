@@ -79,7 +79,6 @@ namespace Crane
             {
                 ConInstance.settingFirstLoad = 2;
                 setup.main(this);
-                //startup.main();
             }
             else if (loadStatus == 2)
             {

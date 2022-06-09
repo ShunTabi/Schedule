@@ -26,27 +26,19 @@ namespace Crane
         public static Panel pa5 = new Panel();
         public static Panel pa6 = new Panel();
         public static Button[] btns = new Button[] { };
-        public static Scheduler scheduler = ConInstance.scheduler;
-        public static Review review = ConInstance.review;
-        public static Record record = ConInstance.record;
-        public static Statistics statistics = ConInstance.statistics;
-        public static impexp impexp = ConInstance.impexp;
-        public static Bin bin = ConInstance.bin;
-        public static Setting setting = ConInstance.setting;
-        public static UserControl[] userControls = new UserControl[] { scheduler, record, review, statistics, impexp, bin, setting };
         class LocalSetup
         {
             public static void LocalMain(Form frm)
             {
                 frm.FormClosing += (e, sender) => FunCom.neverClose(e, sender, trueFalse);
                 frm.Size = new Size(
-                    int.Parse(string.Format("{0}", FunINI.getString(ConFILE.iniDefault, "[Main]", "XY")[0])),
-                    int.Parse(string.Format("{0}", FunINI.getString(ConFILE.iniDefault, "[Main]", "XY")[1]))
+                    int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Main]", "XY")[0])),
+                    int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Main]", "XY")[1]))
                     );
                 frm.Text = ConCom.appName;
                 frm.Location = new Point(
-                    int.Parse(string.Format("{0}", FunINI.getString(ConFILE.iniDefault, "[Main]", "Location")[0])),
-                    int.Parse(string.Format("{0}", FunINI.getString(ConFILE.iniDefault, "[Main]", "Location")[1]))
+                    int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Main]", "Location")[0])),
+                    int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Main]", "Location")[1]))
                     );
                 frm.FormBorderStyle = FormBorderStyle.None;
                 frm.Padding = new Padding(0, 0, 0, 0);
@@ -64,7 +56,7 @@ namespace Crane
                         frm.WindowState = FormWindowState.Minimized;
                     }
                 });
-                FunCom.AddPanel(pa2, 1, frm, new int[] { 0, 95 });
+                FunCom.AddPanel(pa2, 1, frm, new int[] { 0, 100 });
                 Label lbl1 = new Label();
                 FunCom.AddLabel(lbl1, 5, pa2);
                 lbl1.Text = ConCom.appName;
@@ -76,21 +68,34 @@ namespace Crane
                 pa4.BackColor = Color.SpringGreen;
                 FunCom.AddPanel(pa6, 0, pa3, new int[] { 0, 0 });
                 FunCom.AddPanel(pa5, 2, pa3, new int[] { 130, 0 });
+                pa5.AutoScroll = true;
+                ConInstance.record = new Record();
+                ConInstance.schedule = new Schedule();
+                ConInstance.review = new Review();
+                ConInstance.statistics = new Statistics();
+                ConInstance.impexp = new Impexp();
+                ConInstance.bin = new Bin();
+                ConInstance.setting = new Setting();
+                UserControl[] userControls = { ConInstance.record, ConInstance.schedule,  ConInstance.review, ConInstance.statistics, ConInstance.impexp, ConInstance.bin, ConInstance.setting };
                 for (int i = 0; i < userControls.Length; i++)
                 {
                     Button btn = new Button();
+                    Array.Resize(ref btns, btns.Length + 1);
+                    btns[btns.Length - 1] = btn;
                     FunCom.AddButton(btn, 5, i, pa5, new int[] { 100, 70 });
                     btn.Location = new Point(15, 85 * i + 80);
                     btn.Text = ConMain.mainButton[i];
                     btn.Font = new Font("Segoe Print", 8, FontStyle.Regular);
-                    btn.BackColor = Color.SpringGreen;
+                    btn.BackColor = ConColor.mainButtonColor;
                     btn.Click += (sender, e) =>
                     {
                         for (int j = 0; j < userControls.Length; j++)
                         {
+                            btns[j].BackColor = ConColor.mainButtonColor;
                             UserControl uc = userControls[j];
                             uc.Visible = false;
                         }
+                        btns[btn.TabIndex].BackColor =ConColor.mainButtonColorPushed;
                         userControls[btn.TabIndex].Visible = true;
                     };
                 }
@@ -99,12 +104,14 @@ namespace Crane
         }
         private static void LocalMain2()
         {
+            UserControl[] userControls = { ConInstance.record, ConInstance.schedule,  ConInstance.review, ConInstance.statistics, ConInstance.impexp, ConInstance.bin, ConInstance.setting };
             for (int i = 0; i < userControls.Length; i++)
             {
                 UserControl uc = userControls[i];
                 FunCom.AddUserControl(uc, 0, pa6);
                 uc.Visible = false;
             }
+            btns[ConMain.startupCode].BackColor = ConColor.mainButtonColorPushed;
             userControls[ConMain.startupCode].Visible = true;
         }
         class LocalCleaning

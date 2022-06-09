@@ -14,9 +14,9 @@ using System.Text.RegularExpressions;
 
 namespace Crane
 {
-    public partial class SchedulerForm : Form
+    public partial class ScheduleForm : Form
     {
-        public SchedulerForm()
+        public ScheduleForm()
         {
             InitializeComponent();
         }
@@ -43,8 +43,8 @@ namespace Crane
                     LocalLoad.LocalMain();
                 };
                 frm.Location = new Point(
-                    int.Parse(string.Format("{0}", FunINI.getString(ConFILE.iniDefault, "[Sub]", "Location")[0])),
-                    int.Parse(string.Format("{0}", FunINI.getString(ConFILE.iniDefault, "[Sub]", "Location")[1]))
+                    int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Sub]", "Location")[0])),
+                    int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Sub]", "Location")[1]))
                     );
                 frm.Size = new Size(700, 800);
                 frm.FormBorderStyle = FormBorderStyle.None;
@@ -92,30 +92,32 @@ namespace Crane
                 btn1.BackColor = Color.MediumOrchid;
                 btn1.Click += (sender, e) =>
                 {
+                    btn1.Enabled = false;
                     if (cb1.SelectedValue == null || cb2.SelectedValue == null || cb3.SelectedValue == null || tb1.Text == "" || tb2.Text == "" || tb3.Text == "")
                     {
-                        FunMSG.errMsg(ConMSG.message00001);
+                        FunMSG.ErrMsg(ConMSG.message00001);
                     }
                     else if (!Regex.IsMatch(tb1.Text, @"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$") || !Regex.IsMatch(tb2.Text, @"^([01][0-9]|2[0-3]):[0-5][0-9]$") || !Regex.IsMatch(tb3.Text, @"^([01][0-9]|2[0-3]):[0-5][0-9]$"))
                     {
-                        FunMSG.errMsg(ConMSG.message00005);
+                        FunMSG.ErrMsg(ConMSG.message00005);
                     }
                     else
                     {
-                        if (ConScheduler.execCode == 0)
+                        if (ConSchedule.execCode == 0)
                         {
                             FunSQL.SQLDML("SQL0410", ConSQL.ScheduleSQL.SQL0410, new string[] { "@WORKID", "@STATUSID", "@SCHEDULEDATE", "@SCHEDULESTARTTIME", "@SCHEDULEENDTIME" },
                                 new string[] { cb2.SelectedValue.ToString(), cb3.SelectedValue.ToString(), tb1.Text, tb2.Text, tb3.Text });
                         }
-                        else if (ConScheduler.execCode == 1)
+                        else if (ConSchedule.execCode == 1)
                         {
                             FunSQL.SQLDML("SQL0420", ConSQL.ScheduleSQL.SQL0420, new string[] { "@WORKID", "@STATUSID", "@SCHEDULEDATE", "@SCHEDULESTARTTIME", "@SCHEDULEENDTIME", "@SCHEDULEID" },
-                                new string[] { cb2.SelectedValue.ToString(), cb3.SelectedValue.ToString(), tb1.Text, tb2.Text, tb3.Text, ConScheduler.ID });
+                                new string[] { cb2.SelectedValue.ToString(), cb3.SelectedValue.ToString(), tb1.Text, tb2.Text, tb3.Text, ConSchedule.ID });
                         }
-                        ConScheduler.execCode = 0;
-                        ConScheduler.ID = "0";
-                        ConInstance.scheduler.Enabled = true;
+                        ConSchedule.execCode = 0;
+                        ConSchedule.ID = "0";
+                        ConInstance.schedule.Enabled = true;
                         frm.Visible = false;
+                        btn1.Enabled = true;
                     }
                 };
             }
@@ -176,9 +178,9 @@ namespace Crane
         {
             private static void LocalLoad1()
             {
-                if (Regex.IsMatch(ConScheduler.selectedDate, @"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"))
+                if (Regex.IsMatch(ConSchedule.selectedDate, @"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"))
                 {
-                    tb1.Text = ConScheduler.selectedDate;
+                    tb1.Text = ConSchedule.selectedDate;
                 }
                 else
                 {
@@ -189,7 +191,7 @@ namespace Crane
             }
             private static void LocalLoad2()
             {
-                SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0401", ConSQL.ScheduleSQL.SQL0401, new string[] { "@SCHEDULEID" }, new string[] { ConScheduler.ID });
+                SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0401", ConSQL.ScheduleSQL.SQL0401, new string[] { "@SCHEDULEID" }, new string[] { ConSchedule.ID });
                 while (reader.Read())
                 {
                     StringBuilder sb = new StringBuilder();
@@ -206,23 +208,23 @@ namespace Crane
             }
             public static void LocalMain()
             {
-                if (ConScheduler.execCode == 0)
+                if (ConSchedule.execCode == 0)
                 {
                     LocalLoad1();
                 }
-                else if (ConScheduler.execCode == 1)
+                else if (ConSchedule.execCode == 1)
                 {
                     LocalLoad2();
                 }
                 StringBuilder sb = new StringBuilder();
                 sb.Append("ScheduleForm【");
-                sb.Append(ConCom.defaultBtnNames[ConScheduler.execCode]);
+                sb.Append(ConCom.defaultBtnNames[ConSchedule.execCode]);
                 sb.Append("】");
                 lb1.Text = sb.ToString();
-                btn1.Text = ConCom.defaultBtnNames[ConScheduler.execCode];
+                btn1.Text = ConCom.defaultBtnNames[ConSchedule.execCode];
             }
         }
-        private void SchedulerForm_Load(object sender, EventArgs e)
+        private void ScheduleForm_Load(object sender, EventArgs e)
         {
             LocalSetup.LocalMain(this);
             LocalStartup.LocalMain();
@@ -233,7 +235,7 @@ namespace Crane
         {
             public static void LocalMain(Form frm)
             {
-                ConInstance.scheduler.Enabled = true;
+                ConInstance.schedule.Enabled = true;
                 frm.Visible = false;
             }
         }

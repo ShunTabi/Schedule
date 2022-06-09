@@ -13,5 +13,9 @@ namespace Crane
         public static string message00003 = "設定されていません。";
         public static string message00004 = "複数選択できません。";
         public static string message00005 = "フォームの記載を確認してください。\n日付はyyyy-MM-dd、時間はHH:mmで記載してください。";
+        public static string message00010 = "選択されていません。";
+        public static string message00090 = "ないよ。";
+        public static string message00100 = "削除しますか?";
+        public static string message00101 = "完全削除しますか?";
     }
 }

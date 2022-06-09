@@ -60,9 +60,10 @@ namespace Crane
                 btn1.BackColor = Color.MediumOrchid;
                 btn1.Click += (sender, e) =>
                 {
+                    btn1.Enabled = false;
                     if (cb1.Text == "" || tb2.Text == "")
                     {
-                        FunMSG.errMsg(ConMSG.message00001);
+                        FunMSG.ErrMsg(ConMSG.message00001);
                     }
                     else
                     {
@@ -76,6 +77,7 @@ namespace Crane
                         }
                         LocalCleaning.LocalMain();
                         LocalLoad.LocalMain();
+                        btn1.Enabled = true;
                     }
                 };
             }
@@ -94,6 +96,7 @@ namespace Crane
                     },
                     (sender,e)=>
                     {//修正
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
                         SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0201", ConSQL.PlanSQL.SQL0201, new string[] { "@PLANID" }, new string[] { ID });
                         while (reader.Read())
@@ -106,6 +109,7 @@ namespace Crane
                     },
                     (sender,e)=>
                     {//削除
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
                         FunSQL.SQLDML("SQL0221", ConSQL.PlanSQL.SQL0221, new string[] { "@VISIBLESTATUS","@PLANID" }, new string[] { "1",ID });
                         LocalCleaning.LocalMain();

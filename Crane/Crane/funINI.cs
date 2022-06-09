@@ -11,9 +11,9 @@ namespace Crane
 {
     class FunINI
     {
-        public static string[] getString(string fileName, string sectionName, string keyName)
+        public static string[] GetString(string fileName, string sectionName, string keyName)
         {
-            string[] output = new string[] { $"sectionName={sectionName}\nkeyName={keyName}\nresult=ないよ" };
+            string[] output = new string[] { ConMSG.message00090 };
             string line1;
             int numOfSection = -99;
             IEnumerable<string> lines = File.ReadLines(fileName);
@@ -38,6 +38,15 @@ namespace Crane
                         }
                     }
                 }
+            }
+            if(output[0] == "ないよ。")
+            {
+                StringBuilder sb = new StringBuilder(ConMSG.message00090);
+                sb.Append("\nsectionName : ");
+                sb.Append(sectionName);
+                sb.Append("\nkeyName : ");
+                sb.Append(keyName);
+                FunMSG.WrtMsg(ConFILE.msgLog, sb.ToString());
             }
             return output;
         }

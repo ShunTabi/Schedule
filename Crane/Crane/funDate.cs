@@ -13,19 +13,15 @@ namespace Crane
             string output = "";
             if (code0 == 0)
             {//日付のみ
-                output = DateTime.Now.ToString("yyyy-MM-dd");
+                output = DateTime.Now.AddDays(code1).ToString("yyyy-MM-dd");
             }
             else if (code0 == 1)
             {
-                output = DateTime.Now.ToString("HH:mm");
+                output = DateTime.Now.AddDays(code1).ToString("HH:mm");
             }
             else if (code0 == 2)
             {
-                output = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-            }
-            else if (code0 == 4)
-            {
-                output = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                output = DateTime.Now.AddDays(code1).ToString("yyyy-MM-dd HH:mm");
             }
             return output;
         }
@@ -38,8 +34,7 @@ namespace Crane
                 Array.Resize(ref hs, hs.Length + 1);
                 hs[hs.Length - 1] = int.Parse(string.Format("{0}", times[i]));
             }
-            
-            return hs[0] * 4800 / 24  + hs[1] * 4800 / 24 / 60 + 30;
+            return hs[0] * 4800 / 24  + hs[1] * 4800 / 24 / 60;
         }
     }
 }

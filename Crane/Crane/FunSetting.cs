@@ -17,7 +17,7 @@ namespace Crane
             {
                 StringBuilder sb = new StringBuilder(Appname);
                 sb.Append("の起動に失敗しました。");
-                FunMSG.errMsg(sb.ToString());
+                FunMSG.ErrMsg(sb.ToString());
             }
             else
             {
@@ -29,7 +29,7 @@ namespace Crane
                 Proc.Start();
             }
         }
-        public static void copyFile(string filename, string key, int backupGeneration)
+        public static void CopyFile(string filename, string key, int backupGeneration)
         {
             StringBuilder sb = new StringBuilder(filename);
             sb.Append(key);

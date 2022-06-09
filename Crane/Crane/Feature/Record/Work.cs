@@ -78,13 +78,14 @@ namespace Crane
                 btn1.BackColor = Color.MediumOrchid;
                 btn1.Click += (sender, e) =>
                 {
+                    btn1.Enabled = false;
                     if (cb1.Text == "" || cb2.Text == "" || tb2.Text == "" || cb3.Text == "" || tb3.Text == "" || tb4.Text == "")
                     {
-                        FunMSG.errMsg(ConMSG.message00001);
+                        FunMSG.ErrMsg(ConMSG.message00001);
                     }
                     else if (!Regex.IsMatch(tb3.Text, @"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$") || !Regex.IsMatch(tb4.Text, @"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"))
                     {
-                        FunMSG.errMsg(ConMSG.message00005);
+                        FunMSG.ErrMsg(ConMSG.message00005);
                     }
                     else
                     {
@@ -98,6 +99,7 @@ namespace Crane
                         }
                         LocalCleaning.LocalMain();
                         LocalLoad.LocalMain();
+                        btn1.Enabled = true;
                     }
                 };
             }
@@ -116,6 +118,7 @@ namespace Crane
                     },
                     (sender, e) =>
                     {//更新
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
                         SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0301", ConSQL.WorkSQL.SQL0301, new string[] { "@WORKID" }, new string[] { ID });
                         while (reader.Read())
@@ -132,6 +135,7 @@ namespace Crane
                     },
                     (sender, e) =>
                     {//削除
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
                         FunSQL.SQLDML("SQL0321", ConSQL.WorkSQL.SQL0321, new string[] { "@vISIBLESTATUS","@WORKID" }, new string[] { "1",ID });
                         LocalCleaning.LocalMain();

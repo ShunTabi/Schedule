@@ -21,7 +21,7 @@ namespace Crane
         //定義
         public static int execCode = 0;
         public static string ID = "0";
-        public static Form schedulerForm = new SchedulerForm();
+        public static Form scheduleForm = new ScheduleForm();
         public static Panel pa1 = new Panel();
         public static Panel pa2 = new Panel();
         public static Panel pa3 = new Panel();
@@ -36,7 +36,7 @@ namespace Crane
             private static void Common(UserControl uc)
             {
                 uc.EnabledChanged += (sender, e) => { if (uc.Enabled == false) { return; } else {  LocalLoad.LocalMain(); } };
-                schedulerForm.Visible = false;
+                scheduleForm.Visible = false;
                 FunCom.AddPanel(pa2, 0, uc, new int[] { 0, 0 });
                 FunCom.AddPanel(pa1, 2, uc, new int[] { 350, 0 });
                 pa2.BackColor = Color.Plum;
@@ -68,23 +68,29 @@ namespace Crane
                 {
                     (sender, e) =>
                     {//新規
-                        ConScheduler.execCode = 0;
-                        ConScheduler.ID = "0";
-                        schedulerForm.Visible = true;
-                        ConInstance.scheduler.Enabled = false;
+                        ConSchedule.execCode = 0;
+                        ConSchedule.ID = "0";
+                        scheduleForm.Visible = true;
+                        ConInstance.schedule.Enabled = false;
                     },
                     (sender, e) =>
                     {//修正
-                        ConScheduler.execCode = 1;
-                        ConScheduler.ID = dg.SelectedRows[0].Cells[0].Value.ToString();
-                        schedulerForm.Visible = true;
-                        ConInstance.scheduler.Enabled = false;
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                        ConSchedule.execCode = 1;
+                        ConSchedule.ID = dg.SelectedRows[0].Cells[0].Value.ToString();
+                        scheduleForm.Visible = true;
+                        ConInstance.schedule.Enabled = false;
                     },
                     (sender, e) =>
                     {//削除
-                        string ID = dg.SelectedRows[0].Cells[0].Value.ToString();
-                        FunSQL.SQLDML("SQL0421", ConSQL.ScheduleSQL.SQL0421, new string[] { "@VISIBLESTATUS","@SCHEDULEID" }, new string[] { "1",ID });
-                        LocalLoad.LocalMain();
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                        DialogResult result = MessageBox.Show(ConMSG.message00100,"確認",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button2);
+                        if(result == DialogResult.OK)
+                        {
+                            ID = dg.SelectedRows[0].Cells[0].Value.ToString();
+                            FunSQL.SQLDML("SQL0421", ConSQL.ScheduleSQL.SQL0421, new string[] { "@VISIBLESTATUS","@SCHEDULEID" }, new string[] { "1",ID });
+                            LocalLoad.LocalMain();
+                        }
                     }
                 });
                 FunCom.AddDataGridViewColumns(dg, new string[] { "ID", "目標", "計画/作業", " 進捗", "開始時間", "終了時間" });
@@ -103,10 +109,10 @@ namespace Crane
                 btn1.BackColor = Color.MediumOrchid;
                 btn1.Click += (sender, e) =>
                 {
-                    ConScheduler.execCode = 0;
-                    ConScheduler.ID = "0";
-                    schedulerForm.Visible = true;
-                    ConInstance.scheduler.Enabled = false;
+                    ConSchedule.execCode = 0;
+                    ConSchedule.ID = "0";
+                    scheduleForm.Visible = true;
+                    ConInstance.schedule.Enabled = false;
                 };
             }
             public static void LocalMain(UserControl uc)
@@ -127,15 +133,15 @@ namespace Crane
         }
         class LocalLoad
         {
-            private static SQLiteDataReader SQL0401()
+            private static SQLiteDataReader SQL0400()
             {
                 SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0400", ConSQL.ScheduleSQL.SQL0400, new string[] { "@SCHEDULEDATE" }, new string[] { tb1.Text });
-                ConScheduler.selectedDate = tb1.Text;
+                ConSchedule.selectedDate = tb1.Text;
                 return reader;
             }
             public static void DataLocalload()
             {
-                SQLiteDataReader reader = SQL0401();
+                SQLiteDataReader reader = SQL0400();
                 dg.Rows.Clear();
                 while (reader.Read())
                 {
@@ -144,13 +150,19 @@ namespace Crane
                     sb.Append(":");
                     sb.Append((string)reader["WORKNAME"]);
                     dg.Rows.Add(
-                    ((Int64)reader["SCHEDULEID"]).ToString(),
-                    (string)reader["GOALNAME"],
+                        ((Int64)reader["SCHEDULEID"]).ToString(),
+                        (string)reader["GOALNAME"],
                         sb.ToString(),
                         (string)reader["STATUSNAME"],
                         ((DateTime)reader["SCHEDULESTARTTIME"]).ToString("HH:mm"),
                         ((DateTime)reader["SCHEDULEENDTIME"]).ToString("HH:mm")
                         );
+                    if ((DateTime)reader["SCHEDULEDATE"] > (DateTime)reader["WORKENDDATE"])
+                    {
+                        int count = dg.Rows.Count - 1;
+                        dg.Rows[count].DefaultCellStyle.ForeColor = Color.Red;
+                        dg.Rows[count].DefaultCellStyle.BackColor = Color.Gainsboro;
+                    }
                 }
             }
             private static void LbLoadload()
@@ -159,29 +171,46 @@ namespace Crane
                 {
                     pa4.Controls[i].Dispose();
                 }
-                for (int i = 0; i < 25; i++)
-                {
-                    Label l = new Label();
-                    FunCom.AddLabel(l, 5, pa4);
-                    l.Location = new Point(0, 10 + i * 200);
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append("--");
-                    sb.Append(i.ToString("00"));
-                    sb.Append(":00--");
-                    l.Text = sb.ToString();
-                    l.Font = new Font("Segoe Print", 10, FontStyle.Regular);
-                }
-                SQLiteDataReader reader = SQL0401();
+                SQLiteDataReader reader = SQL0400();
                 while (reader.Read())
                 {
                     Panel p = new Panel();
                     Array.Resize(ref ps, ps.Length + 1);
                     ps[ps.Length - 1] = p;
-                    FunCom.AddPanel(p, 99, pa4, new int[] { 300, FunDate.getInt(((DateTime)reader["SCHEDULEENDTIME"]).ToString("HH:mm")) - FunDate.getInt(((DateTime)reader["SCHEDULESTARTTIME"]).ToString("HH:mm")) });
-                    p.Location = new Point(0, FunDate.getInt(((DateTime)reader["SCHEDULESTARTTIME"]).ToString("HH:mm")));
-                    p.BackColor = ConScheduler.statusColors[(Int64)reader["STATUSID"] - 1];
+                    FunCom.AddPanel(p, 99, pa4, new int[] { 250, FunDate.getInt(((DateTime)reader["SCHEDULEENDTIME"]).ToString("HH:mm")) - FunDate.getInt(((DateTime)reader["SCHEDULESTARTTIME"]).ToString("HH:mm"))+1 });
+                    p.TabIndex = int.Parse(String.Format("{0}", ((Int64)reader["SCHEDULEID"]).ToString()));
+                    p.Location = new Point(70, FunDate.getInt(((DateTime)reader["SCHEDULESTARTTIME"]).ToString("HH:mm")) + 25);
+                    p.BackColor = ConSchedule.statusColors[(Int64)reader["STATUSID"] - 1];
+                    FunCom.AddContextMenuStrip(p, ConCom.defaultBtnNames, new EventHandler[]
+                    {
+                        (sender, e) =>
+                        {//新規
+                            ConSchedule.execCode = 0;
+                            ConSchedule.ID = "0";
+                            scheduleForm.Visible = true;
+                            ConInstance.schedule.Enabled = false;
+                        },
+                        (sender, e) =>
+                        {//修正
+                            if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                            ConSchedule.execCode = 1;
+                            ConSchedule.ID = p.TabIndex.ToString();
+                            scheduleForm.Visible = true;
+                            ConInstance.schedule.Enabled = false;
+                        },
+                        (sender, e) =>
+                        {//削除
+                            if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                            DialogResult result = MessageBox.Show(ConMSG.message00100,"確認",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button2);
+                            if(result == DialogResult.OK)
+                            {
+                                ID = p.TabIndex.ToString();
+                                FunSQL.SQLDML("SQL0421", ConSQL.ScheduleSQL.SQL0421, new string[] { "@VISIBLESTATUS","@SCHEDULEID" }, new string[] { "1",ID });
+                                LocalMain();
+                            }
+                        }
+                    });
                     Label l = new Label();
-                    l.Padding = new Padding(20, 25, 20, 5);
                     FunCom.AddLabel(l, 5, p);
                     StringBuilder sb = new StringBuilder();
                     sb.Append("-----------------------------------\n");
@@ -196,7 +225,19 @@ namespace Crane
                     sb.Append((string)reader["WORKNAME"]);
                     sb.Append(")");
                     l.Text = sb.ToString();
-                    l.Font = new Font("Yu mincho", 9, FontStyle.Regular);
+                    l.Font = new Font("Yu mincho", 8, FontStyle.Regular);
+                }
+                for (int i = 0; i < 25; i++)
+                {
+                    Label l = new Label();
+                    FunCom.AddLabel(l, 5, pa4);
+                    l.Location = new Point(0, 10 + i * 200);
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("");
+                    sb.Append(i.ToString("00"));
+                    sb.Append(":00 - - - - - - - - - - - - - - - -");
+                    l.Text = sb.ToString();
+                    l.Font = new Font("Segoe Print", 8, FontStyle.Regular);
                 }
             }
             public static void LocalMain()
@@ -208,7 +249,6 @@ namespace Crane
                 }
             }
         }
-
         private void ScheduleDaily_VisibleChanged(object sender, EventArgs e)
         {
             int loadStatus = ConInstance.scheduleDailyFirstLoad;

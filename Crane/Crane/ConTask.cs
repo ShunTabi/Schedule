@@ -15,7 +15,7 @@ namespace Crane
             {
                 if (int.Parse(string.Format("{0}", ConSetting.startupSettingCodes[4])) == 1)
                 {
-                    FunSetting.copyFile(FunSQL.dataSource,"_bak",int.Parse(string.Format("{0}",FunINI.getString(ConFILE.iniDefault,"[Setting]", "backupGeneration"))));
+                    FunSetting.CopyFile(FunSQL.dataSource,"_bak",int.Parse(string.Format("{0}",FunINI.GetString(ConFILE.iniDefault,"[Setting]", "backupGeneration"))));
                 }
                 if (int.Parse(string.Format("{0}", ConSetting.startupSettingCodes[3])) == 1)
                 {

@@ -1,6 +1,6 @@
 ﻿namespace Crane
 {
-    partial class Genre
+    partial class ScheduleWeekly
     {
         /// <summary> 
         /// 必要なデザイナー変数です。
@@ -30,12 +30,12 @@
         {
             this.SuspendLayout();
             // 
-            // Genre
+            // ScheduleWeekly
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "Genre";
-            this.Load += new System.EventHandler(this.Genre_Load);
+            this.Name = "ScheduleWeekly";
+            this.VisibleChanged += new System.EventHandler(this.ScheduleWeekly_VisibleChanged);
             this.ResumeLayout(false);
 
         }

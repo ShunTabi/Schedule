@@ -1,6 +1,6 @@
 ﻿namespace Crane
 {
-    partial class Scheduler
+    partial class Schedule
     {
         /// <summary> 
         /// 必要なデザイナー変数です。

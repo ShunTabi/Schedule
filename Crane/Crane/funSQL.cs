@@ -11,13 +11,16 @@ namespace Crane
     class FunSQL
     {
         //定義
-        public static string dataSource = FunINI.getString(ConFILE.iniDefault, "[db]", "dataSource")[0];
+        public static string dataSource = FunINI.GetString(ConFILE.iniDefault, "[db]", "dataSource")[0];
         private static void SQLLOG(string msg)
         {
-            if (int.Parse(string.Format("{0}", ConSetting.startupSettingCodes[0])) == 1)
+            Task t = Task.Run(() =>
             {
-                FunMSG.wrtMsg(ConFILE.sqlLog, msg);
-            }
+                if (int.Parse(string.Format("{0}", ConSetting.startupSettingCodes[0])) == 1)
+                {
+                    FunMSG.WrtMsg(ConFILE.sqlLog, msg);
+                }
+            });
         }
         public static SQLiteDataReader SQLSELECT(string sqlcode,string sql,string[] parameters,string[] values)
         {
@@ -34,7 +37,7 @@ namespace Crane
                 sb1.Append(sqlcode);
                 sb1.Append(":");
                 sb1.Append(sql);
-                FunMSG.errMsg(sb1.ToString());
+                FunMSG.ErrMsg(sb1.ToString());
             }
             if (parameters.Length != 0)
             {
@@ -50,8 +53,8 @@ namespace Crane
                         sb3.Append(sqlcode);
                         sb3.Append(":");
                         sb3.Append(values[i]);
-                        FunMSG.errMsg(sb2.ToString());
-                        FunMSG.errMsg(sb3.ToString());
+                        FunMSG.ErrMsg(sb2.ToString());
+                        FunMSG.ErrMsg(sb3.ToString());
                     }
                     cmd.Parameters.Add(new SQLiteParameter(parameters[i], values[i]));
                 }
@@ -63,7 +66,7 @@ namespace Crane
             catch(Exception ex)
             {
                 sb.Append(ex.Message);
-                FunMSG.errMsg(sb.ToString());
+                FunMSG.ErrMsg(sb.ToString());
             }
             sb.Append("[Success]");
             SQLLOG(sb.ToString());
@@ -83,7 +86,7 @@ namespace Crane
                 sb1.Append(sqlcode);
                 sb1.Append(":");
                 sb1.Append(sql);
-                FunMSG.errMsg(sb1.ToString());
+                FunMSG.ErrMsg(sb1.ToString());
             }
             if (parameters.Length != 0)
             {
@@ -99,8 +102,8 @@ namespace Crane
                         sb3.Append(sqlcode);
                         sb3.Append(":");
                         sb3.Append(values[i]);
-                        FunMSG.errMsg(sb2.ToString());
-                        FunMSG.errMsg(sb3.ToString());
+                        FunMSG.ErrMsg(sb2.ToString());
+                        FunMSG.ErrMsg(sb3.ToString());
                     }
                     cmd.Parameters.Add(new SQLiteParameter(parameters[i], values[i]));
                 }
@@ -114,7 +117,7 @@ namespace Crane
             catch (Exception ex)
             {
                 sb.Append(ex.Message);
-                FunMSG.errMsg(sb.ToString());
+                FunMSG.ErrMsg(sb.ToString());
             }
         }
     }

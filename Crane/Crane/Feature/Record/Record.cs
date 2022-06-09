@@ -19,11 +19,7 @@ namespace Crane
         //定義
         public static Panel pa1 = new Panel();
         public static Panel pa2 = new Panel();
-        public static Genre genre = ConInstance.genre;
-        public static Goal goal = ConInstance.goal;
-        public static Plan plan = ConInstance.plan;
-        public static Work work = ConInstance.work;
-        public static UserControl[] userControls = new UserControl[] { genre, goal, plan, work };
+        public static Button[] btns = new Button[] { };
         class LocalSetup
         {
             private static void Common1(UserControl uc)
@@ -32,31 +28,42 @@ namespace Crane
                 FunCom.AddPanel(pa2, 0, uc, new int[] { 0, 0 });
                 FunCom.AddPanel(pa1, 1, uc, new int[] { 0, 100 });
                 string[] btnNames = new string[] { "種別","目標","計画","作業" };
+                ConInstance.genre = new Genre();
+                ConInstance.goal = new Goal();
+                ConInstance.plan = new Plan();
+                ConInstance.work = new Work();
+                UserControl[] userControls = { ConInstance.genre, ConInstance.goal, ConInstance.plan, ConInstance.work };
                 for ( int i = 0;i< userControls.Length; i++)
                 {
                     Button btn = new Button();
+                    Array.Resize(ref btns, btns.Length + 1);
+                    btns[btns.Length - 1] = btn;
                     FunCom.AddButton(btn, 5, i, pa1, new int[] { 90,50 });
                     btn.Text = btnNames[i];
                     btn.Location = new Point(10 + i* 95, 10);
-                    btn.BackColor = Color.MediumOrchid;
+                    btn.BackColor = ConColor.subButtonColor;
                     btn.Click += (sender, e) => {
                         for (int j = 0; j < userControls.Length; j++)
                         {
+                            btns[j].BackColor = ConColor.subButtonColor;
                             uc = userControls[j];
                             uc.Visible = false;
                         }
+                        btns[btn.TabIndex].BackColor = ConColor.subButtonColorPushed;
                         userControls[btn.TabIndex].Visible = true;
                     };
                 }
             }
             private static void Common2()
             {
+                UserControl[] userControls = { ConInstance.genre, ConInstance.goal, ConInstance.plan, ConInstance.work };
                 for (int i = 0; i < userControls.Length; i++)
                 {
                     UserControl uc = userControls[i];
                     FunCom.AddUserControl(uc, 0, pa2);
                     uc.Visible = false;
                 }
+                btns[ConMain.recordStartupCode].BackColor = ConColor.subButtonColorPushed;
                 userControls[ConMain.recordStartupCode].Visible = true;
             }
             public static void LocalMain(UserControl uc)

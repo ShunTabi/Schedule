@@ -83,11 +83,11 @@
     <Compile Include="ConTask.cs" />
     <Compile Include="FunSetting.cs" />
     <Compile Include="ConInstance.cs" />
-    <Compile Include="Feature\Scheduler\SchedulerForm.cs">
+    <Compile Include="Feature\Schedule\ScheduleForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Feature\Scheduler\SchedulerForm.Designer.cs">
-      <DependentUpon>SchedulerForm.cs</DependentUpon>
+    <Compile Include="Feature\Schedule\ScheduleForm.Designer.cs">
+      <DependentUpon>ScheduleForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FunDate.cs" />
     <Compile Include="ConMain.cs" />
@@ -107,11 +107,11 @@
     <Compile Include="FunSQL.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Feature\Scheduler\Scheduler.cs">
+    <Compile Include="Feature\Schedule\Schedule.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Feature\Scheduler\Scheduler.Designer.cs">
-      <DependentUpon>Scheduler.cs</DependentUpon>
+    <Compile Include="Feature\Schedule\Schedule.Designer.cs">
+      <DependentUpon>Schedule.cs</DependentUpon>
     </Compile>
     <Compile Include="Feature\Record\Record.cs">
       <SubType>UserControl</SubType>
@@ -155,11 +155,11 @@
     <Compile Include="Feature\Record\Plan.Designer.cs">
       <DependentUpon>Plan.cs</DependentUpon>
     </Compile>
-    <Compile Include="Feature\impexp\impexp.cs">
+    <Compile Include="Feature\Impexp\Impexp.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Feature\impexp\impexp.Designer.cs">
-      <DependentUpon>impexp.cs</DependentUpon>
+    <Compile Include="Feature\Impexp\Impexp.Designer.cs">
+      <DependentUpon>Impexp.cs</DependentUpon>
     </Compile>
     <Compile Include="Feature\Statistics\Statistics.cs">
       <SubType>UserControl</SubType>
@@ -167,22 +167,22 @@
     <Compile Include="Feature\Statistics\Statistics.Designer.cs">
       <DependentUpon>Statistics.cs</DependentUpon>
     </Compile>
-    <Compile Include="Feature\Scheduler\ScheduleDaily.cs">
+    <Compile Include="Feature\Schedule\ScheduleDaily.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Feature\Scheduler\ScheduleDaily.Designer.cs">
+    <Compile Include="Feature\Schedule\ScheduleDaily.Designer.cs">
       <DependentUpon>ScheduleDaily.cs</DependentUpon>
     </Compile>
-    <Compile Include="Feature\Scheduler\ScheduleWeekly.cs">
+    <Compile Include="Feature\Schedule\ScheduleWeekly.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Feature\Scheduler\ScheduleWeekly.Designer.cs">
+    <Compile Include="Feature\Schedule\ScheduleWeekly.Designer.cs">
       <DependentUpon>ScheduleWeekly.cs</DependentUpon>
     </Compile>
-    <Compile Include="Feature\Scheduler\ScheduleList.cs">
+    <Compile Include="Feature\Schedule\ScheduleList.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Feature\Scheduler\ScheduleList.Designer.cs">
+    <Compile Include="Feature\Schedule\ScheduleList.Designer.cs">
       <DependentUpon>ScheduleList.cs</DependentUpon>
     </Compile>
     <Compile Include="Feature\Bin\Bin.cs">
@@ -212,25 +212,25 @@
     <EmbeddedResource Include="Feature\Bin\Bin.resx">
       <DependentUpon>Bin.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Feature\impexp\impexp.resx">
-      <DependentUpon>impexp.cs</DependentUpon>
+    <EmbeddedResource Include="Feature\Impexp\Impexp.resx">
+      <DependentUpon>Impexp.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\Review\Review.resx">
       <DependentUpon>Review.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Feature\Scheduler\ScheduleDaily.resx">
+    <EmbeddedResource Include="Feature\Schedule\ScheduleDaily.resx">
       <DependentUpon>ScheduleDaily.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Feature\Scheduler\ScheduleList.resx">
+    <EmbeddedResource Include="Feature\Schedule\ScheduleList.resx">
       <DependentUpon>ScheduleList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Feature\Scheduler\Scheduler.resx">
-      <DependentUpon>Scheduler.cs</DependentUpon>
+    <EmbeddedResource Include="Feature\Schedule\Schedule.resx">
+      <DependentUpon>Schedule.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Feature\Scheduler\SchedulerForm.resx">
-      <DependentUpon>SchedulerForm.cs</DependentUpon>
+    <EmbeddedResource Include="Feature\Schedule\ScheduleForm.resx">
+      <DependentUpon>ScheduleForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Feature\Scheduler\ScheduleWeekly.resx">
+    <EmbeddedResource Include="Feature\Schedule\ScheduleWeekly.resx">
       <DependentUpon>ScheduleWeekly.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\Setting\Setting.resx">

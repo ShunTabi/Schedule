@@ -31,7 +31,6 @@ namespace Crane
         {
             private static void Common(UserControl uc)
             {
-                uc.VisibleChanged += (sender, e) => { if (uc.Visible == false) { return; } else { LocalCleaning.LocalMain(); LocalLoad.LocalMain(); } };
                 FunCom.AddPanel(pa2, 0, uc, new int[] { 0, 0 });
                 FunCom.AddPanel(pa1, 2, uc, new int[] { 350, 0 });
                 pa2.BackColor = Color.Plum;
@@ -51,9 +50,10 @@ namespace Crane
                 btn1.BackColor = Color.MediumOrchid;
                 btn1.Click += (sender, e) =>
                 {
+                    btn1.Enabled = false;
                     if (tb2.Text == "")
                     {
-                        FunMSG.errMsg(ConMSG.message00001);
+                        FunMSG.ErrMsg(ConMSG.message00001);
                     }
                     else
                     {
@@ -67,6 +67,7 @@ namespace Crane
                         }
                         LocalCleaning.LocalMain();
                         LocalLoad.LocalMain();
+                        btn1.Enabled = true;
                     }
                 };
             }
@@ -84,6 +85,7 @@ namespace Crane
                     },
                     (sender, e) =>
                     {//修正
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
                         execCode = 1;
                         btn1.Text = ConCom.defaultBtnNames[execCode];
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
@@ -95,6 +97,7 @@ namespace Crane
                     },
                     (sender, e) =>
                     {//削除
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
                         FunSQL.SQLDML("SQL0021", ConSQL.GenreSQL.SQL0021, new string[] { "@VISIBLESTATUS","@GENREID" }, new string[] { "1",ID });
                         LocalCleaning.LocalMain();
