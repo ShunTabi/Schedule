@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace Crane
 {
@@ -12,11 +13,20 @@ namespace Crane
         /// アプリケーションのメイン エントリ ポイントです。
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Crane());
+            if (args.Length > 0)
+            {
+                Mutex _mutex = new Mutex(false, "Crane.exe");
+                if (_mutex.WaitOne(0, false) == false)
+                {
+                    FunMSG.ErrMsg(ConMSG.message00110);
+                    return;
+                }
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Crane());
+            }
         }
     }
 }

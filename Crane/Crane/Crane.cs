@@ -72,11 +72,11 @@ namespace Crane
                 ConInstance.record = new Record();
                 ConInstance.schedule = new Schedule();
                 ConInstance.review = new Review();
-                ConInstance.statistics = new Statistics();
+                ConInstance.analysis = new Analysis();
                 ConInstance.impexp = new Impexp();
                 ConInstance.bin = new Bin();
                 ConInstance.setting = new Setting();
-                UserControl[] userControls = { ConInstance.record, ConInstance.schedule,  ConInstance.review, ConInstance.statistics, ConInstance.impexp, ConInstance.bin, ConInstance.setting };
+                UserControl[] userControls = { ConInstance.record, ConInstance.schedule,  ConInstance.review, ConInstance.analysis, ConInstance.impexp, ConInstance.bin, ConInstance.setting };
                 for (int i = 0; i < userControls.Length; i++)
                 {
                     Button btn = new Button();
@@ -104,7 +104,7 @@ namespace Crane
         }
         private static void LocalMain2()
         {
-            UserControl[] userControls = { ConInstance.record, ConInstance.schedule,  ConInstance.review, ConInstance.statistics, ConInstance.impexp, ConInstance.bin, ConInstance.setting };
+            UserControl[] userControls = { ConInstance.record, ConInstance.schedule,  ConInstance.review, ConInstance.analysis, ConInstance.impexp, ConInstance.bin, ConInstance.setting };
             for (int i = 0; i < userControls.Length; i++)
             {
                 UserControl uc = userControls[i];

@@ -23,6 +23,10 @@ namespace Crane
             {
                 output = DateTime.Now.AddDays(code1).ToString("yyyy-MM-dd HH:mm");
             }
+            else if (code0 == 3)
+            {
+                output = DateTime.Now.AddMonths(code1).ToString("yyyy-MM");
+            }
             return output;
         }
         public static int getInt(string time)

@@ -11,9 +11,9 @@ namespace Crane
         public static string[] mainButton = new string[]
         {
             "Record",
-            "Scheduler",
+            "Schedule",
             "Review",
-            "Statistic",
+            "Analysis",
             "Imp/Exp",
             "Bin",
             "Setting",

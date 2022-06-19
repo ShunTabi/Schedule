@@ -73,9 +73,9 @@ E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Release\Crane.ScheduleForm.resources
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Release\Crane.ScheduleWeekly.resources
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Release\Crane.Setting.resources
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Release\Crane.Properties.Resources.resources
-E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Release\Crane.Statistics.resources
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Release\Crane.csproj.GenerateResource.cache
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Release\Crane.csproj.CoreCompileInputs.cache
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Release\Crane.csproj.CopyComplete
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Release\Crane.exe
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Release\Crane.pdb
+E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Release\Crane.Analysis.resources

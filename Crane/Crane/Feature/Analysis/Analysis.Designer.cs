@@ -1,6 +1,6 @@
 ﻿namespace Crane
 {
-    partial class Statistics
+    partial class Analysis
     {
         /// <summary> 
         /// 必要なデザイナー変数です。
@@ -30,12 +30,12 @@
         {
             this.SuspendLayout();
             // 
-            // Statistics
+            // Analysis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "Statistics";
-            this.VisibleChanged += new System.EventHandler(this.Statistics_VisibleChanged);
+            this.Name = "Analysis";
+            this.VisibleChanged += new System.EventHandler(this.Analysis_VisibleChanged);
             this.ResumeLayout(false);
 
         }

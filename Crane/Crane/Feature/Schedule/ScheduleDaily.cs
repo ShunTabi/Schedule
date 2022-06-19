@@ -19,9 +19,7 @@ namespace Crane
             InitializeComponent();
         }
         //定義
-        public static int execCode = 0;
         public static string ID = "0";
-        public static Form scheduleForm = new ScheduleForm();
         public static Panel pa1 = new Panel();
         public static Panel pa2 = new Panel();
         public static Panel pa3 = new Panel();
@@ -36,7 +34,7 @@ namespace Crane
             private static void Common(UserControl uc)
             {
                 uc.EnabledChanged += (sender, e) => { if (uc.Enabled == false) { return; } else {  LocalLoad.LocalMain(); } };
-                scheduleForm.Visible = false;
+                ConInstance.scheduleForm.Visible = false;
                 FunCom.AddPanel(pa2, 0, uc, new int[] { 0, 0 });
                 FunCom.AddPanel(pa1, 2, uc, new int[] { 350, 0 });
                 pa2.BackColor = Color.Plum;
@@ -70,7 +68,7 @@ namespace Crane
                     {//新規
                         ConSchedule.execCode = 0;
                         ConSchedule.ID = "0";
-                        scheduleForm.Visible = true;
+                        ConInstance.scheduleForm.Visible = true;
                         ConInstance.schedule.Enabled = false;
                     },
                     (sender, e) =>
@@ -78,7 +76,7 @@ namespace Crane
                         if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
                         ConSchedule.execCode = 1;
                         ConSchedule.ID = dg.SelectedRows[0].Cells[0].Value.ToString();
-                        scheduleForm.Visible = true;
+                        ConInstance.scheduleForm.Visible = true;
                         ConInstance.schedule.Enabled = false;
                     },
                     (sender, e) =>
@@ -111,7 +109,7 @@ namespace Crane
                 {
                     ConSchedule.execCode = 0;
                     ConSchedule.ID = "0";
-                    scheduleForm.Visible = true;
+                    ConInstance.scheduleForm.Visible = true;
                     ConInstance.schedule.Enabled = false;
                 };
             }
@@ -187,7 +185,7 @@ namespace Crane
                         {//新規
                             ConSchedule.execCode = 0;
                             ConSchedule.ID = "0";
-                            scheduleForm.Visible = true;
+                            ConInstance.scheduleForm.Visible = true;
                             ConInstance.schedule.Enabled = false;
                         },
                         (sender, e) =>
@@ -195,7 +193,7 @@ namespace Crane
                             if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
                             ConSchedule.execCode = 1;
                             ConSchedule.ID = p.TabIndex.ToString();
-                            scheduleForm.Visible = true;
+                            ConInstance.scheduleForm.Visible = true;
                             ConInstance.schedule.Enabled = false;
                         },
                         (sender, e) =>

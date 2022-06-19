@@ -22,7 +22,7 @@ namespace Crane
         public static string ID = "0";
         public static Panel pa1 = new Panel();
         public static Panel pa2 = new Panel();
-        public static Form scheduleForm = new ScheduleForm();
+        public static TextBox tb1 = new TextBox();
         public static DataGridView dg = new DataGridView();
         class LocalSetup
         {
@@ -36,7 +36,7 @@ namespace Crane
                 pa2.BackColor = Color.Plum;
                 pa2.Padding = new Padding(10, 10, 10, 10);
             }
-            private static void Bottom()
+            private static void ReadyBotton()
             {
                 Label l1 = new Label();
                 FunCom.AddLabel(l1, 5, pa1);
@@ -51,7 +51,7 @@ namespace Crane
                     {//新規
                         ConSchedule.execCode = 0;
                         ConSchedule.ID = "0";
-                        scheduleForm.Visible = true;
+                        ConInstance.scheduleForm.Visible = true;
                         ConInstance.schedule.Enabled = false;
                     },
                     (sender, e) =>
@@ -59,7 +59,7 @@ namespace Crane
                         if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
                         ConSchedule.execCode = 1;
                         ConSchedule.ID = dg.SelectedRows[0].Cells[0].Value.ToString();
-                        scheduleForm.Visible = true;
+                        ConInstance.scheduleForm.Visible = true;
                         ConInstance.schedule.Enabled = false;
                     },
                     (sender, e) =>
@@ -76,10 +76,22 @@ namespace Crane
                 });
                 FunCom.AddDataGridViewColumns(dg, new string[] { "ID", "目標", "計画/作業", " 進捗","日付", "開始時間", "終了時間" });
             }
+            public static void ReadyTextbox()
+            {
+                Label lb1 = new Label();
+                FunCom.AddLabel(lb1, 5, pa1);
+                lb1.Text = "目標/計画";
+                lb1.Location = new Point(357, 30);
+                lb1.Font = new Font("Yu mincho", 10, FontStyle.Regular);
+                FunCom.AddTextbox(tb1, 5, 1, pa1, new int[] { 180, 10 });
+                tb1.Location = new Point(458, 30);
+                tb1.TextChanged += (sender, e) => { LocalLoad.LocalMain(); };
+            }
             public static void LocalMain(UserControl uc)
             {
                 Common(uc);
-                Bottom();
+                ReadyBotton();
+                ReadyTextbox();
             }
         }
         class LocalStartup
@@ -95,18 +107,21 @@ namespace Crane
         {
             public static void DataLocalload()
             {
-                SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0402", ConSQL.ScheduleSQL.SQL0402, new string[] { }, new string[] { });
+                StringBuilder sb1 = new StringBuilder("%");
+                sb1.Append(tb1.Text);
+                sb1.Append("%");
+                SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0402", ConSQL.ScheduleSQL.SQL0402, new string[] { "@KEYWORD" }, new string[] { sb1.ToString() });
                 dg.Rows.Clear();
                 while (reader.Read())
                 {
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append((string)reader["PLANNAME"]);
-                    sb.Append(":");
-                    sb.Append((string)reader["WORKNAME"]);
+                    StringBuilder sb2 = new StringBuilder();
+                    sb2.Append((string)reader["PLANNAME"]);
+                    sb2.Append(":");
+                    sb2.Append((string)reader["WORKNAME"]);
                     dg.Rows.Add(
                         ((Int64)reader["SCHEDULEID"]).ToString(),
                         (string)reader["GOALNAME"],
-                        sb.ToString(),
+                        sb2.ToString(),
                         (string)reader["STATUSNAME"],
                         ((DateTime)reader["SCHEDULEDATE"]).ToString("yyyy-MM-dd"),
                         ((DateTime)reader["SCHEDULESTARTTIME"]).ToString("HH:mm"),

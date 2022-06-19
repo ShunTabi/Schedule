@@ -17,5 +17,6 @@ namespace Crane
         public static string message00090 = "ないよ。";
         public static string message00100 = "削除しますか?";
         public static string message00101 = "完全削除しますか?";
+        public static string message00110 = "複数起動できません。";
     }
 }

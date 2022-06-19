@@ -31,6 +31,7 @@ namespace Crane
                 ConInstance.schedulerDaily = new ScheduleDaily();
                 ConInstance.schedulerWeekly = new ScheduleWeekly();
                 ConInstance.schedulerList = new ScheduleList();
+                ConInstance.scheduleForm = new ScheduleForm();
                 UserControl[] userControls = { ConInstance.schedulerDaily, ConInstance.schedulerWeekly, ConInstance.schedulerList };
                 for (int i = 0; i < userControls.Length; i++)
                 {

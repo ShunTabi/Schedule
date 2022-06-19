@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Data;
+using System.Windows.Forms.DataVisualization.Charting;
 
 
 namespace Crane
@@ -48,6 +49,14 @@ namespace Crane
             pl.TabIndex = 200;
             pl.Width = size[0];
             pl.Height = size[1];
+        }
+        public static void AddChart(Chart ch, int code0, Control ctl, int[] size)
+        {
+            jgDock(ch, code0);
+            ctl.Controls.Add(ch);
+            ch.TabIndex = 200;
+            ch.Width = size[0];
+            ch.Height = size[1];
         }
         public static void AddButton(Button b, int code0, int code1, Control ctl, int[] size)
         {

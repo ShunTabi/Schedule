@@ -78,7 +78,6 @@ namespace Crane
                 btn1.BackColor = Color.MediumOrchid;
                 btn1.Click += (sender, e) =>
                 {
-                    btn1.Enabled = false;
                     if (cb1.Text == "" || cb2.Text == "" || tb2.Text == "" || cb3.Text == "" || tb3.Text == "" || tb4.Text == "")
                     {
                         FunMSG.ErrMsg(ConMSG.message00001);
@@ -99,7 +98,6 @@ namespace Crane
                         }
                         LocalCleaning.LocalMain();
                         LocalLoad.LocalMain();
-                        btn1.Enabled = true;
                     }
                 };
             }
@@ -183,8 +181,7 @@ namespace Crane
         {
             public static void DataLocalLoad()
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("%");
+                StringBuilder sb = new StringBuilder("%");
                 sb.Append(tb1.Text);
                 sb.Append("%");
                 SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0300", ConSQL.WorkSQL.SQL0300, new string[] { "@KEYWORD" }, new string[] { sb.ToString() });

@@ -19,11 +19,9 @@ namespace Crane
             InitializeComponent();
         }
         //定義
-        public static int execCode = 0;
         public static string ID = "0";
         public static int y = 0;
         public static int days = 0;
-        public static Form scheduleForm = new ScheduleForm();
         public static Panel pa1 = new Panel();
         public static Panel pa2 = new Panel();
         public static Panel pa3 = new Panel();
@@ -35,7 +33,7 @@ namespace Crane
             {
                 days = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Schedule]", "scheduleWeekDays")));
                 uc.EnabledChanged += (sender, e) => { if (uc.Enabled == false) { return; } else { LocalLoad.LocalMain(); } };
-                scheduleForm.Visible = false;
+                ConInstance.scheduleForm.Visible = false;
                 FunCom.AddPanel(pa3, 0, uc, new int[] { 0, 0 });
                 FunCom.AddPanel(pa2, 1, uc, new int[] { 0, 30 });
                 FunCom.AddPanel(pa1, 1, uc, new int[] { 0, 70 });
@@ -101,14 +99,14 @@ namespace Crane
                             {//新規
                                 ConSchedule.execCode = 0;
                                 ConSchedule.ID = "0";
-                                scheduleForm.Visible = true;
+                                ConInstance.scheduleForm.Visible = true;
                                 ConInstance.schedule.Enabled = false;
                             },
                             (sender, e) =>
                             {//修正
                                 ConSchedule.execCode = 1;
                                 ConSchedule.ID = p.TabIndex.ToString();
-                                scheduleForm.Visible = true;
+                                ConInstance.scheduleForm.Visible = true;
                                 ConInstance.schedule.Enabled = false;
                             },
                             (sender, e) =>

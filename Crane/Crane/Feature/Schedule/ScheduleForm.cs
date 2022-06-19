@@ -103,20 +103,28 @@ namespace Crane
                     }
                     else
                     {
+                        StringBuilder sb1 = new StringBuilder(tb1.Text);
+                        sb1.Append(" ");
+                        sb1.Append(tb2.Text);
+                        sb1.Append(":00");
+                        StringBuilder sb2 = new StringBuilder(tb1.Text);
+                        sb2.Append(" ");
+                        sb2.Append(tb3.Text);
+                        sb2.Append(":00");
                         if (ConSchedule.execCode == 0)
                         {
                             FunSQL.SQLDML("SQL0410", ConSQL.ScheduleSQL.SQL0410, new string[] { "@WORKID", "@STATUSID", "@SCHEDULEDATE", "@SCHEDULESTARTTIME", "@SCHEDULEENDTIME" },
-                                new string[] { cb2.SelectedValue.ToString(), cb3.SelectedValue.ToString(), tb1.Text, tb2.Text, tb3.Text });
+                                new string[] { cb2.SelectedValue.ToString(), cb3.SelectedValue.ToString(), tb1.Text, sb1.ToString(),sb2.ToString() });
                         }
                         else if (ConSchedule.execCode == 1)
                         {
                             FunSQL.SQLDML("SQL0420", ConSQL.ScheduleSQL.SQL0420, new string[] { "@WORKID", "@STATUSID", "@SCHEDULEDATE", "@SCHEDULESTARTTIME", "@SCHEDULEENDTIME", "@SCHEDULEID" },
-                                new string[] { cb2.SelectedValue.ToString(), cb3.SelectedValue.ToString(), tb1.Text, tb2.Text, tb3.Text, ConSchedule.ID });
+                                new string[] { cb2.SelectedValue.ToString(), cb3.SelectedValue.ToString(), tb1.Text, sb1.ToString(), sb2.ToString(), ConSchedule.ID });
                         }
-                        ConSchedule.execCode = 0;
-                        ConSchedule.ID = "0";
                         ConInstance.schedule.Enabled = true;
                         frm.Visible = false;
+                        ConSchedule.execCode = 0;
+                        ConSchedule.ID = "0";
                         btn1.Enabled = true;
                     }
                 };

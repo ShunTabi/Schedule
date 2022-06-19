@@ -60,7 +60,6 @@ namespace Crane
                 btn1.BackColor = Color.MediumOrchid;
                 btn1.Click += (sender, e) =>
                 {
-                    btn1.Enabled = false;
                     if (cb1.Text == "" || tb2.Text == "")
                     {
                         FunMSG.ErrMsg(ConMSG.message00001);
@@ -77,7 +76,6 @@ namespace Crane
                         }
                         LocalCleaning.LocalMain();
                         LocalLoad.LocalMain();
-                        btn1.Enabled = true;
                     }
                 };
             }

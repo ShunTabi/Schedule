@@ -12,6 +12,7 @@ namespace Crane
 {
     class ConInstance
     {
+        public static Form scheduleForm;
         public static ScheduleDaily schedulerDaily;
         public static ScheduleWeekly schedulerWeekly;
         public static ScheduleList schedulerList;
@@ -22,7 +23,7 @@ namespace Crane
         public static Work work;
         public static Record record;
         public static Impexp impexp;
-        public static Statistics statistics;
+        public static Analysis analysis;
         public static Review review;
         public static Bin bin;
         public static Setting setting;
@@ -52,7 +53,7 @@ namespace Crane
         public static int workFirstLoad = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Setting]", "FirstLoadCode")[7]));
         public static int recordFirstLoad = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Setting]", "FirstLoadCode")[8]));
         public static int impexpFirstLoad = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Setting]", "FirstLoadCode")[9]));
-        public static int statisticsFirstLoad = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Setting]", "FirstLoadCode")[10]));
+        public static int analysisFirstLoad = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Setting]", "FirstLoadCode")[10]));
         public static int reviewFirstLoad = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Setting]", "FirstLoadCode")[11]));
         public static int binFirstLoad = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Setting]", "FirstLoadCode")[12]));
         public static int settingFirstLoad = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Setting]", "FirstLoadCode")[13]));
