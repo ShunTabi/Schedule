@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
@@ -14,8 +15,10 @@ namespace Crane
         {
             Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
             StreamWriter writer = new StreamWriter(fileName, true, sjisEnc);
-            StringBuilder sb = new StringBuilder("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n");
-            sb.Append(FunDate.getToday(2, 0));
+            StringBuilder sb = new StringBuilder("[Thread");
+            sb.Append(Thread.CurrentThread.ManagedThreadId.ToString());
+            sb.Append("]- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n");
+            sb.Append(FunDate.getToday(4, 0));
             sb.Append(" > \n");
             sb.Append(msg);
             writer.WriteLine(sb.ToString());
@@ -29,7 +32,7 @@ namespace Crane
             }
             if (int.Parse(string.Format("{0}", ConSetting.startupSettingCodes[2])) == 1)
             {
-                WrtMsg(ConFILE.msgLog, msg);
+                Task ActiveTask = ConTask.LOGTask(msg, ConFILE.msgLog, ConFILE.msgLogStatus);
             }
         }
     }

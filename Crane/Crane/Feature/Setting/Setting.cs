@@ -17,12 +17,13 @@ namespace Crane
             InitializeComponent();
         }
         //定義
+        public static int FirstLoadStatus = ConInstance.settingFirstLoad;
         public static ComboBox[] cbs = new ComboBox[] { };
         class setup
         {
             public static void main(UserControl uc)
             {
-                uc.VisibleChanged += (sender, e) => { if (uc.Visible == false) { return; } else { /*cleaning.main();*/ load.main(); } };
+                uc.VisibleChanged += (sender, e) => { if (uc.Visible == false) { return; } else { /*cleaning.main();*/ LocalLoad.main(); } };
                 uc.Padding = new Padding(20, 20, 20, 20);
                 for (int i = 0; i < ConSetting.names.Length; i++)
                 {
@@ -39,21 +40,14 @@ namespace Crane
                     cb.Location = new Point(190 + 400 * (i % 3), 90 + 90 * (i / 3));
                     FunCom.AddComboboxItem(cb, ConSetting.keys, ConSetting.values[i]);
                 }
+                LocalLoad.main();
             }
         }
-        //class startup
-        //{
-        //    public static void main() { }
-        //}
-        //class cleaning
-        //{
-        //    public static void main() { }
-        //}
-        class load
+        class LocalLoad
         {
             public static void main()
             {
-                for(int i = 0; i < cbs.Length; i++)
+                for (int i = 0; i < cbs.Length; i++)
                 {
                     cbs[i].SelectedIndex = int.Parse(string.Format("{0}", ConSetting.startupSettingCodes[i]));
                 }
@@ -74,19 +68,22 @@ namespace Crane
         }
         private void Setting_VisibleChanged(object sender, EventArgs e)
         {
-            int loadStatus = ConInstance.settingFirstLoad;
-            if (loadStatus == 1)
+            if (ConInstance.setting.Visible == true)
             {
-                ConInstance.settingFirstLoad = 2;
+                if (ConInstance.settingFirstLoad < 2)
+                {
+                    ConInstance.settingFirstLoad += 1;
+                }
+                int LoadStatus = ConInstance.settingFirstLoad;
+                if (LoadStatus == 1)
+                {
+                    setup.main(this);
+                }
+            }
+            else if (ConInstance.setting.Visible == false && ConInstance.settingFirstLoad == 1 && FirstLoadStatus == 1)
+            {
+                ConInstance.settingFirstLoad += 1;
                 setup.main(this);
-            }
-            else if (loadStatus == 2)
-            {
-                return;
-            }
-            else if (loadStatus == 0)
-            {
-                ConInstance.settingFirstLoad = 1;
             }
         }
     }

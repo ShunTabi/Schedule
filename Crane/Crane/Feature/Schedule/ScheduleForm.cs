@@ -92,17 +92,17 @@ namespace Crane
                 btn1.BackColor = Color.MediumOrchid;
                 btn1.Click += (sender, e) =>
                 {
-                    btn1.Enabled = false;
                     if (cb1.SelectedValue == null || cb2.SelectedValue == null || cb3.SelectedValue == null || tb1.Text == "" || tb2.Text == "" || tb3.Text == "")
                     {
-                        FunMSG.ErrMsg(ConMSG.message00001);
+                        FunMSG.ErrMsg(ConMSG.CheckMSG.message00001);
                     }
                     else if (!Regex.IsMatch(tb1.Text, @"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$") || !Regex.IsMatch(tb2.Text, @"^([01][0-9]|2[0-3]):[0-5][0-9]$") || !Regex.IsMatch(tb3.Text, @"^([01][0-9]|2[0-3]):[0-5][0-9]$"))
                     {
-                        FunMSG.ErrMsg(ConMSG.message00005);
+                        FunMSG.ErrMsg(ConMSG.CheckMSG.message00003);
                     }
                     else
                     {
+                        btn1.Enabled = false;
                         StringBuilder sb1 = new StringBuilder(tb1.Text);
                         sb1.Append(" ");
                         sb1.Append(tb2.Text);

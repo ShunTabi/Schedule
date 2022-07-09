@@ -20,6 +20,7 @@ namespace Crane
             InitializeComponent();
         }
         //定義
+        public static int FirstLoadStatus = ConInstance.analysisFirstLoad;
         public static Panel p1 = new Panel();
         public static Panel p2 = new Panel();
         public static Chart ch = new Chart();
@@ -40,7 +41,7 @@ namespace Crane
                 FunCom.AddCombobox(cb1, 5, 1, p1, new int[] { 180, 10 });
                 cb1.Font = new Font("Yu mincho", 10, FontStyle.Regular);
                 cb1.Location = new Point(0, 50);
-                FunCom.AddComboboxItem(cb1, new long[] { 0,1 }, new string[] { "棒グラフ", "折れ線グラフ" });
+                FunCom.AddComboboxItem(cb1, new long[] { 0, 1 }, new string[] { "棒グラフ", "折れ線グラフ" });
                 cb1.SelectedIndex = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Analysis]", "type")));
                 FunCom.AddCombobox(cb2, 5, 2, p1, new int[] { 180, 10 });
                 cb2.Font = new Font("Yu mincho", 10, FontStyle.Regular);
@@ -97,10 +98,10 @@ namespace Crane
             {
                 if (!Regex.IsMatch(tb1.Text, @"^[0-9]{4}-(0[1-9]|1[0-2])$") || !Regex.IsMatch(tb2.Text, @"^[0-9]{4}-(0[1-9]|1[0-2])$"))
                 {
-                    FunMSG.ErrMsg(ConMSG.message00005);
+                    FunMSG.ErrMsg(ConMSG.CheckMSG.message00003);
                     return;
                 }
-                else if(mode == 0) { return; }
+                else if (mode == 0) { return; }
                 mode = 0;
                 ch.Series.Clear();
                 ch.Legends.Clear();
@@ -121,14 +122,14 @@ namespace Crane
                     Array.Resize(ref legends, legends.Length + 1);
                     legends[legends.Length - 1] = (string)reader["GOALNAME"];
                 }
-                if(legends.Length > 0)
+                if (legends.Length > 0)
                 {
                     ch.Legends.Add(legends[0]);
                 }
                 string[] x_label = new string[] { };
                 if (int.Parse(string.Format("{0}", cb2.SelectedValue)) == 0)
                 {
-                    reader = FunSQL.SQLSELECT("SQL0502", ConSQL.AnalysisSQL.SQL0502, new string[] { "@MONTH1", "@MONTH2" }, new string[] { tb1.Text,tb2.Text });
+                    reader = FunSQL.SQLSELECT("SQL0502", ConSQL.AnalysisSQL.SQL0502, new string[] { "@MONTH1", "@MONTH2" }, new string[] { tb1.Text, tb2.Text });
                 }
                 else
                 {
@@ -151,7 +152,7 @@ namespace Crane
                     }
                     else
                     {
-                        reader = FunSQL.SQLSELECT("SQL0501", ConSQL.AnalysisSQL.SQL0501, new string[] { "@GOALID", "@MONTH1", "@MONTH2" }, new string[] { cb2.SelectedValue.ToString(), tb1.Text, tb2.Text });    
+                        reader = FunSQL.SQLSELECT("SQL0501", ConSQL.AnalysisSQL.SQL0501, new string[] { "@GOALID", "@MONTH1", "@MONTH2" }, new string[] { cb2.SelectedValue.ToString(), tb1.Text, tb2.Text });
                     }
                     while (reader.Read())
                     {
@@ -180,26 +181,31 @@ namespace Crane
         }
         private void Analysis_VisibleChanged(object sender, EventArgs e)
         {
-            int loadStatus = ConInstance.analysisFirstLoad;
-            if (loadStatus == 1)
+            if (ConInstance.analysis.Visible == true)
             {
-                ConInstance.analysisFirstLoad = 2;
-                LocalSetup.LocalMain(this);
-                LocalSatrtup.LocalMain();
-                LocalLoad.LocalMain();
-            }
-            else if (loadStatus == 2)
-            {
-                if (Visible == false) { return; }
-                else
+                if (ConInstance.analysisFirstLoad < 2)
+                {
+                    ConInstance.analysisFirstLoad += 1;
+                }
+                int LoadStatus = ConInstance.analysisFirstLoad;
+                if (LoadStatus == 1)
+                {
+                    LocalSetup.LocalMain(this);
+                    LocalSatrtup.LocalMain();
+                    LocalLoad.LocalMain();
+                }
+                else if (LoadStatus == 2)
                 {
                     LocalSatrtup.LocalMain();
                     LocalLoad.LocalMain();
                 }
             }
-            else if (loadStatus == 0)
+            else if (ConInstance.analysis.Visible == false && ConInstance.analysisFirstLoad == 1 && FirstLoadStatus == 1)
             {
-                ConInstance.analysisFirstLoad = 1;
+                ConInstance.analysisFirstLoad += 1;
+                LocalSetup.LocalMain(this);
+                LocalSatrtup.LocalMain();
+                LocalLoad.LocalMain();
             }
         }
     }

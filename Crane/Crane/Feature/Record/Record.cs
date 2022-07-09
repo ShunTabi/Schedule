@@ -17,6 +17,7 @@ namespace Crane
             InitializeComponent();
         }
         //定義
+        public static int FirstLoadStatus = ConInstance.recordFirstLoad;
         public static Panel pa1 = new Panel();
         public static Panel pa2 = new Panel();
         public static Button[] btns = new Button[] { };
@@ -72,41 +73,26 @@ namespace Crane
                 Common2();
             }
         }
-        //class LocalStartup
-        //{
-        //    public static void LocalMain()
-        //    {
-
-        //    }
-        //}
-        //class LocalCleaning
-        //{
-        //    public static void LocalMain()
-        //    {
-
-        //    }
-        //}
-        //class LocalLoad
-        //{
-        //    public static void LocalMain()
-        //    {
-        //    }
         private void Record_VisibleChanged(object sender, EventArgs e)
         {
-            int loadStatus = ConInstance.recordFirstLoad;
-            if (loadStatus == 1)
+            if (ConInstance.record.Visible == true)
             {
-                ConInstance.recordFirstLoad = 2;
+                if (ConInstance.recordFirstLoad < 2)
+                {
+                    ConInstance.recordFirstLoad += 1;
+                }
+                int LoadStatus = ConInstance.recordFirstLoad;
+                if (LoadStatus == 1)
+                {
+                    LocalSetup.LocalMain(this);
+                    //startup.LocalMain();
+                }
+            }
+            else if (ConInstance.record.Visible == false && ConInstance.recordFirstLoad == 1 && FirstLoadStatus == 1)
+            {
+                ConInstance.recordFirstLoad += 1;
                 LocalSetup.LocalMain(this);
                 //startup.LocalMain();
-            }
-            else if(loadStatus == 2)
-            {
-                return;
-            }
-            else if (loadStatus == 0)
-            {
-                ConInstance.recordFirstLoad = 1;
             }
         }
     }

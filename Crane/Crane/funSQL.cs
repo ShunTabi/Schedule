@@ -15,7 +15,7 @@ namespace Crane
         {
             if (int.Parse(string.Format("{0}", ConSetting.startupSettingCodes[0])) == 1)
             {
-                FunMSG.WrtMsg(ConFILE.sqlLog, msg);
+                Task ActiveTask = ConTask.LOGTask(msg, ConFILE.sqlLog, ConFILE.sqlLogStatus);
             }
         }
         public static SQLiteDataReader SQLSELECT(string sqlcode,string sql,string[] parameters,string[] values)
@@ -63,7 +63,7 @@ namespace Crane
                 SQLLOG(sb.ToString());
                 if (int.Parse(string.Format("{0}", ConSetting.startupSettingCodes[17])) == 1)
                 {
-                    FunMSG.WrtMsg(ConFILE.debugLog, sb1.ToString());
+                    Task ActiveTask = ConTask.LOGTask(sb1.ToString(), ConFILE.debugLog, ConFILE.debugLogStatus);
                 }
             }
             catch(Exception ex)
@@ -115,7 +115,7 @@ namespace Crane
                 cmd.ExecuteNonQuery();
                 if (int.Parse(string.Format("{0}", ConSetting.startupSettingCodes[17])) == 1)
                 {
-                    FunMSG.WrtMsg(ConFILE.debugLog, sb1.ToString());
+                    Task ActiveTask = ConTask.LOGTask(sb1.ToString(), ConFILE.debugLog, ConFILE.debugLogStatus);
                 }
                 sb.Append("[Success]");
                 SQLLOG(sb.ToString());

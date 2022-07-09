@@ -23,14 +23,14 @@ namespace Crane
     {
         public static int execCode = 0;
         public static string ID = "0";
-        public static Color[] statusColors = new Color[] { Color.Pink,Color.Lavender,Color.DimGray,Color.DimGray };
+        public static Color[] statusColors = new Color[] { Color.Pink, Color.Lavender, Color.DimGray, Color.DimGray };
         public static string selectedDate = FunDate.getToday(0, 0);
     }
     class ConSetting
     {
         public static string[] names = new string[]
         {
-            "sqlLog","msgBox","msgLog","cleaning","backup","未",
+            "sqlLog","msgBox","msgLog","eventLog","未","未",
             "未","未","未","未","未","未",
             "未","未","未","未","未","debug",
         };

@@ -19,6 +19,7 @@ namespace Crane
             InitializeComponent();
         }
         //定義
+        public static int FirstLoadStatus = ConInstance.scheduleDailyFirstLoad;
         public static string ID = "0";
         public static Panel pa1 = new Panel();
         public static Panel pa2 = new Panel();
@@ -73,7 +74,7 @@ namespace Crane
                     },
                     (sender, e) =>
                     {//修正
-                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
                         ConSchedule.execCode = 1;
                         ConSchedule.ID = dg.SelectedRows[0].Cells[0].Value.ToString();
                         ConInstance.scheduleForm.Visible = true;
@@ -81,8 +82,8 @@ namespace Crane
                     },
                     (sender, e) =>
                     {//削除
-                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
-                        DialogResult result = MessageBox.Show(ConMSG.message00100,"確認",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button2);
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
+                        DialogResult result = MessageBox.Show(ConMSG.CheckMSG.message00004,"確認",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button2);
                         if(result == DialogResult.OK)
                         {
                             ID = dg.SelectedRows[0].Cells[0].Value.ToString();
@@ -190,7 +191,7 @@ namespace Crane
                         },
                         (sender, e) =>
                         {//修正
-                            if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                            if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
                             ConSchedule.execCode = 1;
                             ConSchedule.ID = p.TabIndex.ToString();
                             ConInstance.scheduleForm.Visible = true;
@@ -198,8 +199,8 @@ namespace Crane
                         },
                         (sender, e) =>
                         {//削除
-                            if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
-                            DialogResult result = MessageBox.Show(ConMSG.message00100,"確認",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button2);
+                            if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
+                            DialogResult result = MessageBox.Show(ConMSG.CheckMSG.message00004,"確認",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button2);
                             if(result == DialogResult.OK)
                             {
                                 ID = p.TabIndex.ToString();
@@ -249,25 +250,30 @@ namespace Crane
         }
         private void ScheduleDaily_VisibleChanged(object sender, EventArgs e)
         {
-            int loadStatus = ConInstance.scheduleDailyFirstLoad;
-            if (loadStatus == 1)
+            if (ConInstance.scheduleDaily.Visible == true)
             {
-                ConInstance.scheduleDailyFirstLoad = 2;
-                LocalSetup.LocalMain(this);
-                LocalStartup.LocalMain();
-                LocalLoad.LocalMain();
-            }
-            else if(loadStatus == 2)
-            {
-                if (Visible == false) { return; }
-                else
+                if (ConInstance.scheduleDailyFirstLoad < 2)
+                {
+                    ConInstance.scheduleDailyFirstLoad += 1;
+                }
+                int LoadStatus = ConInstance.scheduleDailyFirstLoad;
+                if (LoadStatus == 1)
+                {
+                    LocalSetup.LocalMain(this);
+                    LocalStartup.LocalMain();
+                    LocalLoad.LocalMain();
+                }
+                else if (LoadStatus == 2)
                 {
                     LocalLoad.LocalMain();
                 }
             }
-            else if (loadStatus == 0)
+            else if (ConInstance.scheduleDaily.Visible == false && ConInstance.scheduleDailyFirstLoad == 1 && FirstLoadStatus == 1)
             {
-                ConInstance.scheduleDailyFirstLoad = 1;
+                ConInstance.scheduleDailyFirstLoad += 1;
+                LocalSetup.LocalMain(this);
+                LocalStartup.LocalMain();
+                LocalLoad.LocalMain();
             }
         }
     }

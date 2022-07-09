@@ -19,6 +19,7 @@ namespace Crane
             InitializeComponent();
         }
         //定義
+        public static int FirstLoadStatus = ConInstance.scheduleWeeklyFirstLoad;
         public static string ID = "0";
         public static int y = 0;
         public static int days = 0;
@@ -159,25 +160,30 @@ namespace Crane
         }
         private void ScheduleWeekly_VisibleChanged(object sender, EventArgs e)
         {
-            int loadStatus = ConInstance.scheduleWeeklyFirstLoad;
-            if (loadStatus == 1)
+            if (ConInstance.scheduleWeekly.Visible == true)
             {
-                ConInstance.scheduleWeeklyFirstLoad = 2;
-                LocalSetup.LocalMain(this);
-                LocalStartup.LocalMain();
-                LocalLoad.LocalMain();
-            }
-            else if (loadStatus == 2)
-            {
-                if (Visible == false) { return; }
-                else
+                if (ConInstance.scheduleWeeklyFirstLoad < 2)
+                {
+                    ConInstance.scheduleWeeklyFirstLoad += 1;
+                }
+                int LoadStatus = ConInstance.scheduleWeeklyFirstLoad;
+                if (LoadStatus == 1)
+                {
+                    LocalSetup.LocalMain(this);
+                    LocalStartup.LocalMain();
+                    LocalLoad.LocalMain();
+                }
+                else if (LoadStatus == 2)
                 {
                     LocalLoad.LocalMain();
                 }
             }
-            else if (loadStatus == 0)
+            else if (ConInstance.scheduleWeekly.Visible == false && ConInstance.scheduleWeeklyFirstLoad == 1 && FirstLoadStatus == 1)
             {
-                ConInstance.scheduleWeeklyFirstLoad = 1;
+                ConInstance.scheduleWeeklyFirstLoad += 1;
+                LocalSetup.LocalMain(this);
+                LocalStartup.LocalMain();
+                LocalLoad.LocalMain();
             }
         }
     }

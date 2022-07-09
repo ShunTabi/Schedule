@@ -18,6 +18,7 @@ namespace Crane
             InitializeComponent();
         }
         //定義
+        public static int FirstLoadStatus = ConInstance.planFirstLoad;
         public static int execCode = 0;
         public static string ID = "0";
         public static Panel pa1 = new Panel();
@@ -62,7 +63,7 @@ namespace Crane
                 {
                     if (cb1.Text == "" || tb2.Text == "")
                     {
-                        FunMSG.ErrMsg(ConMSG.message00001);
+                        FunMSG.ErrMsg(ConMSG.CheckMSG.message00001);
                     }
                     else
                     {
@@ -94,7 +95,7 @@ namespace Crane
                     },
                     (sender,e)=>
                     {//修正
-                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
                         SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0201", ConSQL.PlanSQL.SQL0201, new string[] { "@PLANID" }, new string[] { ID });
                         while (reader.Read())
@@ -107,7 +108,7 @@ namespace Crane
                     },
                     (sender,e)=>
                     {//削除
-                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
                         FunSQL.SQLDML("SQL0221", ConSQL.PlanSQL.SQL0221, new string[] { "@VISIBLESTATUS","@PLANID" }, new string[] { "1",ID });
                         LocalCleaning.LocalMain();
@@ -192,27 +193,33 @@ namespace Crane
         }
         private void Plan_VisibleChanged(object sender, EventArgs e)
         {
-            int loadStatus = ConInstance.planFirstLoad;
-            if (loadStatus == 1)
+            if (ConInstance.plan.Visible == true)
             {
-                ConInstance.planFirstLoad = 2;
-                LocalSetup.LocalMain(this);
-                //LocalStartup.LocalMain();
-                LocalCleaning.LocalMain();
-                LocalLoad.LocalMain();
-            }
-            else if (loadStatus == 2)
-            {
-                if (Visible == false) { return; }
-                else
+                if (ConInstance.planFirstLoad < 2)
+                {
+                    ConInstance.planFirstLoad += 1;
+                }
+                int LoadStatus = ConInstance.planFirstLoad;
+                if (LoadStatus == 1)
+                {
+                    LocalSetup.LocalMain(this);
+                    //LocalStartup.LocalMain();
+                    LocalCleaning.LocalMain();
+                    LocalLoad.LocalMain();
+                }
+                else if (LoadStatus == 2)
                 {
                     LocalCleaning.LocalMain();
                     LocalLoad.LocalMain();
                 }
             }
-            else if (loadStatus == 0)
+            else if (ConInstance.plan.Visible == false && ConInstance.planFirstLoad == 1 && FirstLoadStatus == 1)
             {
-                ConInstance.planFirstLoad = 1;
+                ConInstance.planFirstLoad += 1;
+                LocalSetup.LocalMain(this);
+                //LocalStartup.LocalMain();
+                LocalCleaning.LocalMain();
+                LocalLoad.LocalMain();
             }
         }
     }

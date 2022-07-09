@@ -18,6 +18,7 @@ namespace Crane
             InitializeComponent();
         }
         //定義
+        public static int FirstLoadStatus = ConInstance.binFirstLoad;
         public static string ID = "0";
         public static Panel pa1 = new Panel();
         public static Panel pa2 = new Panel();
@@ -48,7 +49,7 @@ namespace Crane
                 {
                     (sender, e) =>
                     {//修正
-                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
                         for (int i = 0;i< dg.SelectedRows.Count;i++)
                         {
                             string ID = dg.SelectedRows[i].Cells[0].Value.ToString();
@@ -59,27 +60,31 @@ namespace Crane
                             }
                             else if (key == "GOAL")
                             {
-                            FunSQL.SQLDML("SQL0121", ConSQL.GoalSQL.SQL0121, new string[] { "@VISIBLESTATUS","@GOALID" }, new string[] { "0",ID});
+                                FunSQL.SQLDML("SQL0121", ConSQL.GoalSQL.SQL0121, new string[] { "@VISIBLESTATUS","@GOALID" }, new string[] { "0",ID});
                             }
                             else if(key == "PLAN")
                             {
-                            FunSQL.SQLDML("SQL0221", ConSQL.PlanSQL.SQL0221, new string[] { "@VISIBLESTATUS","@PLANID" }, new string[] { "0",ID});
+                                FunSQL.SQLDML("SQL0221", ConSQL.PlanSQL.SQL0221, new string[] { "@VISIBLESTATUS","@PLANID" }, new string[] { "0",ID});
                             }
                             else if(key == "WORK")
                             {
-                            FunSQL.SQLDML("SQL0321", ConSQL.WorkSQL.SQL0321, new string[] { "@VISIBLESTATUS","@WORKID" }, new string[] { "0",ID});
+                                FunSQL.SQLDML("SQL0321", ConSQL.WorkSQL.SQL0321, new string[] { "@VISIBLESTATUS","@WORKID" }, new string[] { "0",ID});
                             }
                             else if(key == "SCHEDULE")
                             {
-                            FunSQL.SQLDML("SQL0421", ConSQL.ScheduleSQL.SQL0421, new string[] { "@VISIBLESTATUS","@SCHEDULEID" }, new string[] { "0",ID});
+                                FunSQL.SQLDML("SQL0421", ConSQL.ScheduleSQL.SQL0421, new string[] { "@VISIBLESTATUS","@SCHEDULEID" }, new string[] { "0",ID});
+                            }
+                            else if(key == "REVIEW")
+                            {
+                                FunSQL.SQLDML("SQL0621", ConSQL.ReviewSQL.SQL0621, new string[] { "@VISIBLESTATUS","@REVIEWID" }, new string[] { "0",ID});
                             }
                         }
                         LocalLoad.LocalMain();
                     },
                     (sender, e) =>
                     {//削除
-                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
-                        DialogResult result = MessageBox.Show(ConMSG.message00101,"確認",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button2);
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
+                        DialogResult result = MessageBox.Show(ConMSG.CheckMSG.message00005,"確認",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button2);
                         if(result == DialogResult.OK)
                         {
                             for (int i = 0;i< dg.SelectedRows.Count; i++)
@@ -106,6 +111,10 @@ namespace Crane
                                 {
                                     FunSQL.SQLDML("SQL0430", ConSQL.ScheduleSQL.SQL0430, new string[] { "@SCHEDULEID" }, new string[] { ID});
                                 }
+                                else if(key == "REVIEW")
+                                {
+                                    FunSQL.SQLDML("SQL0630", ConSQL.ReviewSQL.SQL0630, new string[] { "@REVIEWID" }, new string[] { ID});
+                                }
                             }
                         }
                         LocalLoad.LocalMain();
@@ -121,9 +130,6 @@ namespace Crane
         }
         class LocalStartup
         {
-            public static void LocalMain()
-            {
-            }
         }
         class LocalCleaning
         {
@@ -151,23 +157,28 @@ namespace Crane
         }
         private void Bin_VisibleChanged(object sender, EventArgs e)
         {
-            int loadStatus = ConInstance.binFirstLoad;
-            if (loadStatus == 1)
+            if (ConInstance.bin.Visible == true)
             {
-                ConInstance.binFirstLoad = 2;
-                LocalSetup.LocalMain(this);
-                LocalLoad.LocalMain();
-            }else if(loadStatus == 2)
-            {
-                if (Visible == false) { return; }
-                else
+                if (ConInstance.binFirstLoad < 2)
+                {
+                    ConInstance.binFirstLoad += 1;
+                }
+                int LoadStatus = ConInstance.binFirstLoad;
+                if (LoadStatus == 1)
+                {
+                    LocalSetup.LocalMain(this);
+                    LocalLoad.LocalMain();
+                }
+                else if (LoadStatus == 2)
                 {
                     LocalLoad.LocalMain();
                 }
             }
-            else if (loadStatus == 0)
+            else if (ConInstance.bin.Visible == false && ConInstance.binFirstLoad == 1 && FirstLoadStatus == 1)
             {
-                ConInstance.binFirstLoad = 1;
+                ConInstance.binFirstLoad += 1;
+                LocalSetup.LocalMain(this);
+                LocalLoad.LocalMain();
             }
         }
     }

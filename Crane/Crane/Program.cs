@@ -15,18 +15,15 @@ namespace Crane
         [STAThread]
         static void Main(string[] args)
         {
-            if (args.Length > 0)
+            Mutex _mutex = new Mutex(false, "Crane.exe");
+            if (_mutex.WaitOne(0, false) == false)
             {
-                Mutex _mutex = new Mutex(false, "Crane.exe");
-                if (_mutex.WaitOne(0, false) == false)
-                {
-                    FunMSG.ErrMsg(ConMSG.message00110);
-                    return;
-                }
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Crane());
+                FunMSG.ErrMsg(ConMSG.CheckMSG.message00006);
+                return;
             }
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Crane());
         }
     }
 }

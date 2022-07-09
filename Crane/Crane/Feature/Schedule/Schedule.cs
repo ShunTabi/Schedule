@@ -18,6 +18,7 @@ namespace Crane
             InitializeComponent();
         }
         //定義
+        public static int FirstLoadStatus = ConInstance.scheduleFirstLoad;
         public static Panel pa1 = new Panel();
         public static Panel pa2 = new Panel();
         public static Button[] btns = new Button[] { };
@@ -28,11 +29,11 @@ namespace Crane
                 FunCom.AddPanel(pa2, 0, uc, new int[] { 0, 0 });
                 FunCom.AddPanel(pa1, 1, uc, new int[] { 0, 100 });
                 string[] btnNames = new string[] { "日間","週間","一覧" };
-                ConInstance.schedulerDaily = new ScheduleDaily();
-                ConInstance.schedulerWeekly = new ScheduleWeekly();
-                ConInstance.schedulerList = new ScheduleList();
+                ConInstance.scheduleDaily = new ScheduleDaily();
+                ConInstance.scheduleWeekly = new ScheduleWeekly();
+                ConInstance.scheduleList = new ScheduleList();
                 ConInstance.scheduleForm = new ScheduleForm();
-                UserControl[] userControls = { ConInstance.schedulerDaily, ConInstance.schedulerWeekly, ConInstance.schedulerList };
+                UserControl[] userControls = { ConInstance.scheduleDaily, ConInstance.scheduleWeekly, ConInstance.scheduleList };
                 for (int i = 0; i < userControls.Length; i++)
                 {
                     Button btn = new Button();
@@ -56,7 +57,7 @@ namespace Crane
             }
             private static void common2()
             {
-                UserControl[] userControls = { ConInstance.schedulerDaily, ConInstance.schedulerWeekly, ConInstance.schedulerList };
+                UserControl[] userControls = { ConInstance.scheduleDaily, ConInstance.scheduleWeekly, ConInstance.scheduleList };
                 for (int i = 0; i < userControls.Length; i++)
                 {
                     UserControl uc = userControls[i];
@@ -72,34 +73,26 @@ namespace Crane
                 common2();
             }
         }
-        //class startup
-        //{
-        //    public static void main()
-        //    {
-
-        //    }
-        //}
-        //class cleaning
-        //{
-        //    public static void main()
-        //    {
-
-        private void Scheduler_VisibleChanged(object sender, EventArgs e)
+        private void schedule_VisibleChanged(object sender, EventArgs e)
         {
-            int loadStatus = ConInstance.scheduleFirstLoad;
-            if (loadStatus == 1)
+            if (ConInstance.schedule.Visible == true)
             {
-                ConInstance.scheduleFirstLoad = 2;
+                if (ConInstance.scheduleFirstLoad < 2)
+                {
+                    ConInstance.scheduleFirstLoad += 1;
+                }
+                int LoadStatus = ConInstance.scheduleFirstLoad;
+                if (LoadStatus == 1)
+                {
+                    LocalSetup.LocalMain(this);
+                    //LocalStartup.LocalMain();
+                }
+            }
+            else if (ConInstance.schedule.Visible == false && ConInstance.scheduleFirstLoad == 1 && FirstLoadStatus == 1)
+            {
+                ConInstance.scheduleFirstLoad += 1;
                 LocalSetup.LocalMain(this);
                 //LocalStartup.LocalMain();
-            }
-            else if (loadStatus == 2)
-            {
-                return;
-            }
-            else if (loadStatus == 0)
-            {
-                ConInstance.scheduleFirstLoad = 1;
             }
         }
     }

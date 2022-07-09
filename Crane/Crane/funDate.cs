@@ -27,6 +27,10 @@ namespace Crane
             {
                 output = DateTime.Now.AddMonths(code1).ToString("yyyy-MM");
             }
+            else if (code0 == 4)
+            {
+                output = DateTime.Now.AddMonths(code1).ToString("yyyy-MM-dd HH:mm:ss");
+            }
             return output;
         }
         public static int getInt(string time)

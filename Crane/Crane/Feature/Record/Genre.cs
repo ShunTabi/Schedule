@@ -18,6 +18,7 @@ namespace Crane
             InitializeComponent();
         }
         //定義
+        public static int FirstLoadStatus = ConInstance.genreFirstLoad;
         public static int execCode = 0;
         public static string ID = "0";
         public static Panel pa1 = new Panel();
@@ -52,7 +53,7 @@ namespace Crane
                 {
                     if (tb2.Text == "")
                     {
-                        FunMSG.ErrMsg(ConMSG.message00001);
+                        FunMSG.ErrMsg(ConMSG.CheckMSG.message00001);
                     }
                     else
                     {
@@ -83,7 +84,7 @@ namespace Crane
                     },
                     (sender, e) =>
                     {//修正
-                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
                         execCode = 1;
                         btn1.Text = ConCom.defaultBtnNames[execCode];
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
@@ -95,7 +96,7 @@ namespace Crane
                     },
                     (sender, e) =>
                     {//削除
-                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
                         FunSQL.SQLDML("SQL0021", ConSQL.GenreSQL.SQL0021, new string[] { "@VISIBLESTATUS","@GENREID" }, new string[] { "1",ID });
                         LocalCleaning.LocalMain();
@@ -106,7 +107,7 @@ namespace Crane
                 Label lb1 = new Label();
                 FunCom.AddLabel(lb1, 5, pa3);
                 lb1.Text = "種別";
-                lb1.Location = new Point(0,0);
+                lb1.Location = new Point(0, 0);
                 lb1.Font = new Font("Yu mincho", 10, FontStyle.Regular);
                 FunCom.AddTextbox(tb1, 5, 1, pa3, new int[] { 180, 10 });
                 tb1.Location = new Point(52, 0);
@@ -163,27 +164,33 @@ namespace Crane
         }
         private void Genre_VisibleChanged(object sender, EventArgs e)
         {
-            int loadStatus = ConInstance.genreFirstLoad;
-            if (loadStatus == 1)
+            if (ConInstance.genre.Visible == true)
             {
-                ConInstance.genreFirstLoad = 2;
-                LocalSetup.LocalMain(this);
-                //LocalStartup.LocalMain();
-                LocalCleaning.LocalMain();
-                LocalLoad.LocalMain();
-            }
-            else if(loadStatus == 2)
-            {
-                if (Visible == false) { return; }
-                else
+                if (ConInstance.genreFirstLoad < 2)
+                {
+                    ConInstance.genreFirstLoad += 1;
+                }
+                int LoadStatus = ConInstance.genreFirstLoad;
+                if (LoadStatus == 1)
+                {
+                    LocalSetup.LocalMain(this);
+                    //LocalStartup.LocalMain();
+                    LocalCleaning.LocalMain();
+                    LocalLoad.LocalMain();
+                }
+                else if (LoadStatus == 2)
                 {
                     LocalCleaning.LocalMain();
                     LocalLoad.LocalMain();
                 }
             }
-            else if (loadStatus == 0)
+            else if (ConInstance.genre.Visible == false && ConInstance.genreFirstLoad == 1 && FirstLoadStatus == 1)
             {
-                ConInstance.genreFirstLoad = 1;
+                ConInstance.genreFirstLoad += 1;
+                LocalSetup.LocalMain(this);
+                //LocalStartup.LocalMain();
+                LocalCleaning.LocalMain();
+                LocalLoad.LocalMain();
             }
         }
     }

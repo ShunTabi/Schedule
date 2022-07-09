@@ -13,7 +13,7 @@ namespace Crane
     {
         public static string[] GetString(string fileName, string sectionName, string keyName)
         {
-            string[] output = new string[] { ConMSG.message00090 };
+            string[] output = new string[] { ConMSG.CheckMSG.message00002 };
             string line1;
             int numOfSection = -99;
             IEnumerable<string> lines = File.ReadLines(fileName);
@@ -41,7 +41,7 @@ namespace Crane
             }
             if(output[0] == "ないよ。")
             {
-                StringBuilder sb = new StringBuilder(ConMSG.message00090);
+                StringBuilder sb = new StringBuilder(ConMSG.CheckMSG.message00002);
                 sb.Append("\nsectionName : ");
                 sb.Append(sectionName);
                 sb.Append("\nkeyName : ");

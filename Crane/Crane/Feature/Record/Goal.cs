@@ -18,6 +18,7 @@ namespace Crane
             InitializeComponent();
         }
         //定義
+        public static int FirstLoadStatus = ConInstance.goalFirstLoad;
         public static int execCode = 0;
         public static string ID = "0";
         public static Panel pa1 = new Panel();
@@ -60,7 +61,7 @@ namespace Crane
                 {
                     if (cb1.Text == "" || tb2.Text == "")
                     {
-                        FunMSG.ErrMsg(ConMSG.message00001);
+                        FunMSG.ErrMsg(ConMSG.CheckMSG.message00001);
                     }
                     else
                     {
@@ -98,7 +99,7 @@ namespace Crane
                     },
                     (sender, e) =>
                     {//更新
-                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
                         SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0101", ConSQL.GoalSQL.SQL0101, new string[] { "@GOALID" }, new string[] { ID });
                         while (reader.Read())
@@ -111,7 +112,7 @@ namespace Crane
                     },
                     (sender, e) =>
                     {//削除
-                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
                         FunSQL.SQLDML("SQL0121", ConSQL.GoalSQL.SQL0121, new string[] { "@VISIBLESTATUS","@GOALID" }, new string[] { "1",ID });
                         LocalCleaning.LocalMain();
@@ -190,27 +191,33 @@ namespace Crane
         }
         private void Goal_VisibleChanged(object sender, EventArgs e)
         {
-            int loadStatus = ConInstance.goalFirstLoad;
-            if (loadStatus == 1)
+            if (ConInstance.goal.Visible == true)
             {
-                ConInstance.goalFirstLoad = 2;
-                LocalSetup.LocalMain(this);
-                LocalCleaning.LocalMain();
-                //LocalStartup.LocalMain();
-                LocalLoad.LocalMain();
-            }
-            else if(loadStatus == 2)
-            {
-                if (Visible == false) { return; }
-                else
+                if (ConInstance.goalFirstLoad < 2)
+                {
+                    ConInstance.goalFirstLoad += 1;
+                }
+                int LoadStatus = ConInstance.goalFirstLoad;
+                if (LoadStatus == 1)
+                {
+                    LocalSetup.LocalMain(this);
+                    //LocalStartup.LocalMain();
+                    LocalCleaning.LocalMain();
+                    LocalLoad.LocalMain();
+                }
+                else if (LoadStatus == 2)
                 {
                     LocalCleaning.LocalMain();
                     LocalLoad.LocalMain();
                 }
             }
-            else if (loadStatus == 0)
+            else if (ConInstance.goal.Visible == false && ConInstance.goalFirstLoad == 1 && FirstLoadStatus == 1)
             {
-                ConInstance.goalFirstLoad = 1;
+                ConInstance.goalFirstLoad += 1;
+                LocalSetup.LocalMain(this);
+                //LocalStartup.LocalMain();
+                LocalCleaning.LocalMain();
+                LocalLoad.LocalMain();
             }
         }
     }

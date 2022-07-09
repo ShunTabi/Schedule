@@ -18,6 +18,7 @@ namespace Crane
             InitializeComponent();
         }
         //定義
+        public static int FirstLoadStatus = ConInstance.scheduleListFirstLoad;
         public static int execCode = 0;
         public static string ID = "0";
         public static Panel pa1 = new Panel();
@@ -56,7 +57,7 @@ namespace Crane
                     },
                     (sender, e) =>
                     {//修正
-                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
                         ConSchedule.execCode = 1;
                         ConSchedule.ID = dg.SelectedRows[0].Cells[0].Value.ToString();
                         ConInstance.scheduleForm.Visible = true;
@@ -64,8 +65,8 @@ namespace Crane
                     },
                     (sender, e) =>
                     {//削除
-                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
-                        DialogResult result = MessageBox.Show(ConMSG.message00100,"確認",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button2);
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
+                        DialogResult result = MessageBox.Show(ConMSG.CheckMSG.message00004,"確認",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation,MessageBoxDefaultButton.Button2);
                         if(result == DialogResult.OK)
                         {
                             string ID = dg.SelectedRows[0].Cells[0].Value.ToString();
@@ -143,24 +144,28 @@ namespace Crane
 
         private void ScheduleList_VisibleChanged(object sender, EventArgs e)
         {
-            int loadStatus = ConInstance.scheduleListFirstLoad;
-            if (loadStatus == 1)
+            if (ConInstance.scheduleList.Visible == true)
             {
-                ConInstance.scheduleFirstLoad = 2;
-                LocalSetup.LocalMain(this);
-                LocalLoad.LocalMain();
-            }
-            else if (loadStatus == 2)
-            {
-                if (Visible == false) { return; }
-                else
+                if (ConInstance.scheduleListFirstLoad < 2)
+                {
+                    ConInstance.scheduleListFirstLoad += 1;
+                }
+                int LoadStatus = ConInstance.scheduleListFirstLoad;
+                if (LoadStatus == 1)
+                {
+                    LocalSetup.LocalMain(this);
+                    LocalLoad.LocalMain();
+                }
+                else if (LoadStatus == 2)
                 {
                     LocalLoad.LocalMain();
                 }
             }
-            else if(loadStatus == 0)
+            else if (ConInstance.scheduleList.Visible == false && ConInstance.scheduleListFirstLoad == 1 && FirstLoadStatus == 1)
             {
-                ConInstance.scheduleListFirstLoad = 1;
+                ConInstance.scheduleListFirstLoad += 1;
+                LocalSetup.LocalMain(this);
+                LocalLoad.LocalMain();
             }
         }
     }

@@ -19,6 +19,7 @@ namespace Crane
             InitializeComponent();
         }
         //定義
+        public static int FirstLoadStatus = ConInstance.workFirstLoad;
         public static int execCode = 0;
         public static string ID = "0";
         public static Panel pa1 = new Panel();
@@ -42,7 +43,7 @@ namespace Crane
                 FunCom.AddPanel(pa2, 0, uc, new int[] { 0, 0 });
                 FunCom.AddPanel(pa1, 2, uc, new int[] { 350, 0 });
                 pa2.BackColor = Color.Plum;
-                pa2.Padding = new Padding(10,10,10,10);
+                pa2.Padding = new Padding(10, 10, 10, 10);
             }
             private static void LeftSide()
             {
@@ -69,10 +70,10 @@ namespace Crane
                 cb3.Location = new Point(100, 225);
                 FunCom.AddTextbox(tb3, 5, 5, pa1, new int[] { 180, 10 });
                 tb3.Location = new Point(100, 295);
-                tb3.Text = FunDate.getToday(0,0);
+                tb3.Text = FunDate.getToday(0, 0);
                 FunCom.AddTextbox(tb4, 5, 6, pa1, new int[] { 180, 10 });
                 tb4.Location = new Point(100, 365);
-                tb4.Text = FunDate.getToday(0,0);
+                tb4.Text = FunDate.getToday(0, 0);
                 FunCom.AddButton(btn1, 5, 7, pa1, new int[] { 90, 50 });
                 btn1.Location = new Point(100, 435);
                 btn1.BackColor = Color.MediumOrchid;
@@ -80,11 +81,11 @@ namespace Crane
                 {
                     if (cb1.Text == "" || cb2.Text == "" || tb2.Text == "" || cb3.Text == "" || tb3.Text == "" || tb4.Text == "")
                     {
-                        FunMSG.ErrMsg(ConMSG.message00001);
+                        FunMSG.ErrMsg(ConMSG.CheckMSG.message00001);
                     }
                     else if (!Regex.IsMatch(tb3.Text, @"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$") || !Regex.IsMatch(tb4.Text, @"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"))
                     {
-                        FunMSG.ErrMsg(ConMSG.message00005);
+                        FunMSG.ErrMsg(ConMSG.CheckMSG.message00003);
                     }
                     else
                     {
@@ -116,7 +117,7 @@ namespace Crane
                     },
                     (sender, e) =>
                     {//更新
-                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
                         SQLiteDataReader reader = FunSQL.SQLSELECT("SQL0301", ConSQL.WorkSQL.SQL0301, new string[] { "@WORKID" }, new string[] { ID });
                         while (reader.Read())
@@ -133,9 +134,9 @@ namespace Crane
                     },
                     (sender, e) =>
                     {//削除
-                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.message00010); return; }
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
-                        FunSQL.SQLDML("SQL0321", ConSQL.WorkSQL.SQL0321, new string[] { "@vISIBLESTATUS","@WORKID" }, new string[] { "1",ID });
+                        FunSQL.SQLDML("SQL0321", ConSQL.WorkSQL.SQL0321, new string[] { "@VISIBLESTATUS","@WORKID" }, new string[] { "1",ID });
                         LocalCleaning.LocalMain();
                         LocalLoad.LocalMain();
                     }
@@ -170,8 +171,8 @@ namespace Crane
             public static void LocalMain()
             {
                 tb2.Text = "";
-                tb3.Text = FunDate.getToday(0,0);
-                tb4.Text = FunDate.getToday(0,0);
+                tb3.Text = FunDate.getToday(0, 0);
+                tb4.Text = FunDate.getToday(0, 0);
                 ID = "0";
                 execCode = 0;
                 btn1.Text = ConCom.defaultBtnNames[execCode];
@@ -257,26 +258,33 @@ namespace Crane
 
         private void Work_VisibleChanged(object sender, EventArgs e)
         {
-            int loadStatus = ConInstance.workFirstLoad;
-            if (loadStatus == 1)
+            if (ConInstance.work.Visible == true)
             {
-                ConInstance.workFirstLoad = 2;
-                LocalSetup.LocalMain(this);
-                LocalCleaning.LocalMain();
-                LocalLoad.LocalMain();
-            }
-            else if(loadStatus == 2)
-            {
-                if (Visible == false) { return; }
-                else
+                if (ConInstance.workFirstLoad < 2)
+                {
+                    ConInstance.workFirstLoad += 1;
+                }
+                int LoadStatus = ConInstance.workFirstLoad;
+                if (LoadStatus == 1)
+                {
+                    LocalSetup.LocalMain(this);
+                    //LocalStartup.LocalMain();
+                    LocalCleaning.LocalMain();
+                    LocalLoad.LocalMain();
+                }
+                else if (LoadStatus == 2)
                 {
                     LocalCleaning.LocalMain();
                     LocalLoad.LocalMain();
                 }
             }
-            else if (loadStatus == 0)
+            else if (ConInstance.work.Visible == false && ConInstance.workFirstLoad == 1 && FirstLoadStatus == 1)
             {
-                ConInstance.workFirstLoad = 1;
+                ConInstance.workFirstLoad += 1;
+                LocalSetup.LocalMain(this);
+                //LocalStartup.LocalMain();
+                LocalCleaning.LocalMain();
+                LocalLoad.LocalMain();
             }
         }
     }

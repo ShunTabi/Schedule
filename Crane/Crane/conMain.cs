@@ -21,5 +21,6 @@ namespace Crane
         public static int startupCode = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault,"[Main]","startupCode")[0]));
         public static int recordStartupCode = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Record]", "recordStartupCode")[0]));
         public static int scheduleStartupCode = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Schedule]", "scheduleStartupCode")[0]));
+        public static int reviewStartupCode = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Review]", "reviewStartupCode")[0]));
     }
 }

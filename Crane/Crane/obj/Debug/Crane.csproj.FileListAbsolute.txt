@@ -65,7 +65,6 @@ E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Debug\Crane.Plan.resources
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Debug\Crane.Work.resources
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Debug\Crane.Bin.resources
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Debug\Crane.impexp.resources
-E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Debug\Crane.Review.resources
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Debug\Crane.ScheduleDaily.resources
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Debug\Crane.ScheduleList.resources
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Debug\Crane.Schedule.resources
@@ -79,3 +78,4 @@ E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Debug\Crane.csproj.CopyComplete
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Debug\Crane.exe
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Debug\Crane.pdb
 E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Debug\Crane.Analysis.resources
+E:\03.C#\02.Crane_DEV\Crane\Crane\obj\Debug\Crane.Review.resources
