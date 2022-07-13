@@ -107,7 +107,7 @@ namespace Crane
                 FunCom.AddDataGridView(dg, 0, pa2, new int[] { 0, 0 });
                 dg.BackgroundColor = Color.Plum;
                 FunCom.AddDataGridViewColumns(dg, new string[] { "ID", "目標", "計画", "優先度/作業", "開始日", "終了日" });
-                FunCom.AddContextMenuStrip(dg, ConCom.defaultBtnNames, new EventHandler[]
+                FunCom.AddContextMenuStrip(dg, ConCom.defaultBtnNames2, new EventHandler[]
                 {
                     (sender, e) =>
                     {//新規
@@ -133,7 +133,15 @@ namespace Crane
                         btn1.Text = ConCom.defaultBtnNames[execCode];
                     },
                     (sender, e) =>
-                    {//削除
+                    {//収納箱へ
+                        if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
+                        ID = dg.SelectedRows[0].Cells[0].Value.ToString();
+                        FunSQL.SQLDML("SQL0321", ConSQL.WorkSQL.SQL0321, new string[] { "@VISIBLESTATUS","@WORKID" }, new string[] { "2",ID });
+                        LocalCleaning.LocalMain();
+                        LocalLoad.LocalMain();
+                    },
+                    (sender, e) =>
+                    {//ゴミ箱へ
                         if(dg.SelectedRows.Count == 0){ FunMSG.ErrMsg(ConMSG.CheckMSG.message00007); return; }
                         ID = dg.SelectedRows[0].Cells[0].Value.ToString();
                         FunSQL.SQLDML("SQL0321", ConSQL.WorkSQL.SQL0321, new string[] { "@VISIBLESTATUS","@WORKID" }, new string[] { "1",ID });

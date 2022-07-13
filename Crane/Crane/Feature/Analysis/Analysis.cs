@@ -38,20 +38,29 @@ namespace Crane
             }
             private static void Common2()
             {
-                FunCom.AddCombobox(cb1, 5, 1, p1, new int[] { 180, 10 });
-                cb1.Font = new Font("Yu mincho", 10, FontStyle.Regular);
-                cb1.Location = new Point(0, 50);
-                FunCom.AddComboboxItem(cb1, new long[] { 0, 1 }, new string[] { "棒グラフ", "折れ線グラフ" });
-                cb1.SelectedIndex = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Analysis]", "type")));
-                FunCom.AddCombobox(cb2, 5, 2, p1, new int[] { 180, 10 });
-                cb2.Font = new Font("Yu mincho", 10, FontStyle.Regular);
-                cb2.Location = new Point(190, 50);
-                FunCom.AddTextbox(tb1, 5, 3, p1, new int[] { 180, 10 });
-                tb1.Location = new Point(380, 50);
+                string[] labelName = { "chart", "data1", "期間" };
+                for (int i = 0; i < labelName.Length; i++)
+                {
+                    Label lb = new Label();
+                    lb.Text = labelName[i];
+                    lb.Location = new Point(250 * i, 10);
+                    lb.Font = new Font("Yu mincho", 10, FontStyle.Regular);
+                    FunCom.AddLabel(lb, 5, p1);
+                }
+                cb1.Location = new Point(57, 10);
+                cb2.Location = new Point(311, 10);
+                tb1.Location = new Point(552, 10);
+                tb2.Location = new Point(742, 10);
                 tb1.Text = FunDate.getToday(3, int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Analysis]", "from"))));
-                FunCom.AddTextbox(tb2, 5, 4, p1, new int[] { 180, 10 });
-                tb2.Location = new Point(570, 50);
                 tb2.Text = FunDate.getToday(3, int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Analysis]", "to"))));
+                FunCom.AddCombobox(cb1, 5, 1, p1, new int[] { 180, 10 });
+                FunCom.AddCombobox(cb2, 5, 2, p1, new int[] { 180, 10 });
+                FunCom.AddTextbox(tb1, 5, 3, p1, new int[] { 180, 10 });
+                FunCom.AddTextbox(tb2, 5, 4, p1, new int[] { 180, 10 });
+                FunCom.AddComboboxItem(cb1, new long[] { 0, 1 }, new string[] { "棒グラフ", "折れ線グラフ" });
+                cb1.SelectedIndex = int.Parse(string.Format("{0}", FunINI.GetString(ConFILE.iniDefault, "[Analysis]", "chart")));
+                cb1.Font = new Font("Yu mincho", 10, FontStyle.Regular);
+                cb2.Font = new Font("Yu mincho", 10, FontStyle.Regular);
             }
             private static void Common3()
             {

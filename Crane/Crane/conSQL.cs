@@ -96,7 +96,8 @@ namespace Crane
         }
         public class BinSQL
         {
-            public static string SQL9004 = $"SELECT * FROM V_BIN ORDER BY KEY,NAME,UPDATEDATE DESC LIMIT {ComSQL.SQLLimit}";
+            public static string SQL9004 = $"SELECT * FROM V_STORAGEBIN WHERE KEY LIKE @KEYWORD OR NAME LIKE @KEYWORD ORDER BY KEY,NAME,UPDATEDATE DESC LIMIT {ComSQL.SQLLimit}";
+            public static string SQL9005 = $"SELECT * FROM V_RECYCLEBIN WHERE KEY LIKE @KEYWORD OR NAME LIKE @KEYWORD ORDER BY KEY,NAME,UPDATEDATE DESC LIMIT {ComSQL.SQLLimit}";
         }
     }
 }

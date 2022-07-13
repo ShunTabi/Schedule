@@ -239,6 +239,12 @@ namespace Crane
                         sb1.ToString(),
                         ((DateTime)reader["REVIEWENDDATE"]).ToString("yyyy-MM-dd")
                         );
+                    if ((DateTime.Parse(FunDate.getToday(0, 0)) > (DateTime)reader["REVIEWENDDATE"]) && ((Int64)reader["STATUSID"] !=3 ))
+                    {
+                        int count = dg.Rows.Count - 1;
+                        dg.Rows[count].DefaultCellStyle.ForeColor = Color.Red;
+                        dg.Rows[count].DefaultCellStyle.BackColor = Color.Gainsboro;
+                    }
                 }
             }
             private static void CmdLocalLoad1()

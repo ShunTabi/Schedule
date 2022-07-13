@@ -20,32 +20,119 @@ namespace Crane
         //定義
         public static int FirstLoadStatus = ConInstance.binFirstLoad;
         public static string ID = "0";
+        public static int LoadCode = 0;
+        public static TextBox tb1 = new TextBox();
+        public static Label l1 = new Label();
         public static Panel pa1 = new Panel();
         public static Panel pa2 = new Panel();
         public static Panel pa3 = new Panel();
+        public static Button[] btns = new Button[] { };
         public static DataGridView dg = new DataGridView();
         class LocalSetup
         {
             public static void Common(UserControl uc)
             {
                 FunCom.AddPanel(pa3, 0, uc, new int[] { 0, 0 });
-                FunCom.AddPanel(pa2, 1, uc, new int[] { 0, 70 });
-                FunCom.AddPanel(pa1, 1, uc, new int[] { 0, 50 });
-                pa2.BackColor = Color.Plum;
+                FunCom.AddPanel(pa2, 1, uc, new int[] { 0, 75 });
+                FunCom.AddPanel(pa1, 1, uc, new int[] { 0, 100 });
                 pa2.Padding = new Padding(10, 10, 10, 10);
-                pa3.BackColor = Color.Plum;
                 pa3.Padding = new Padding(10, 10, 10, 10);
+                string[] btnNames = new string[] { "Storage", "Recycle" };
+                for (int i = 0; i < btnNames.Length; i++)
+                {
+                    Button btn = new Button();
+                    Array.Resize(ref btns, btns.Length + 1);
+                    btns[btns.Length - 1] = btn;
+                    FunCom.AddButton(btn, 5, i, pa1, new int[] { 90, 50 });
+                    btn.Text = btnNames[i];
+                    btn.Location = new Point(10 + i * 95, 10);
+                    btn.BackColor = ConColor.subButtonColor;
+                    btn.Click += (sender, e) =>
+                    {
+                        for (int j = 0; j < btnNames.Length; j++)
+                        {
+                            btns[j].BackColor = ConColor.subButtonColor;
+                            LoadCode = btn.TabIndex;
+                            LocalLoad.contextMenuLoad();
+                            LocalLoad.LocalMain();
+                        }
+                        btns[btn.TabIndex].BackColor = ConColor.subButtonColorPushed;
+                    };
+                    pa2.BackColor = Color.Plum;
+                    pa2.Padding = new Padding(10, 10, 10, 10);
+                    pa3.BackColor = Color.Plum;
+                    pa3.Padding = new Padding(10, 10, 10, 10);
+                }
             }
             private static void Bottom()
             {
-                Label l1 = new Label();
                 FunCom.AddLabel(l1, 5, pa2);
                 l1.Location = new Point(0, 10);
-                l1.Text = "RECYCLEBIN";
+                l1.Text = "BIN";
                 l1.Font = new Font("Segoe Print", 20, FontStyle.Regular);
                 FunCom.AddDataGridView(dg, 0, pa3, new int[] { 0, 0 });
                 dg.BackgroundColor = Color.Plum;
-                FunCom.AddContextMenuStrip(dg, new string[] { "復元", "完全削除" }, new EventHandler[]
+                FunCom.AddDataGridViewColumns(dg, new string[] { "ID", "キー", "内容", "更新日" });
+                LocalLoad.contextMenuLoad();
+            }
+            public static void ReadyTextbox()
+            {
+                Label lb1 = new Label();
+                FunCom.AddLabel(lb1, 5, pa2);
+                lb1.Text = "キー/内容";
+                lb1.Location = new Point(357, 30);
+                lb1.Font = new Font("Yu mincho", 10, FontStyle.Regular);
+                FunCom.AddTextbox(tb1, 5, 1, pa2, new int[] { 180, 10 });
+                tb1.Location = new Point(458, 30);
+                tb1.TextChanged += (sender, e) => { LocalLoad.LocalMain(); };
+            }
+            public static void LocalMain(UserControl uc)
+            {
+                Common(uc);
+                ReadyTextbox();
+                Bottom();
+                btns[ConMain.binStartupCode].BackColor = ConColor.subButtonColorPushed;
+                LoadCode = ConMain.binStartupCode;
+            }
+        }
+        class LocalStartup
+        {
+        }
+        class LocalCleaning
+        {
+        }
+        class LocalLoad
+        {
+            public static void DataLocalload()
+            {
+                StringBuilder sb = new StringBuilder("%");
+                sb.Append(tb1.Text);
+                sb.Append("%");
+                SQLiteDataReader reader = null;
+                if (LoadCode == 0)
+                {
+                    l1.Text = "StorageBin";
+                    reader = FunSQL.SQLSELECT("SQL9004", ConSQL.BinSQL.SQL9004, new string[] { "@KEYWORD" }, new string[] { sb.ToString() });
+                }
+                else if (LoadCode == 1)
+                {
+                    l1.Text = "RecycleBin";
+                    reader = FunSQL.SQLSELECT("SQL9005", ConSQL.BinSQL.SQL9005, new string[] { "@KEYWORD" }, new string[] { sb.ToString() });
+                }
+                dg.Rows.Clear();
+                while (reader.Read())
+                {
+                    dg.Rows.Add(
+                        ((Int64)reader["ID"]).ToString(),
+                        (string)reader["KEY"],
+                        (string)reader["NAME"],
+                        ((DateTime)reader["UPDATEDATE"]).ToString("yyyy-MM-dd")
+                        );
+                }
+            }
+            public static void contextMenuLoad()
+            {
+                EventHandler[] eventHandler = new EventHandler[]
                 {
                     (sender, e) =>
                     {//修正
@@ -119,35 +206,14 @@ namespace Crane
                         }
                         LocalLoad.LocalMain();
                     }
-                });
-                FunCom.AddDataGridViewColumns(dg, new string[] { "ID", "キー", "内容", "更新日" });
-            }
-            public static void LocalMain(UserControl uc)
-            {
-                Common(uc);
-                Bottom();
-            }
-        }
-        class LocalStartup
-        {
-        }
-        class LocalCleaning
-        {
-        }
-        class LocalLoad
-        {
-            public static void DataLocalload()
-            {
-                SQLiteDataReader reader = FunSQL.SQLSELECT("SQL9004", ConSQL.BinSQL.SQL9004, new string[] { }, new string[] { });
-                dg.Rows.Clear();
-                while (reader.Read())
+                };
+                if (LoadCode == 0)
                 {
-                    dg.Rows.Add(
-                        ((Int64)reader["ID"]).ToString(),
-                        (string)reader["KEY"],
-                        (string)reader["NAME"],
-                        ((DateTime)reader["UPDATEDATE"]).ToString("yyyy-MM-dd")
-                        );
+                    FunCom.AddContextMenuStrip(dg, new string[] { "復元" }, new EventHandler[] { eventHandler[0] });
+                }
+                else if (LoadCode == 1)
+                {
+                    FunCom.AddContextMenuStrip(dg, new string[] { "復元", "完全削除" }, new EventHandler[] { eventHandler[0], eventHandler[1] });
                 }
             }
             public static void LocalMain()

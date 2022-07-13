@@ -10,7 +10,8 @@ namespace Crane
     class ConCom
     {
         public static string appName = "Crane";
-        public static string[] defaultBtnNames = new string[] { "登録", "更新", "削除" };
+        public static string[] defaultBtnNames = new string[] { "登録", "更新", "ゴミ箱へ" };
+        public static string[] defaultBtnNames2 = new string[] { "登録", "更新", "収納箱へ", "ゴミ箱へ" };
     }
     class ConColor
     {

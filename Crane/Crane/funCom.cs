@@ -128,6 +128,7 @@ namespace Crane
             dg.Font = new Font("Yu mincho", 9, FontStyle.Regular);
             dg.BorderStyle = BorderStyle.None;
             dg.RowHeadersVisible = false;
+            dg.ReadOnly = true;
         }
         public static void AddDataGridViewColumns(DataGridView dg, string[] columnNames)
         {
